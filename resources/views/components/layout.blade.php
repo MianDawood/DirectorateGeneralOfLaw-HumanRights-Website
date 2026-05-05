@@ -1,4 +1,11 @@
 @props(['title' => 'Directorate of Human Rights | Khyber Pakhtunkhwa'])
+@php
+    $settings = \App\Models\SiteSetting::getSettings();
+    $campaignHighlights = [
+        'home_campaign_primary' => $settings->home_campaign_primary ?? 'Marka-E-Haq',
+        'home_campaign_secondary' => $settings->home_campaign_secondary ?? 'Anti-Corruption Week',
+    ];
+@endphp
 <!DOCTYPE html>
 <html lang="en" class="overflow-x-hidden">
 
@@ -161,10 +168,14 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-4 border-l border-white/20 pl-10">
-                    <a href="{{ route('contact_us') }}" class="text-white/60 hover:text-[#02B1EB] transition-all-custom"><i
-                            data-lucide="share-2" class="w-4 h-4"></i></a>
-                    <a href="#" class="text-white/60 hover:text-[#02B1EB] transition-all-custom"><i
-                            data-lucide="message-circle" class="w-4 h-4"></i></a>
+                    @if($settings->facebook_url)
+                    <a href="{{ $settings->facebook_url }}" target="_blank" class="text-white/60 hover:text-[#02B1EB] transition-all-custom"><i
+                            data-lucide="facebook" class="w-4 h-4"></i></a>
+                    @endif
+                    @if($settings->twitter_url)
+                    <a href="{{ $settings->twitter_url }}" target="_blank" class="text-white/60 hover:text-[#02B1EB] transition-all-custom"><i
+                            data-lucide="twitter" class="w-4 h-4"></i></a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -206,29 +217,28 @@
                             class="campaign-badge flex items-center gap-2 px-4 py-2 bg-[#123B2D]/5 border border-[#123B2D]/10 rounded-lg hover:bg-[#123B2D]/10 transition-all cursor-pointer">
                             <i data-lucide="shield-check" class="w-4 h-4 text-[#123B2D]"></i>
                             <span
-                                class="text-[10px] font-black uppercase tracking-wider text-[#123B2D] whitespace-nowrap">Marka-E-Haq</span>
+                                class="text-[10px] font-black uppercase tracking-wider text-[#123B2D] whitespace-nowrap">{{ $campaignHighlights['home_campaign_primary'] }}</span>
                         </div>
                         <div
                             class="campaign-badge flex items-center gap-2 px-4 py-2 bg-[#02B1EB]/5 border border-[#02B1EB]/10 rounded-lg hover:bg-[#02B1EB]/10 transition-all cursor-pointer">
                             <i data-lucide="alert-triangle" class="w-4 h-4 text-[#02B1EB]"></i>
                             <span
-                                class="text-[10px] font-black uppercase tracking-wider text-[#02B1EB] whitespace-nowrap">Anti-Corruption
-                                Week</span>
+                                class="text-[10px] font-black uppercase tracking-wider text-[#02B1EB] whitespace-nowrap">{{ $campaignHighlights['home_campaign_secondary'] }}</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Desktop Search Bar -->
                 <div class="hidden lg:block w-[280px] xl:w-[300px]">
-                    <div
+                    <form action="{{ route('search') }}" method="GET"
                         class="search-container relative flex items-center bg-slate-50 border border-slate-200 rounded-xl overflow-hidden shadow-sm transition-all duration-300 focus-within:ring-2 focus-within:ring-[#02B1EB]/20">
-                        <input type="text" placeholder="Search services..."
+                        <input type="text" name="query" value="{{ request('query') }}" placeholder="Search services..."
                             class="w-full pl-5 pr-12 py-3 text-sm text-slate-700 bg-transparent focus:outline-none" />
-                        <button
+                        <button type="submit"
                             class="absolute right-0 h-full w-11 bg-[#123B2D] flex items-center justify-center text-white hover:bg-[#02B1EB] transition-colors">
                             <i data-lucide="search" class="w-4 h-4"></i>
                         </button>
-                    </div>
+                    </form>
                 </div>
 
                 <!-- Mobile Menu Trigger -->
@@ -367,12 +377,13 @@
             <!-- Scrollable Body -->
             <div class="flex-1 overflow-y-auto p-6 scrollbar-none space-y-8">
                 <!-- Mobile Search -->
-                <div class="relative">
-                    <input type="text" placeholder="Search..."
+                <form action="{{ route('search') }}" method="GET" class="relative">
+                    <input type="text" name="query" value="{{ request('query') }}" placeholder="Search..."
                         class="w-full pl-5 pr-12 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
-                    <i data-lucide="search"
-                        class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
-                </div>
+                    <button type="submit" class="absolute right-4 top-1/2 -translate-y-1/2">
+                        <i data-lucide="search" class="w-5 h-5 text-slate-400"></i>
+                    </button>
+                </form>
 
                 <!-- Navigation Links -->
                 <div class="space-y-2">
@@ -383,17 +394,21 @@
                             <i data-lucide="home" class="w-5 h-5"></i> Home
                         </a>
 
-                        <!-- Dropdown Item (Accordion) -->
                         <div class="mobile-dropdown group">
-                            <button
-                                class="flex items-center justify-between w-full p-3 rounded-xl text-slate-700 font-bold {{ request()->routeIs('introduction', 'ourteam') ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
-
                             <div
-                                class="hidden space-y-1 mt-1 ml-11 overflow-hidden transition-all duration-300 dropdown-content">
+                                class="flex items-center justify-between w-full p-3 rounded-xl text-slate-700 font-bold {{ request()->routeIs('introduction', 'ourteam') ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
+                                <a href="{{ route('introduction') }}" class="flex items-center gap-3 flex-1">
+                                    <i data-lucide="users" class="w-5 h-5"></i> Who We Are
+                                </a>
+                                <button class="p-2 dropdown-trigger">
+                                    <i data-lucide="chevron-down"
+                                        class="w-4 h-4 transition-transform duration-300 dropdown-icon"></i>
+                                </button>
+                            </div>
+                            <div class="hidden space-y-1 mt-1 ml-11 dropdown-content">
                                 <a href="{{ route('introduction') }}"
-                                    class="block p-2 text-sm text-slate-500 hover:text-primary transition-colors italic">Introduction</a>
-                                <a href="{{ route('ourteam') }}"
-                                    class="block p-2 text-sm text-slate-500 hover:text-primary transition-colors italic">Our
+                                    class="block p-2 text-sm text-slate-500 italic">Introduction</a>
+                                <a href="{{ route('ourteam') }}" class="block p-2 text-sm text-slate-500 italic">Our
                                     Team</a>
                             </div>
                         </div>
@@ -426,9 +441,9 @@
 
                         <div class="mobile-dropdown group">
                             <div
-                                class="flex items-center justify-between w-full p-3 rounded-xl text-slate-700 font-bold {{ request()->routeIs('mediacorner', 'photogallery', 'videogallery') ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
+                                class="flex items-center justify-between w-full p-3 rounded-xl text-slate-700 font-bold {{ request()->routeIs('ngo_*', 'registration_form_*') ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
                                 <a href="{{ route('ngo_required_documents') }}" class="flex items-center gap-3 flex-1">
-                                    <i data-lucide="file-check" class="w-5 h-5"></i> NGOs Registration
+                                    <i data-lucide="file-check" class="w-5 h-5"></i> NGO Registration
                                 </a>
                                 <button class="p-2 dropdown-trigger">
                                     <i data-lucide="chevron-down"
@@ -440,24 +455,30 @@
                                     class="block p-2 text-sm text-slate-500 italic">Required Documents</a>
                                 <a href="{{ route('ngo_guidelines') }}"
                                     class="block p-2 text-sm text-slate-500 italic">Registration Guidelines</a>
-                                <a href="{{ route('ngo_directives') }}" class="block p-2 text-sm text-slate-500 italic">Mandatory
-                                    Directives</a>
-                                <a href="{{ route('ngo_notices') }}" class="block p-2 text-sm text-slate-500 italic">Latest Notice
-                                    Board</a>
+                                <a href="{{ route('ngo_directives') }}"
+                                    class="block p-2 text-sm text-slate-500 italic">Mandatory Directives</a>
+                                <a href="{{ route('ngo_notices') }}"
+                                    class="block p-2 text-sm text-slate-500 italic">Latest Notice Board</a>
                                 <a href="{{ route('registration_form_part1') }}"
                                     class="block p-2 text-sm text-slate-500 italic">Online Registration</a>
-                                <a href="{{ route('ngo_registered') }}" class="block p-2 text-sm text-slate-500 italic">Registered
-                                    NGOs</a>
-                                <a href="{{ route('ngo_suspended') }}" class="block p-2 text-sm text-slate-500 italic">Suspended
-                                    NGOs</a>
+                                <a href="{{ route('ngo_registered') }}"
+                                    class="block p-2 text-sm text-slate-500 italic">Registered NGOs</a>
+                                <a href="{{ route('ngo_suspended') }}"
+                                    class="block p-2 text-sm text-slate-500 italic">Suspended NGOs</a>
                             </div>
                         </div>
+
                         <a href="{{ route('resources') }}"
                             class="flex items-center gap-3 p-3 rounded-xl text-slate-700 font-bold {{ request()->routeIs('resources') ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
                             <i data-lucide="book-open" class="w-5 h-5"></i> Resources
                         </a>
-                        
-                        <!-- Dynamic Pages in Mobile Menu -->
+
+                        @php
+                            $dynamicPages = \App\Models\Page::published()
+                                ->inNavigation()
+                                ->ordered()
+                                ->get();
+                        @endphp
                         @if($dynamicPages->count() > 0)
                             @foreach($dynamicPages as $dynamicPage)
                                 <a href="{{ route('page.show', $dynamicPage->slug) }}"
@@ -466,7 +487,7 @@
                                 </a>
                             @endforeach
                         @endif
-                        
+
                         <a href="{{ route('contact_us') }}"
                             class="flex items-center gap-3 p-3 rounded-xl text-slate-700 font-bold {{ request()->routeIs('contact_us') ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
                             <i data-lucide="phone-call" class="w-5 h-5"></i> Contact Us
@@ -496,14 +517,24 @@
 
                     <!-- Socials in Mobile Menu -->
                     <div class="flex items-center gap-3 pt-2">
-                        <a href="#"
+                        @if($settings->facebook_url)
+                        <a href="{{ $settings->facebook_url }}" target="_blank"
                             class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-slate-400 hover:text-[#1877F2] hover:bg-blue-50 transition-all border border-slate-100">
-                            <i data-lucide="share-2" class="w-5 h-5"></i>
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
                         </a>
-                        <a href="#"
+                        @endif
+                        @if($settings->twitter_url)
+                        <a href="{{ $settings->twitter_url }}" target="_blank"
                             class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-slate-400 hover:text-[#1DA1F2] hover:bg-blue-50 transition-all border border-slate-100">
-                            <i data-lucide="message-circle" class="w-5 h-5"></i>
+                            <i data-lucide="twitter" class="w-5 h-5"></i>
                         </a>
+                        @endif
+                        @if($settings->instagram_url)
+                        <a href="{{ $settings->instagram_url }}" target="_blank"
+                            class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-slate-400 hover:text-[#E4405F] hover:bg-pink-50 transition-all border border-slate-100">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -831,22 +862,30 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
-                    <a href="#"
-                        class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-lg">
-                        <i data-lucide="share-2" class="w-5 h-5"></i>
+                    @if($settings->facebook_url)
+                    <a href="{{ $settings->facebook_url }}" target="_blank"
+                        class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center hover:bg-[#1877F2] hover:text-white transition-all shadow-lg group">
+                        <i data-lucide="facebook" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
                     </a>
-                    <a href="#"
-                        class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-lg">
-                        <i data-lucide="message-circle" class="w-5 h-5"></i>
+                    @endif
+                    @if($settings->twitter_url)
+                    <a href="{{ $settings->twitter_url }}" target="_blank"
+                        class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center hover:bg-[#1DA1F2] hover:text-white transition-all shadow-lg group">
+                        <i data-lucide="twitter" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
                     </a>
-                    <a href="#"
-                        class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-lg">
-                        <i data-lucide="camera" class="w-5 h-5"></i>
+                    @endif
+                    @if($settings->instagram_url)
+                    <a href="{{ $settings->instagram_url }}" target="_blank"
+                        class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center hover:bg-[#E4405F] hover:text-white transition-all shadow-lg group">
+                        <i data-lucide="instagram" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
                     </a>
-                    <a href="#"
-                        class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-lg">
-                        <i data-lucide="video" class="w-5 h-5"></i>
+                    @endif
+                    @if($settings->youtube_url)
+                    <a href="{{ $settings->youtube_url }}" target="_blank"
+                        class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center hover:bg-[#FF0000] hover:text-white transition-all shadow-lg group">
+                        <i data-lucide="youtube" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
                     </a>
+                    @endif
                 </div>
             </div>
         </div>

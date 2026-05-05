@@ -61,7 +61,7 @@
                                             {{ $page->order }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ optional($page->published_at)->format('M d, Y') ?? '—' }}
+                                            {{ optional($page->published_at)->format('M d, Y') ?? 'â€”' }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex space-x-2">

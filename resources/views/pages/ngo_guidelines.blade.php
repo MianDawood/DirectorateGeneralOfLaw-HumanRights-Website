@@ -1,3 +1,8 @@
+@php
+use App\Models\NgoGuideline;
+$guidelines = NgoGuideline::where('is_active', true)->orderBy('order')->get();
+@endphp
+
 <x-layout>
 <main>
         <section class="bg-gradient-to-br from-[#123B2D] to-[#1a5240] py-24 relative overflow-hidden">
@@ -25,75 +30,22 @@
         <section class="py-24 bg-white">
             <div class="max-w-[1200px] mx-auto px-6 lg:px-20">
                 <div class="space-y-12 reveal-stagger">
-                    <!-- Step 1 -->
-                    <div class="flex flex-col md:flex-row items-start gap-10 group">
-                        <div
-                            class="w-16 h-16 bg-[#123B2D] text-white rounded-2xl flex items-center justify-center shrink-0 font-outfit font-black text-2xl shadow-xl group-hover:scale-110 transition-transform duration-500">
-                            1</div>
-                        <div class="pt-2">
-                            <h3 class="font-outfit text-2xl font-bold text-[#123B2D] uppercase mb-4 tracking-tight">
-                                Obtain Registration Form</h3>
-                            <p class="text-slate-500 text-lg leading-relaxed">Download the official registration form
-                                from the Directorate's website or collect a physical copy from the office located at
-                                Plot No. 21, Sector B-2, Phase-V, Hayatabad, Peshawar.</p>
+                    @forelse($guidelines as $index => $guideline)
+                        <div class="flex flex-col md:flex-row items-start gap-10 group">
+                            <div
+                                class="w-16 h-16 {{ ($index % 2 == 0) ? 'bg-[#123B2D]' : 'bg-[#02B1EB]' }} text-white rounded-2xl flex items-center justify-center shrink-0 font-outfit font-black text-2xl shadow-xl group-hover:scale-110 transition-transform duration-500">
+                                {{ $index + 1 }}</div>
+                            <div class="pt-2">
+                                <h3 class="font-outfit text-2xl font-bold text-[#123B2D] uppercase mb-4 tracking-tight">
+                                    {{ $guideline->title }}</h3>
+                                <p class="text-slate-500 text-lg leading-relaxed">{{ $guideline->description }}</p>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Step 2 -->
-                    <div class="flex flex-col md:flex-row items-start gap-10 group">
-                        <div
-                            class="w-16 h-16 bg-[#02B1EB] text-white rounded-2xl flex items-center justify-center shrink-0 font-outfit font-black text-2xl shadow-xl group-hover:scale-110 transition-transform duration-500">
-                            2</div>
-                        <div class="pt-2">
-                            <h3 class="font-outfit text-2xl font-bold text-[#123B2D] uppercase mb-4 tracking-tight">
-                                Complete the Application</h3>
-                            <p class="text-slate-500 text-lg leading-relaxed">Fill in all required fields with accurate
-                                information. Attach all required supporting documents as listed in the Required
-                                Documents section.</p>
+                    @empty
+                        <div class="text-center py-20">
+                            <p class="text-slate-400 italic">No guidelines available yet.</p>
                         </div>
-                    </div>
-
-                    <!-- Step 3 -->
-                    <div class="flex flex-col md:flex-row items-start gap-10 group">
-                        <div
-                            class="w-16 h-16 bg-[#123B2D] text-white rounded-2xl flex items-center justify-center shrink-0 font-outfit font-black text-2xl shadow-xl group-hover:scale-110 transition-transform duration-500">
-                            3</div>
-                        <div class="pt-2">
-                            <h3 class="font-outfit text-2xl font-bold text-[#123B2D] uppercase mb-4 tracking-tight">Pay
-                                Registration Fee</h3>
-                            <p class="text-slate-500 text-lg leading-relaxed">Deposit the prescribed registration fee
-                                through Treasury Challan. Keep evidence of payment for submission with your application.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Step 4 -->
-                    <div class="flex flex-col md:flex-row items-start gap-10 group">
-                        <div
-                            class="w-16 h-16 bg-[#02B1EB] text-white rounded-2xl flex items-center justify-center shrink-0 font-outfit font-black text-2xl shadow-xl group-hover:scale-110 transition-transform duration-500">
-                            4</div>
-                        <div class="pt-2">
-                            <h3 class="font-outfit text-2xl font-bold text-[#123B2D] uppercase mb-4 tracking-tight">
-                                Submit Application</h3>
-                            <p class="text-slate-500 text-lg leading-relaxed">Submit the completed application along
-                                with all supporting documents to the Directorate General of Law & Human Rights, Khyber
-                                Pakhtunkhwa.</p>
-                        </div>
-                    </div>
-
-                    <!-- Step 5 -->
-                    <div class="flex flex-col md:flex-row items-start gap-10 group">
-                        <div
-                            class="w-16 h-16 bg-[#123B2D] text-white rounded-2xl flex items-center justify-center shrink-0 font-outfit font-black text-2xl shadow-xl group-hover:scale-110 transition-transform duration-500">
-                            5</div>
-                        <div class="pt-2">
-                            <h3 class="font-outfit text-2xl font-bold text-[#123B2D] uppercase mb-4 tracking-tight">
-                                Verification & Approval</h3>
-                            <p class="text-slate-500 text-lg leading-relaxed">Your application will be reviewed and
-                                verified. Upon successful verification, a registration certificate will be issued to
-                                your organization.</p>
-                        </div>
-                    </div>
+                    @endforelse
                 </div>
 
                 <div
@@ -110,7 +62,6 @@
         </section>
     </main>
 
-    <!-- Footer Section -->
     <!-- Global Scrollbar Styles -->
     <style>
         .scrollbar-thin::-webkit-scrollbar {
@@ -130,5 +81,4 @@
             background: #cbd5e0;
         }
     </style>
-    <!-- Footer Section -->
 </x-layout>

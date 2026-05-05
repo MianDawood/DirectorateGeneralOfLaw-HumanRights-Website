@@ -84,6 +84,18 @@
         <div class="mt-12">
             <h2 class="text-lg font-bold text-gray-900 dark:text-white">Quick Actions</h2>
             <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <a href="{{ route('admin.site-settings.homepage.edit') }}" class="flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 transition dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700/50">
+                    <div class="flex-shrink-0 p-3 bg-indigo-100 rounded-lg dark:bg-indigo-500/20">
+                        <svg class="w-6 h-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6h4.5M4.5 19.5h15a2.25 2.25 0 002.25-2.25v-10.5A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-900 dark:text-white">Update Homepage Labels</p>
+                        <p class="text-xs text-gray-500">Change the two campaign badges shown in the frontend header.</p>
+                    </div>
+                </a>
+
                 <a href="{{ route('admin.events.index') }}" class="flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 transition dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700/50">
                     <div class="flex-shrink-0 p-3 bg-brand-100 rounded-lg dark:bg-brand-500/20">
                         <svg class="w-6 h-6 text-brand-600 dark:text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

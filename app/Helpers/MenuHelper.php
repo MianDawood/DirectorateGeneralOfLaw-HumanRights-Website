@@ -4,124 +4,184 @@ namespace App\Helpers;
 
 class MenuHelper
 {
-    public static function getMainNavItems()
-    {
-        return [
-            [
-                'icon' => 'dashboard',
-                'name' => 'Dashboard',
-                'path' => route('dashboard.index'),
-            ],
-            [
-                'icon' => 'ui-elements',
-                'name' => 'Services',
-                'path' => route('dashboard.services'),
-            ],
-            [
-                'icon' => 'authentication',
-                'name' => 'Official Messages',
-                'path' => route('admin.official-messages.index'),
-            ],
-            [
-                'icon' => 'pages',
-                'name' => 'News Management',
-                'path' => route('admin.news.index'),
-            ],
-            [
-                'icon' => 'forms',
-                'name' => 'Publications',
-                'path' => route('admin.publications.index'),
-            ],
-        ];
-    }
-
-    public static function getOthersItems()
-    {
-        return [
-            [
-                'icon' => 'forms',
-                'name' => 'Tenders',
-                'path' => route('admin.tenders.index'),
-            ],
-            [
-                'icon' => 'charts',
-                'name' => 'Causes',
-                'path' => route('admin.causes.index'),
-            ],
-            [
-                'icon' => 'forms',
-                'name' => 'Complaints',
-                'path' => route('admin.complaints.index'),
-            ],
-            [
-                'icon' => 'pages',
-                'name' => 'Contact Messages',
-                'path' => route('admin.contact-messages.index'),
-            ],
-            [
-                'icon' => 'user',
-                'name' => 'Team Members',
-                'path' => route('admin.team-members.index'),
-            ],
-            [
-                'icon' => 'pages',
-                'name' => 'Gallery',
-                'path' => route('admin.gallery-items.index'),
-            ],
-            [
-                'icon' => 'authentication',
-                'name' => 'NGO Notices',
-                'path' => route('admin.ngo-notices.index'),
-            ],
-            [
-                'icon' => 'forms',
-                'name' => 'Events',
-                'path' => route('admin.events.index'),
-            ],
-            [
-                'icon' => 'pages',
-                'name' => 'Pages Management',
-                'path' => route('admin.pages.index'),
-            ],
-            [
-                'icon' => 'pages',
-                'name' => 'Registration Applications',
-                'path' => route('admin.registration-applications.index'),
-            ],
-        ];
-    }
-
-    public static function getAccountItems()
-    {
-        return [
-            [
-                'icon' => 'user',
-                'name' => 'View Profile',
-                'path' => route('dashboard.profile'),
-            ],
-            [
-                'icon' => 'logout',
-                'name' => 'Sign Out',
-                'path' => route('logout'),
-                'is_logout' => true,
-            ],
-        ];
-    }
-
     public static function getMenuGroups()
     {
         return [
             [
-                'title' => 'Core Management',
-                'items' => self::getMainNavItems()
+                'title' => 'Overview',
+                'items' => [
+                    [
+                        'icon' => 'dashboard',
+                        'name' => 'Dashboard',
+                        'path' => route('dashboard.index'),
+                    ],
+                    [
+                        'icon' => 'user',
+                        'name' => 'View Profile',
+                        'path' => route('dashboard.profile'),
+                    ],
+                ]
             ],
             [
-                'title' => 'Content',
-                'items' => self::getOthersItems()
+                'title' => 'Content Management',
+                'items' => [
+                    [
+                        'icon' => 'authentication',
+                        'name' => 'News & Media',
+                        'subItems' => [
+                            [
+                                'name' => 'News Management',
+                                'path' => route('admin.news.index'),
+                            ],
+                            [
+                                'name' => 'Gallery',
+                                'path' => route('admin.gallery-items.index'),
+                            ],
+                            [
+                                'name' => 'Events',
+                                'path' => route('admin.events.index'),
+                            ],
+                        ]
+                    ],
+                    [
+                        'icon' => 'forms',
+                        'name' => 'Resources',
+                        'subItems' => [
+                            [
+                                'name' => 'Publications',
+                                'path' => route('admin.publications.index'),
+                            ],
+                            [
+                                'name' => 'Tenders',
+                                'path' => route('admin.tenders.index'),
+                            ],
+                        ]
+                    ],
+                ]
             ],
             [
-                'title' => 'Account',
-                'items' => self::getAccountItems()
+                'title' => 'NGO Portal',
+                'items' => [
+                    [
+                        'icon' => 'ui-elements',
+                        'name' => 'NGO Management',
+                        'subItems' => [
+                            [
+                                'name' => 'Applications',
+                                'path' => route('admin.registration-applications.index'),
+                            ],
+                            [
+                                'name' => 'Required Docs',
+                                'path' => route('admin.ngo-required-documents.edit'),
+                            ],
+                            [
+                                'name' => 'NGO Notices',
+                                'path' => route('admin.ngo-notices.index'),
+                            ],
+                        ]
+                    ],
+                    [
+                        'icon' => 'pages',
+                        'name' => 'NGO Resources',
+                        'subItems' => [
+                            [
+                                'name' => 'NGO Directives',
+                                'path' => route('admin.ngo-directives.edit'),
+                            ],
+                            [
+                                'name' => 'NGO Guidelines',
+                                'path' => route('admin.ngo-guidelines.edit'),
+                            ],
+                            [
+                                'name' => 'NGO Notices Page',
+                                'path' => route('admin.ngo-notices-pages.index'),
+                            ],
+                        ]
+                    ],
+                ]
+            ],
+            [
+                'title' => 'Page Controls',
+                'items' => [
+                    [
+                        'icon' => 'pages',
+                        'name' => 'Main Sections',
+                        'subItems' => [
+                            [
+                                'name' => 'Introduction',
+                                'path' => route('admin.introductions.edit'),
+                            ],
+                            [
+                                'name' => 'What We Do',
+                                'path' => route('admin.what-we-dos.edit'),
+                            ],
+                            [
+                                'name' => 'Site Settings',
+                                'path' => route('admin.site-settings.index'),
+                            ],
+                        ]
+                    ],
+                    [
+                        'icon' => 'authentication',
+                        'name' => 'Official Messages',
+                        'path' => route('admin.official-messages.index'),
+                    ],
+                    [
+                        'icon' => 'pages',
+                        'name' => 'Pages Management',
+                        'path' => route('admin.pages.index'),
+                    ],
+                ]
+            ],
+            [
+                'title' => 'Interactions',
+                'items' => [
+                    [
+                        'icon' => 'forms',
+                        'name' => 'Public Feedback',
+                        'subItems' => [
+                            [
+                                'name' => 'Contact Messages',
+                                'path' => route('admin.contact-messages.index'),
+                            ],
+                            [
+                                'name' => 'Complaints',
+                                'path' => route('admin.complaints.index'),
+                            ],
+                        ]
+                    ],
+                ]
+            ],
+            [
+                'title' => 'Others',
+                'items' => [
+                    [
+                        'icon' => 'charts',
+                        'name' => 'Causes',
+                        'path' => route('admin.causes.index'),
+                    ],
+                    [
+                        'icon' => 'user',
+                        'name' => 'Team Members',
+                        'path' => route('admin.team-members.index'),
+                    ],
+                    [
+                        'icon' => 'ui-elements',
+                        'name' => 'Services',
+                        'path' => route('dashboard.services'),
+                    ],
+                ]
+            ],
+            [
+                'title' => 'System',
+                'items' => [
+                    [
+                        'icon' => 'logout',
+                        'name' => 'Sign Out',
+                        'path' => route('logout'),
+                        'is_logout' => true,
+                    ],
+                ]
             ]
         ];
     }

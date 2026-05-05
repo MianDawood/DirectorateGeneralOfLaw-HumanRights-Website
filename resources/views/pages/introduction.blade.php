@@ -1,3 +1,20 @@
+@php
+use App\Models\Introduction;
+use App\Models\IntroductionHead;
+
+// Fetch all active introduction sections ordered by their ID
+$introSections = Introduction::where('is_active', true)->orderBy('id')->get();
+
+// Map them to specific variables based on their sequence
+$hero = $introSections->get(0);
+$vision = $introSections->get(1);
+$mission = $introSections->get(2);
+$coreValues = $introSections->get(3);
+
+// Fetch all active heads for the leadership slider
+$heads = IntroductionHead::where('is_active', true)->orderBy('order')->get();
+@endphp
+
 <x-layout>
 <!-- Clean Professional Introduction Hero -->
     <section class="bg-white  py-10 lg:py-15">
@@ -7,8 +24,9 @@
                 <div class="flex-1 space-y-6">
                     <div class="flex items-center gap-3">
                         <!-- <div class="w-10 h-1 bg-primary"></div> -->
-                        <span class="text-xs font-bold uppercase tracking-[0.3em] text-slate-400">Government of Khyber
-                            Pakhtunkhwa</span>
+                        <span class="text-xs font-bold uppercase tracking-[0.3em] text-slate-400">
+                            {{ $hero?->title ?? 'Government of Khyber Pakhtunkhwa' }}
+                        </span>
                     </div>
 
                     <h1
@@ -18,8 +36,7 @@
 
                     <p
                         class="text-slate-600 text-lg leading-relaxed max-w-xl font-medium italic border-l-4 border-slate-100 pl-6">
-                        Established to safeguard and promote fundamental rights, ensuring justice and equality for every
-                        citizen across the province through legal framework and community engagement.
+                        {{ $hero?->description ?? 'Established to safeguard and promote fundamental rights, ensuring justice and equality for every citizen across the province through legal framework and community engagement.' }}
                     </p>
 
                     <!-- Clean Breadcrumb -->
@@ -47,7 +64,7 @@
                         </div>
 
                         <div class="relative b p-2 rounded-2xl  ">
-                            <img src="{{ asset('images/hero image 5.jpg') }}" alt="Directorate Activities"
+                            <img src="{{ asset($hero?->image ?? 'images/hero image 5.jpg') }}" alt="Directorate Activities"
                                 class="w-full h-[350px] lg:h-[450px] object-cover rounded-xl grayscale-[0.2] hover:grayscale-0 transition-all duration-700">
                         </div>
 
@@ -88,147 +105,55 @@
                 <!-- Slider Container -->
                 <div id="leadership-slider" class="w-full max-w-6xl ml-1 lg:ml-[100px] relative h-[500px] lg:h-[550px]">
 
-                    <!-- Slide 1: Jess Wilson -->
-                    <div class="leader-slide absolute inset-0 flex items-center group/slide overflow-visible">
-                        <div
-                            class="relative w-full max-w-4xl mx-auto h-[500px] bg-[#0f1115] rounded-[50px] p-8 pt-28 lg:p-14 lg:pl-56 flex flex-col lg:flex-row items-center gap-10 overflow-visible transition-all duration-700">
-                            <!-- Image (Floating Half-Out) -->
-                            <div
-                                class="absolute left-1/2 lg:left-0 top-0 lg:top-1/2 shrink-0 z-20 slide-image transition-all duration-1000 ease-out">
-                                <div
-                                    class="w-[200px] h-[200px] lg:w-[290px] lg:h-[370px] rounded-full lg:rounded-[50px] overflow-hidden shadow-2xl">
-                                    <img src="{{ asset('images/Minister.jpeg') }}" alt="Jess Wilson"
-                                        class="w-full h-full object-cover">
+                    @forelse($heads as $index => $head)
+                        <!-- Slide: {{ $head->name }} -->
+                        <div class="leader-slide absolute inset-0 flex items-center group/slide overflow-visible" 
+                             style="{{ $index === 0 ? 'opacity: 1; z-index: 10; visibility: visible;' : 'opacity: 0; z-index: 0; visibility: hidden;' }}">
+                            <div class="relative w-full max-w-4xl mx-auto h-[500px] bg-[#0f1115] rounded-[50px] p-8 pt-28 lg:p-14 lg:pl-56 flex flex-col lg:flex-row items-center gap-10 overflow-visible transition-all duration-700">
+                                <!-- Image (Floating) -->
+                                <div class="absolute left-1/2 lg:left-0 top-0 lg:top-1/2 shrink-0 z-20 slide-image transition-all duration-1000 ease-out" 
+                                     style="transform: translate({{ 'window.innerWidth < 1024 ? \'-50%\' : \'-33.33%\'' }}, -50%) scale(1);">
+                                    <div class="w-[200px] h-[200px] lg:w-[290px] lg:h-[370px] rounded-full lg:rounded-[50px] overflow-hidden shadow-2xl">
+                                        <img src="{{ asset($head->image ?? 'images/introduction 1.jpeg') }}" alt="{{ $head->name }}"
+                                            class="w-full h-full object-cover">
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- Right: Content -->
-                            <div
-                                class="flex-1 text-center lg:text-left space-y-3 sm:space-y-6 slide-content transition-all duration-1000 ease-out delay-100">
-                                <div class="slide-title transition-all duration-700 ease-out delay-200">
-                                    <h2
-                                        class="font-outfit text-2xl sm:text-3xl lg:text-5xl font-bold text-white tracking-tight">
-                                        Mr. Aftab Alam</h2>
-                                    <p class="text-slate-400 text-xs sm:text-base lg:text-xl font-normal mt-1">Minister
-                                        for Law
-                                        Parliamentary Affairs & Human Rights Khyber Pakhtunkhwa</p>
-                                </div>
-                                <p
-                                    class="text-white/60 text-[11px] sm:text-sm md:text-base lg:text-lg leading-relaxed max-w-xl slide-text transition-all duration-700 ease-out delay-300 lg:line-clamp-5">
-                                    The people of Khyber Pakhtunkhwa have perennial and endless calamities both natural
-                                    and man-induced for over three decades now. Human rights watch reports and indices
-                                    unveil the frail state of human rights in the province. Moreover the recent surge of
-                                    terrorism, and social evils inherent in mis-governance, have greatly affected the
-                                    state of human rights in the Province of Khyber Pakhtunkhwa. Shackled with nexus of
-                                    multi-dimensional human rights violations, the ...
-                                </p>
-                                <div
-                                    class="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 pt-2 sm:pt-4 slide-btns transition-all duration-700 ease-out delay-500">
-                                    <button
-                                        class="px-6 py-2 sm:px-10 sm:py-3.5 border-2 border-white/10 rounded-full text-white font-bold text-[10px] sm:text-sm tracking-widest uppercase hover:bg-white/5 transition-all duration-300">
-                                        Profile
-                                    </button>
-                                    <button
-                                        class="px-8 py-2 sm:px-12 sm:py-3.5 bg-white text-[#0f1115] rounded-full font-bold text-[10px] sm:text-sm tracking-widest uppercase hover:bg-[#bce1f5] hover:shadow-2xl transition-all duration-300">
-                                        Follow
-                                    </button>
+                                <div class="flex-1 text-center lg:text-left space-y-3 sm:space-y-6 slide-content transition-all duration-1000 ease-out delay-100">
+                                    <div class="slide-title transition-all duration-700 ease-out delay-200">
+                                        <h2 class="font-outfit text-2xl sm:text-3xl lg:text-5xl font-bold text-white tracking-tight">
+                                            {{ $head->name }}</h2>
+                                        <p class="text-slate-400 text-xs sm:text-base lg:text-xl font-normal mt-1">
+                                            {{ $head->role }}
+                                        </p>
+                                    </div>
+                                    <p class="text-white/60 text-[11px] sm:text-sm md:text-base lg:text-lg leading-relaxed max-w-xl slide-text transition-all duration-700 ease-out delay-300 lg:line-clamp-5">
+                                        {{ $head->message }}
+                                    </p>
+                                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 pt-2 sm:pt-4 slide-btns transition-all duration-700 ease-out delay-500">
+                                        @if($head->profile_url)
+                                            <a href="{{ $head->profile_url }}" target="_blank"
+                                                class="px-6 py-2 sm:px-10 sm:py-3.5 border-2 border-white/10 rounded-full text-white font-bold text-[10px] sm:text-sm tracking-widest uppercase hover:bg-white/5 transition-all duration-300">
+                                                Profile
+                                            </a>
+                                        @endif
+                                        <button class="px-8 py-2 sm:px-12 sm:py-3.5 bg-white text-[#0f1115] rounded-full font-bold text-[10px] sm:text-sm tracking-widest uppercase hover:bg-[#bce1f5] hover:shadow-2xl transition-all duration-300">
+                                            Follow
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Slide 2: Alex Rivera -->
-                    <div class="leader-slide absolute inset-0 flex items-center group/slide overflow-visible">
-                        <div
-                            class="relative w-full max-w-4xl mx-auto h-[500px] bg-[#0f1115] rounded-[50px] p-8 pt-28 lg:p-14 lg:pl-56 flex flex-col lg:flex-row items-center gap-10 overflow-visible transition-all duration-700">
-                            <!-- Image (Floating) -->
-                            <div
-                                class="absolute left-1/2 lg:left-0 top-0 lg:top-1/2 shrink-0 z-20 slide-image transition-all duration-1000 ease-out">
-                                <div
-                                    class="w-[200px] h-[200px] lg:w-[290px] lg:h-[370px] rounded-full lg:rounded-[50px] overflow-hidden shadow-2xl">
-                                    <img src="{{ asset('images/introduction 1.jpeg') }}" alt="Alex Rivera"
-                                        class="w-full h-full object-cover">
-                                </div>
-                            </div>
-                            <div
-                                class="flex-1 text-center lg:text-left space-y-3 sm:space-y-6 slide-content transition-all duration-1000 ease-out delay-100">
-                                <div class="slide-title transition-all duration-700 ease-out delay-200">
-                                    <h2
-                                        class="font-outfit text-2xl sm:text-3xl lg:text-5xl font-bold text-white tracking-tight">
-                                        Mr. Ghulam Ali</h2>
-                                    <p class="text-slate-400 text-xs sm:text-base lg:text-xl font-normal mt-1">Director
-                                        General, Law
-                                        & Human Rights, Government of Khyber Pakhtunkhwa</p>
-                                </div>
-                                <p
-                                    class="text-white/60 text-[11px] sm:text-sm md:text-base lg:text-lg leading-relaxed max-w-xl slide-text transition-all duration-700 ease-out delay-300 lg:line-clamp-5">
-                                    What is beautiful about the Human Rights is that they recognize the inherent value
-                                    of each person. The principles which Human Rights are based on include dignity,
-                                    equality and mutual respect. These principles are common to all cultures, religions,
-                                    philosophies and geographical areas. After witnessing gross violation of Human
-                                    Rights during the World War II, the world community got together and resolved to
-                                    stop such violations in future. The result ...
-                                </p>
-                                <div
-                                    class="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 pt-2 sm:pt-4 slide-btns transition-all duration-700 ease-out delay-500">
-                                    <button
-                                        class="px-6 py-2 sm:px-10 sm:py-3.5 border-2 border-white/10 rounded-full text-white font-bold text-[10px] sm:text-sm tracking-widest uppercase hover:bg-white/5 transition-all duration-300">
-                                        Profile
-                                    </button>
-                                    <button
-                                        class="px-8 py-2 sm:px-12 sm:py-3.5 bg-white text-[#0f1115] rounded-full font-bold text-[10px] sm:text-sm tracking-widest uppercase hover:bg-[#bce1f5] hover:shadow-2xl transition-all duration-300">
-                                        Follow
-                                    </button>
+                    @empty
+                        <!-- Default Slide if no heads found -->
+                        <div class="leader-slide absolute inset-0 flex items-center group/slide overflow-visible">
+                            <div class="relative w-full max-w-4xl mx-auto h-[500px] bg-[#0f1115] rounded-[50px] p-8 pt-28 lg:p-14 lg:pl-56 flex flex-col lg:flex-row items-center gap-10 overflow-visible transition-all duration-700">
+                                <div class="flex-1 text-center text-white p-10">
+                                    <h2 class="text-2xl font-bold">No Leadership Information Available</h2>
+                                    <p class="text-slate-400 mt-2">Leadership profiles will appear here once added in the dashboard.</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Slide 3: Sarah Chen -->
-                    <div class="leader-slide absolute inset-0 flex items-center group/slide overflow-visible">
-                        <div
-                            class="relative w-full max-w-4xl mx-auto h-[500px] bg-[#0f1115] rounded-[50px] p-8 pt-28 lg:p-14 lg:pl-56 flex flex-col lg:flex-row items-center gap-10 overflow-visible transition-all duration-700">
-                            <!-- Image (Floating) -->
-                            <div
-                                class="absolute left-1/2 lg:left-0 top-0 lg:top-1/2 shrink-0 z-20 slide-image transition-all duration-1000 ease-out">
-                                <div
-                                    class="w-[200px] h-[200px] lg:w-[290px] lg:h-[370px] rounded-full lg:rounded-[50px] overflow-hidden shadow-2xl">
-                                    <img src="{{ asset('images/introduction 2.jpg') }}" alt="Sarah Chen"
-                                        class="w-full h-full object-cover">
-                                </div>
-                            </div>
-                            <div
-                                class="flex-1 text-center lg:text-left space-y-3 sm:space-y-6 slide-content transition-all duration-1000 ease-out delay-100">
-                                <div class="slide-title transition-all duration-700 ease-out delay-200">
-                                    <h2
-                                        class="font-outfit text-2xl sm:text-3xl lg:text-5xl font-bold text-white tracking-tight">
-                                        Syed Kazim Hussain Shah</h2>
-                                    <p class="text-slate-400 text-xs sm:text-base lg:text-xl font-normal mt-1">Director
-                                        Human Rights,
-                                        Government of Khyber Pakhtunkhwa</p>
-                                </div>
-                                <p
-                                    class="text-white/60 text-[11px] sm:text-sm md:text-base lg:text-lg leading-relaxed max-w-xl slide-text transition-all duration-700 ease-out delay-300 lg:line-clamp-5">
-                                    What is beautiful about the Human Rights is that they recognize the inherent value
-                                    of each person. The principles which Human Rights are based on include dignity,
-                                    equality and mutual respect. These principles are common to all cultures, religions,
-                                    philosophies and geographical areas. After witnessing gross violation of Human
-                                    Rights during the World War II, the world community got together and resolved to
-                                    stop such violations in future. The result ...
-                                </p>
-                                <div
-                                    class="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 pt-2 sm:pt-4 slide-btns transition-all duration-700 ease-out delay-500">
-                                    <button
-                                        class="px-6 py-2 sm:px-10 sm:py-3.5 border-2 border-white/10 rounded-full text-white font-bold text-[10px] sm:text-sm tracking-widest uppercase hover:bg-white/5 transition-all duration-300">
-                                        Profile
-                                    </button>
-                                    <button
-                                        class="px-8 py-2 sm:px-12 sm:py-3.5 bg-white text-[#0f1115] rounded-full font-bold text-[10px] sm:text-sm tracking-widest uppercase hover:bg-[#bce1f5] hover:shadow-2xl transition-all duration-300">
-                                        Follow
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforelse
 
                 </div>
 
@@ -348,8 +273,7 @@
                             Vision</h2>
                     </div>
                     <p class="text-slate-600 text-lg lg:text-xl leading-relaxed max-w-4xl font-medium">
-                        Our vision is of a Khyber Pakhtunkhwa Province in which every person's Human Rights are
-                        respected and he/she is able to enjoy life in all its fullness.
+                        {{ $vision?->description ?? 'Our vision is of a Khyber Pakhtunkhwa Province in which every person\'s Human Rights are respected and he/she is able to enjoy life in all its fullness.' }}
                     </p>
                 </div>
 
@@ -362,10 +286,7 @@
                             Mission</h2>
                     </div>
                     <p class="text-slate-600 text-base lg:text-lg leading-relaxed max-w-5xl">
-                        Directorate of Human Rights Government of Khyber Pakhtunkhwa's Mission is to Promote, Protect
-                        and Enforce Human Rights in the Province of Khyber Pakhtunkhwa, as guaranteed by the
-                        Constitution of Islamic Republic of Pakistan and various International Conventions, Treaties,
-                        Covenants and Agreements to which Pakistan is a state party or shall become a state party.
+                        {{ $mission?->description ?? 'Directorate of Human Rights Government of Khyber Pakhtunkhwa\'s Mission is to Promote, Protect and Enforce Human Rights in the Province of Khyber Pakhtunkhwa, as guaranteed by the Constitution of Islamic Republic of Pakistan and various International Conventions, Treaties, Covenants and Agreements to which Pakistan is a state party or shall become a state party.' }}
                     </p>
                 </div>
 
@@ -378,12 +299,10 @@
                             Core Values</h2>
                     </div>
                     <p class="text-slate-600 text-base lg:text-lg leading-relaxed max-w-5xl mb-12">
-                        Directorate of Human Rights, a statutory and independent institution under the general
-                        supervision of Law, Parliamentary Affairs & Human Rights Department Government of Khyber
-                        Pakhtunkhwa, is committed to upholding these core values:
+                        {{ $coreValues?->description ?? 'Directorate of Human Rights, a statutory and independent institution under the general supervision of Law, Parliamentary Affairs & Human Rights Department Government of Khyber Pakhtunkhwa, is committed to upholding these core values:' }}
                     </p>
 
-                    <!-- Values Grid -->
+                    <!-- Values Grid (Static - these are standard values) -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-4">
                         <div class="flex items-center gap-4 group transition-all duration-300 py-1">
                             <div

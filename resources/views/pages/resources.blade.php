@@ -115,17 +115,17 @@
                             <!-- 3. Desktop Support Desk (Hidden on Mobile) -->
                             <div class="hidden lg:block">
                                 <div
-                                    class="p-8 bg-primary rounded-[32px] text-white relative overflow-hidden group shadow-2xl shadow-primary/20">
+                                    class="p-8 bg-primary rounded-[32px] relative overflow-hidden group shadow-2xl shadow-primary/20">
                                     <div class="relative z-10">
                                         <div
                                             class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6">
                                             <i data-lucide="life-buoy" class="w-6 h-6 text-secondary"></i>
                                         </div>
                                         <h4 class="text-xl font-bold mb-3 font-outfit">Support Desk</h4>
-                                        <p class="text-sm text-white/60 mb-8 leading-relaxed">Having trouble finding a
+                                        <p class="text-sm mb-8 leading-relaxed">Having trouble finding a
                                             specific document or needing verification?</p>
                                         <a href="{{ route('contact_us') }}"
-                                            class="flex items-center justify-center gap-3 py-4 bg-white text-primary rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-secondary hover:text-white transition-all transform hover:-translate-y-1">
+                                            class="flex items-center justify-center gap-3 py-4 bg-white rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-secondary hover:text-white transition-all transform hover:-translate-y-1">
                                             Get Help Now <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
                                         </a>
                                     </div>

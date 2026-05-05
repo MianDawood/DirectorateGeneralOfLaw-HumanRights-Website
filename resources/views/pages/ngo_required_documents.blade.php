@@ -1,3 +1,8 @@
+@php
+use App\Models\NgoRequiredDocument;
+$documents = NgoRequiredDocument::where('is_active', true)->orderBy('order')->get();
+@endphp
+
 <x-layout>
 <main>
         <section class="bg-gradient-to-br from-[#123B2D] to-[#1a5240] py-20 relative overflow-hidden">
@@ -82,91 +87,34 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 reveal-stagger">
-                    <!-- Doc 1 -->
-                    <div class="group bg-white rounded-2xl md:rounded-3xl p-6 border border-slate-100 hover:border-[#123B2D]/20 hover:shadow-xl transition-all duration-300">
-                        <div class="flex items-start gap-6">
-                            <div class="w-16 h-16 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-all">
-                                <i data-lucide="file-text" class="w-8 h-8"></i>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="font-outfit font-bold text-slate-900 text-lg leading-tight mb-2">Amended Rules & Form 2024</h4>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">4.2 MB • PDF</span>
-                                    <a href="images/PDF/Amended Rules along with Registration Form - Khyber Pakhtunkhwa Non-Governmental Organizations (Registration Working in the Field of Human Rights) Rules, 2024.pdf" target="_blank" class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:bg-[#123B2D] hover:text-white transition-all">
-                                        <i data-lucide="download" class="w-4 h-4"></i>
-                                    </a>
+                    @foreach($documents as $doc)
+                        @php
+                            $ext = pathinfo($doc->file_path, PATHINFO_EXTENSION);
+                            $isDoc = in_array(strtolower($ext), ['doc', 'docx']);
+                            $isPdf = strtolower($ext) === 'pdf';
+                            $iconColor = $isPdf ? 'text-red-500 bg-red-50' : ($isDoc ? 'text-blue-500 bg-blue-50' : 'text-emerald-500 bg-emerald-50');
+                        @endphp
+                        <div class="group bg-white rounded-2xl md:rounded-3xl p-6 border border-slate-100 hover:border-[#123B2D]/20 hover:shadow-xl transition-all duration-300">
+                            <div class="flex items-start gap-6">
+                                <div class="w-16 h-16 {{ $iconColor }} rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-all">
+                                    <i data-lucide="file-text" class="w-8 h-8"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-outfit font-bold text-slate-900 text-lg leading-tight mb-2">{{ $doc->name }}</h4>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                            {{ strtoupper($ext) }} DOCUMENT
+                                        </span>
+                                        <a href="{{ asset($doc->file_path) }}" 
+                                           {{ $isPdf ? 'target="_blank"' : 'download' }} 
+                                           class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:bg-[#123B2D] hover:text-white transition-all">
+                                            <i data-lucide="download" class="w-4 h-4"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Doc 2 -->
-                    <div class="group bg-white rounded-2xl md:rounded-3xl p-6 border border-slate-100 hover:border-[#123B2D]/20 hover:shadow-xl transition-all duration-300">
-                        <div class="flex items-start gap-6">
-                            <div class="w-16 h-16 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-all">
-                                <i data-lucide="file-text" class="w-8 h-8"></i>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="font-outfit font-bold text-slate-900 text-lg leading-tight mb-2">KP NGO Rules 2024</h4>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">2.8 MB • PDF</span>
-                                    <a href="images/PDF/Khyber Pakhtunkhwa Non-Governmental Organizations (Registration Working in the Field of Human Rights) Rules, 2024.pdf" target="_blank" class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:bg-[#123B2D] hover:text-white transition-all">
-                                        <i data-lucide="download" class="w-4 h-4"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Doc 3 -->
-                    <div class="group bg-white rounded-2xl md:rounded-3xl p-6 border border-slate-100 hover:border-[#123B2D]/20 hover:shadow-xl transition-all duration-300">
-                        <div class="flex items-start gap-6">
-                            <div class="w-16 h-16 bg-blue-50 text-blue-500 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-all">
-                                <i data-lucide="file-text" class="w-8 h-8"></i>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="font-outfit font-bold text-slate-900 text-lg leading-tight mb-2">Registration Form (Word)</h4>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">32 KB • DOCX</span>
-                                    <a href="images/PDF/NGOs Registration Form, Directorate General of Law & Human Rights Government of Khyer Pakhtunkhwa (1).docx" download class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:bg-[#123B2D] hover:text-white transition-all">
-                                        <i data-lucide="download" class="w-4 h-4"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Doc 4 -->
-                    <div class="group bg-white rounded-2xl md:rounded-3xl p-6 border border-slate-100 hover:border-[#123B2D]/20 hover:shadow-xl transition-all duration-300">
-                        <div class="flex items-start gap-6">
-                            <div class="w-16 h-16 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-all">
-                                <i data-lucide="file-text" class="w-8 h-8"></i>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="font-outfit font-bold text-slate-900 text-lg leading-tight mb-2">Registration Form (PDF)</h4>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">322 KB • PDF</span>
-                                    <a href="images/PDF/NGOs Registration Form, Directorate General of Law & Human Rights Government of Khyer Pakhtunkhwa.pdf" target="_blank" class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:bg-[#123B2D] hover:text-white transition-all">
-                                        <i data-lucide="download" class="w-4 h-4"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Doc 5 -->
-                    <div class="group bg-white rounded-2xl md:rounded-3xl p-6 border border-slate-100 hover:border-[#123B2D]/20 hover:shadow-xl transition-all duration-300">
-                        <div class="flex items-start gap-6">
-                            <div class="w-16 h-16 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-all">
-                                <i data-lucide="file-text" class="w-8 h-8"></i>
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="font-outfit font-bold text-slate-900 text-lg leading-tight mb-2">Treasury Challan Form</h4>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">19 KB • PDF</span>
-                                    <a href="images/PDF/Treasury_Challan_Form NGOs Registration (DG Law and Human Rights Govt of KP).pdf.pdf" target="_blank" class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:bg-[#123B2D] hover:text-white transition-all">
-                                        <i data-lucide="download" class="w-4 h-4"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </section>

@@ -46,7 +46,17 @@
             return this.openSubmenus[key] || false;
         },
         isActive(path) {
-            return window.location.pathname === path || '{{ $currentPath }}' === path.replace(/^\//, '');
+            if (!path) return false;
+            const cleanPath = path.replace(/^(https?:\/\/[^\/]+)?\//, '');
+            const cleanCurrent = window.location.pathname.replace(/^\//, '');
+            return cleanCurrent === cleanPath;
+        },
+        isParentActive(item) {
+            if (item.path && this.isActive(item.path)) return true;
+            if (item.subItems) {
+                return item.subItems.some(sub => this.isActive(sub.path));
+            }
+            return false;
         }
     }"
     :class="{
@@ -99,15 +109,15 @@
                                         <button @click="toggleSubmenu({{ $groupIndex }}, {{ $itemIndex }})"
                                             class="menu-item group w-full"
                                             :class="[
-                                                isSubmenuOpen({{ $groupIndex }}, {{ $itemIndex }}) ?
+                                                isParentActive({{ json_encode($item) }}) ?
                                                 'menu-item-active' : 'menu-item-inactive',
                                                 !$store.sidebar.isExpanded && !$store.sidebar.isHovered ?
                                                 'xl:justify-center' : 'xl:justify-start'
                                             ]">
 
                                             <!-- Icon -->
-                                            <span :class="isSubmenuOpen({{ $groupIndex }}, {{ $itemIndex }}) ?
-                                                    'menu-item-icon-active' : 'menu-item-icon-inactive'">
+                                            <span :class="isParentActive({{ json_encode($item) }}) ?
+                                                     'menu-item-icon-active' : 'menu-item-icon-inactive'">
                                                 {!! MenuHelper::getIconSvg($item['icon']) !!}
                                             </span>
 

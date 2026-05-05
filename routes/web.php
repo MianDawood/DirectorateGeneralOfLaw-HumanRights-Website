@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\OfficialMessagesController;
 use App\Http\Controllers\Admin\NewsController;
@@ -23,14 +25,28 @@ use App\Http\Controllers\MediaCornerController;
 use App\Http\Controllers\RegistrationApplicationController;
 use App\Http\Controllers\Admin\RegistrationApplicationsController;
 use App\Http\Controllers\Admin\ServicesController;
+use App\Http\Controllers\Admin\SiteSettingsController;
 use App\Http\Controllers\Admin\UserProfileController;
 use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\PageContentsController;
+use App\Http\Controllers\Admin\IntroductionsController;
+use App\Http\Controllers\Admin\WhatWeDosController;
+use App\Http\Controllers\Admin\NgoDirectivesController;
+use App\Http\Controllers\Admin\NgoGuidelinesController;
+use App\Http\Controllers\Admin\NgoNoticesPagesController;
+use App\Http\Controllers\Admin\NgoRequiredDocumentsController;
+use App\Http\Controllers\Admin\WhatWeDoActivitiesController;
 use App\Http\Controllers\PageController as FrontPageController;
+use App\Http\Controllers\SearchController;
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
+Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
+Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 
 // Dashboard Routes (Protected)
 Route::middleware(['auth'])->prefix('dashboard')->group(function () {
@@ -40,6 +56,10 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
 
     // Management Sections
     Route::get('/services', [ServicesController::class, 'index'])->name('dashboard.services');
+    Route::get('/site-settings', [SiteSettingsController::class, 'index'])->name('admin.site-settings.index');
+    Route::put('/site-settings', [SiteSettingsController::class, 'update'])->name('admin.site-settings.update');
+    Route::get('/site-settings/homepage', [SiteSettingsController::class, 'editHomePage'])->name('admin.site-settings.homepage.edit');
+    Route::put('/site-settings/homepage', [SiteSettingsController::class, 'updateHomePage'])->name('admin.site-settings.homepage.update');
     Route::get('/messages', [DashboardController::class, 'messages'])->name('dashboard.messages');
     Route::get('/downloads', [DashboardController::class, 'downloads'])->name('dashboard.downloads');
     Route::get('/causes', [DashboardController::class, 'causes'])->name('dashboard.causes');
@@ -182,15 +202,54 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
         'store' => 'admin.pages.store',
         'show' => 'admin.pages.show',
         'edit' => 'admin.pages.edit',
-        'update' => 'admin.pages.update',
+'update' => 'admin.pages.update',
         'destroy' => 'admin.pages.destroy',
     ]);
-    
+
     // Page Management Additional Routes
     Route::patch('pages/{page}/toggle-status', [PageController::class, 'toggleStatus'])->name('admin.pages.toggle-status');
     Route::patch('pages/{page}/toggle-navigation', [PageController::class, 'toggleNavigation'])->name('admin.pages.toggle-navigation');
     Route::post('pages/{page}/duplicate', [PageController::class, 'duplicate'])->name('admin.pages.duplicate');
     Route::post('pages/upload-image', [PageController::class, 'uploadImage'])->name('admin.pages.upload-image');
+
+    // Introduction Page Management
+    Route::get('introductions', [IntroductionsController::class, 'edit'])->name('admin.introductions.edit');
+    Route::put('introductions', [IntroductionsController::class, 'update'])->name('admin.introductions.update');
+    Route::delete('introductions/head/{head}', [IntroductionsController::class, 'destroyHead'])->name('admin.introductions.head.destroy');
+
+    // What We Do Page Management
+    Route::get('what-we-dos', [WhatWeDosController::class, 'edit'])->name('admin.what-we-dos.edit');
+    Route::put('what-we-dos', [WhatWeDosController::class, 'update'])->name('admin.what-we-dos.update');
+    
+Route::delete('/what-we-dos/activity/{activity}', [WhatWeDosController::class, 'destroyActivity'])
+    ->name('admin.what-we-dos.activity.destroy');
+
+    // NGO Directives Page Management
+    Route::get('ngo-directives', [NgoDirectivesController::class, 'edit'])->name('admin.ngo-directives.edit');
+    Route::put('ngo-directives', [NgoDirectivesController::class, 'update'])->name('admin.ngo-directives.update');
+
+    // NGO Guidelines Page Management
+    Route::get('ngo-guidelines', [NgoGuidelinesController::class, 'edit'])->name('admin.ngo-guidelines.edit');
+    Route::put('ngo-guidelines', [NgoGuidelinesController::class, 'update'])->name('admin.ngo-guidelines.update');
+    Route::delete('ngo-guidelines/{guideline}', [NgoGuidelinesController::class, 'destroy'])->name('admin.ngo-guidelines.destroy');
+
+    // NGO Notices Page Management
+    Route::resource('ngo-notices-pages', NgoNoticesPagesController::class)->names([
+        'index' => 'admin.ngo-notices-pages.index',
+        'create' => 'admin.ngo-notices-pages.create',
+        'store' => 'admin.ngo-notices-pages.store',
+        'show' => 'admin.ngo-notices-pages.show',
+        'edit' => 'admin.ngo-notices-pages.edit',
+        'update' => 'admin.ngo-notices-pages.update',
+        'destroy' => 'admin.ngo-notices-pages.destroy',
+    ]);
+
+    // NGO Required Documents Page Management
+    Route::get('ngo-required-documents', [NgoRequiredDocumentsController::class, 'edit'])->name('admin.ngo-required-documents.edit');
+    Route::put('ngo-required-documents', [NgoRequiredDocumentsController::class, 'update'])->name('admin.ngo-required-documents.update');
+    Route::delete('ngo-required-documents/{document}', [NgoRequiredDocumentsController::class, 'destroy'])->name('admin.ngo-required-documents.destroy');
+
+    // Old Page Contents (remove)
 });
 
 Route::get('/', function () {
@@ -281,3 +340,4 @@ Route::post('/contact_us', [ContactController::class, 'store'])->name('contact.s
 Route::get('/page/{slug}', [FrontPageController::class, 'show'])->name('page.show');
 Route::get('/pages', [FrontPageController::class, 'index'])->name('pages.index');
 Route::get('/pages/search', [FrontPageController::class, 'search'])->name('pages.search');
+Route::get('/search', [SearchController::class, 'index'])->name('search');

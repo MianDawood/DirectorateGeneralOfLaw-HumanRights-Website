@@ -29,6 +29,12 @@ class DatabaseSeeder extends Seeder
             NgoNoticeSeeder::class,
             EventSeeder::class,
             RegistrationApplicationsSeeder::class,
+            WhatWeDoSeeder::class,
+            IntroductionSeeder::class,
+            NgoRequiredDocumentSeeder::class,
+            NgoGuidelineSeeder::class,
+            NgoDirectiveSeeder::class,
+            SiteSettingSeeder::class,
         ]);
     }
 }

@@ -25,6 +25,12 @@
                             </p>
                         </div>
                         <div>
+                            @if (session('status'))
+                                <div class="mb-5 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-800 dark:bg-green-900/20 dark:text-green-300">
+                                    {{ session('status') }}
+                                </div>
+                            @endif
+
                             <form method="POST" action="{{ route('login.post') }}">
                                 @csrf
                                 <div class="space-y-5">
@@ -86,6 +92,10 @@
                                                 Keep me logged in
                                             </label>
                                         </div>
+                                        <a href="{{ route('password.request') }}"
+                                            class="text-sm font-medium text-brand-500 transition hover:text-brand-600">
+                                            Forgot password?
+                                        </a>
                                     </div>
                                     <!-- Button -->
                                     <div>
