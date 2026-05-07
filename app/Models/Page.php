@@ -12,6 +12,8 @@ class Page extends Model
     use HasFactory;
 
     protected $fillable = [
+        'parent_id',
+        'static_parent',
         'title',
         'slug',
         'content',
@@ -24,6 +26,22 @@ class Page extends Model
         'template',
         'published_at',
     ];
+
+    /**
+     * Get the parent page.
+     */
+    public function parent()
+    {
+        return $this->belongsTo(Page::class, 'parent_id');
+    }
+
+    /**
+     * Get the child pages.
+     */
+    public function children()
+    {
+        return $this->hasMany(Page::class, 'parent_id')->ordered();
+    }
 
     protected $casts = [
         'content' => 'string',

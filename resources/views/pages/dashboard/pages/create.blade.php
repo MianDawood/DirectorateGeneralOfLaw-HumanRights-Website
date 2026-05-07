@@ -23,6 +23,26 @@
                         </div>
 
                         
+                        <!-- parent_id -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Parent Page (Optional)</label>
+                                    <select name="parent_selection" id="parent_selection" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="">None (Top Level)</option>
+                                        <optgroup label="Global Menus">
+                                            <option value="static:who_we_are" {{ (old('parent_selection') == 'static:who_we_are' || (isset($page) && $page->static_parent == 'who_we_are')) ? 'selected' : '' }}>Who We Are</option>
+                                            <option value="static:ngo_registration" {{ (old('parent_selection') == 'static:ngo_registration' || (isset($page) && $page->static_parent == 'ngo_registration')) ? 'selected' : '' }}>NGO Registration</option>
+                                        </optgroup>
+                                        <optgroup label="Existing Pages">
+                                            @foreach($parentPages as $parentPage)
+                                                <option value="{{ $parentPage->id }}" {{ (old('parent_selection') == $parentPage->id || (isset($page) && $page->parent_id == $parentPage->id)) ? 'selected' : '' }}>
+                                                    {{ $parentPage->title }}
+                                                </option>
+                                            @endforeach
+                                        </optgroup>
+                                    </select>
+                            @error('parent_id')<p class="text-red-600 text-sm mt-1">{{ $message }}</p>@enderror
+                        </div>
+
                         <!-- status -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Status</label>

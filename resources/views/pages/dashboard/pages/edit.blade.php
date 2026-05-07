@@ -36,6 +36,29 @@
                             </div>
 
                             
+                            <!-- Parent Page -->
+                            <div>
+                                <label for="parent_id" class="block text-sm font-medium text-gray-700">Parent Page (Optional)</label>
+                                <select name="parent_selection" id="parent_selection"
+                                        class="mt-1 block w-full px-3 py-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="">None (Top Level)</option>
+                                    <optgroup label="Global Menus">
+                                        <option value="static:who_we_are" {{ (old('parent_selection') == 'static:who_we_are' || $page->static_parent == 'who_we_are') ? 'selected' : '' }}>Who We Are</option>
+                                        <option value="static:ngo_registration" {{ (old('parent_selection') == 'static:ngo_registration' || $page->static_parent == 'ngo_registration') ? 'selected' : '' }}>NGO Registration</option>
+                                    </optgroup>
+                                    <optgroup label="Existing Pages">
+                                        @foreach($parentPages as $p)
+                                            <option value="{{ $p->id }}" {{ (old('parent_selection') == $p->id || $page->parent_id == $p->id) ? 'selected' : '' }}>
+                                                {{ $p->title }}
+                                            </option>
+                                        @endforeach
+                                    </optgroup>
+                                </select>
+                                @error('parent_id')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
                             <!-- Status -->
                             <div>
                                 <label for="status" class="block text-sm font-medium text-gray-700">Status</label>

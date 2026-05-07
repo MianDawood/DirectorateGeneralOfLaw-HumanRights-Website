@@ -189,7 +189,7 @@
 
                         @forelse($allEvents as $event)
                         <div class="flex-none w-full lg:w-[calc(50%-16px)] snap-start">
-                            <div class="group flex flex-col md:flex-row bg-white rounded-3xl overflow-hidden shadow-sm transition-all duration-500 border border-slate-100 h-full">
+                            <div class="group flex flex-col md:flex-row bg-gray-50 rounded-3xl overflow-hidden shadow-sm transition-all duration-500 border border-slate-100 h-full">
                                 <div class="relative w-full md:w-2/5 h-64 md:h-auto overflow-hidden">
                                     <img src="{{ $event->image_path ? asset('storage/' . $event->image_path) : asset('images/event 1.jpeg') }}" alt="{{ $event->title }}"
                                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
@@ -267,7 +267,7 @@
         </section>
 
         <!-- Video Gallery Section -->
-        <section id="video-corner" class="py-24 bg-secondary overflow-hidden relative">
+        <section id="video-corner" class="py-24 overflow-hidden relative" style="background-color: black;">
             <!-- Animated decorative elements -->
             <div
                 class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 ">
@@ -309,10 +309,10 @@
                             <h4 class="text-white font-outfit text-xl font-bold uppercase tracking-tight mb-2 group-hover:text-primary transition-colors">
                                 {{ $video->title }}</h4>
                             @if($video->description)
-                            <p class="text-white/65 text-sm leading-relaxed line-clamp-3">{{ $video->description }}</p>
+                            <p class="text-white text-sm leading-relaxed line-clamp-3">{{ $video->description }}</p>
                             @endif
                             <div class="mt-5 pt-4 border-t border-white/10">
-                                <span class="inline-flex items-center gap-2 text-primary text-[11px] font-black uppercase tracking-widest">
+                                <span class="inline-flex items-center gap-2 text-white text-[11px] font-black uppercase tracking-widest">
                                     <i data-lucide="play-circle" class="w-4 h-4"></i>
                                     Tap to play
                                 </span>

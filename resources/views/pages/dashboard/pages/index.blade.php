@@ -37,6 +37,9 @@
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                             {{ Str::limit($page->title, 50) }}
+                                            @if($page->parent_id)
+                                                <div class="text-xs text-gray-400">Sub-page of: {{ $page->parent->title }}</div>
+                                            @endif
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             <code class="bg-gray-100 px-2 py-1 rounded text-xs">{{ $page->slug }}</code>

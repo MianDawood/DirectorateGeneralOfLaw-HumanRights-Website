@@ -26,7 +26,8 @@ class PageController extends Controller
      */
     public function create()
     {
-        return view('pages.dashboard.pages.create');
+        $parentPages = Page::whereNull('parent_id')->orderBy('title')->get();
+        return view('pages.dashboard.pages.create', compact('parentPages'));
     }
 
     /**
@@ -35,6 +36,7 @@ class PageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'parent_selection' => 'nullable|string',
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:pages,slug',
             'content' => 'required|string',
@@ -50,6 +52,19 @@ class PageController extends Controller
             'title', 'content', 'meta_title', 'meta_description', 
             'meta_keywords', 'status'
         ]);
+
+        if ($request->filled('parent_selection')) {
+            if (Str::startsWith($request->parent_selection, 'static:')) {
+                $data['static_parent'] = Str::after($request->parent_selection, 'static:');
+                $data['parent_id'] = null;
+            } else {
+                $data['parent_id'] = $request->parent_selection;
+                $data['static_parent'] = null;
+            }
+        } else {
+            $data['parent_id'] = null;
+            $data['static_parent'] = null;
+        }
         
         $data['slug'] = $request->slug ?: Str::slug($request->title);
         $data['show_in_navigation'] = $request->has('show_in_navigation');
@@ -74,7 +89,11 @@ class PageController extends Controller
      */
     public function edit(Page $page)
     {
-        return view('pages.dashboard.pages.edit', compact('page'));
+        $parentPages = Page::whereNull('parent_id')
+                          ->where('id', '!=', $page->id)
+                          ->orderBy('title')
+                          ->get();
+        return view('pages.dashboard.pages.edit', compact('page', 'parentPages'));
     }
 
     /**
@@ -83,6 +102,7 @@ class PageController extends Controller
     public function update(Request $request, Page $page)
     {
         $request->validate([
+            'parent_selection' => 'nullable|string',
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:pages,slug,' . $page->id,
             'content' => 'required|string',
@@ -98,6 +118,19 @@ class PageController extends Controller
             'title', 'content', 'meta_title', 'meta_description', 
             'meta_keywords', 'status'
         ]);
+
+        if ($request->filled('parent_selection')) {
+            if (Str::startsWith($request->parent_selection, 'static:')) {
+                $data['static_parent'] = Str::after($request->parent_selection, 'static:');
+                $data['parent_id'] = null;
+            } else {
+                $data['parent_id'] = $request->parent_selection;
+                $data['static_parent'] = null;
+            }
+        } else {
+            $data['parent_id'] = null;
+            $data['static_parent'] = null;
+        }
         
         $data['slug'] = $request->slug ?: Str::slug($request->title);
         $data['show_in_navigation'] = $request->has('show_in_navigation');

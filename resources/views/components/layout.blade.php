@@ -6,6 +6,35 @@
         'home_campaign_secondary' => $settings->home_campaign_secondary ?? 'Anti-Corruption Week',
     ];
 @endphp
+@php
+    $topLevelPages = \App\Models\Page::published()
+        ->whereNull('parent_id')
+        ->whereNull('static_parent')
+        ->inNavigation()
+        ->ordered()
+        ->with('children')
+        ->get();
+    
+    $whoWeArePages = \App\Models\Page::published()
+        ->where('static_parent', 'who_we_are')
+        ->inNavigation()
+        ->ordered()
+        ->get();
+        
+    $ngoRegistrationPages = \App\Models\Page::published()
+        ->where('static_parent', 'ngo_registration')
+        ->inNavigation()
+        ->ordered()
+        ->get();
+
+    $mobileTopLevelPages = \App\Models\Page::published()
+        ->whereNull('parent_id')
+        ->whereNull('static_parent')
+        ->inNavigation()
+        ->ordered()
+        ->with('children')
+        ->get();
+@endphp
 <!DOCTYPE html>
 <html lang="en" class="overflow-x-hidden">
 
@@ -258,7 +287,7 @@
                                 data-lucide="home" class="w-4 h-4"></i><span>Home</span></a></li>
                     <li class="group relative">
                         <button
-                            class="flex items-center gap-2 px-5 py-4 text-white {{ request()->routeIs('introduction', 'ourteam') ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm"><span>Who
+                            class="flex items-center gap-2 px-5 py-4 text-white {{ (request()->routeIs('introduction', 'ourteam') || $whoWeArePages->contains('slug', request()->route('slug'))) ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm"><span>Who
                                 We Are</span><i data-lucide="chevron-down"
                                 class="w-3.5 h-3.5 opacity-60 group-hover:rotate-180 transition-transform duration-300"></i></button>
                         <div
@@ -272,6 +301,14 @@
                                     class="px-4 py-3 text-slate-700 hover:bg-[#123B2D]/5 hover:text-[#123B2D] rounded-lg transition-colors flex items-center justify-between group/item text-sm">Our
                                     Team<i data-lucide="chevron-right"
                                         class="w-3 h-3 opacity-0 group-hover/item:opacity-100 -translate-x-2 group-hover/item:translate-x-0 transition-all"></i></a>
+                                
+                                @foreach($whoWeArePages as $p)
+                                    <a href="{{ route('page.show', $p->slug) }}"
+                                        class="px-4 py-3 text-slate-700 {{ request()->route('slug') === $p->slug ? 'bg-[#123B2D]/5 text-[#123B2D]' : 'hover:bg-[#123B2D]/5 hover:text-[#123B2D]' }} rounded-lg transition-colors flex items-center justify-between group/item text-sm">
+                                        {{ $p->title }}
+                                        <i data-lucide="chevron-right" class="w-3 h-3 {{ request()->route('slug') === $p->slug ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2' }} group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all"></i>
+                                    </a>
+                                @endforeach
                             </div>
                         </div>
                     </li>
@@ -298,7 +335,7 @@
                     <!-- NGO Registration with Sub-Menu -->
                     <li class="group relative">
                         <a href="{{ route('ngo_required_documents') }}"
-                            class="flex items-center gap-2 px-5 py-4 text-white {{ request()->routeIs('ngo_*', 'registration_form_*') ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm"><span>NGO
+                            class="flex items-center gap-2 px-5 py-4 text-white {{ (request()->routeIs('ngo_*', 'registration_form_*') || $ngoRegistrationPages->contains('slug', request()->route('slug'))) ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm"><span>NGO
                                 Registration</span><i data-lucide="chevron-down"
                                 class="w-3.5 h-3.5 opacity-60 group-hover:rotate-180 transition-transform duration-300"></i></a>
                         <div
@@ -330,6 +367,17 @@
                                 <a href="{{ route('ngo_suspended') }}"
                                     class="px-4 py-3 text-slate-700 hover:bg-[#123B2D]/5 hover:text-[#123B2D] rounded-lg transition-colors flex items-center gap-3 text-sm"><i
                                         data-lucide="x-circle" class="w-4 h-4 text-[#02B1EB]"></i>Suspended NGOs</a>
+                                
+                                @foreach($ngoRegistrationPages as $p)
+                                    <a href="{{ route('page.show', $p->slug) }}"
+                                        class="px-4 py-3 text-slate-700 {{ request()->route('slug') === $p->slug ? 'bg-[#123B2D]/5 text-[#123B2D]' : 'hover:bg-[#123B2D]/5 hover:text-[#123B2D]' }} rounded-lg transition-colors flex items-center justify-between group/item text-sm">
+                                        <div class="flex items-center gap-3">
+                                            <i data-lucide="file-text" class="w-4 h-4 text-[#02B1EB]"></i>
+                                            {{ $p->title }}
+                                        </div>
+                                        <i data-lucide="chevron-right" class="w-3 h-3 {{ request()->route('slug') === $p->slug ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2' }} group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all"></i>
+                                    </a>
+                                @endforeach
                             </div>
                         </div>
                     </li>
@@ -338,18 +386,42 @@
                     </li>
                     
                     <!-- Dynamic Pages -->
-                    @php
-                        $dynamicPages = \App\Models\Page::published()
-                            ->inNavigation()
-                            ->ordered()
-                            ->get();
-                    @endphp
-                    @if($dynamicPages->count() > 0)
-                        @foreach($dynamicPages as $dynamicPage)
-                            <li><a href="{{ route('page.show', $dynamicPage->slug) }}"
-                                    class="flex items-center gap-2 px-5 py-4 text-white {{ request()->routeIs('page.show') && request()->route('slug') === $dynamicPage->slug ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm"><span>{{ $dynamicPage->title }}</span></a></li>
-                        @endforeach
-                    @endif
+                    @foreach($topLevelPages as $page)
+                        @php
+                            $hasChildren = $page->children->count() > 0;
+                            $isHierarchyActive = request()->routeIs('page.show') && 
+                                                (request()->route('slug') === $page->slug || 
+                                                 $page->children->contains('slug', request()->route('slug')));
+                        @endphp
+
+                        @if($hasChildren)
+                            <li class="group relative">
+                                <a href="{{ route('page.show', $page->slug) }}"
+                                    class="flex items-center gap-2 px-5 py-4 text-white {{ $isHierarchyActive ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm">
+                                    <span>{{ $page->title }}</span>
+                                    <i data-lucide="chevron-down" class="w-3.5 h-3.5 opacity-60 group-hover:rotate-180 transition-transform duration-300"></i>
+                                </a>
+                                <div class="absolute left-0 top-full w-64 bg-white shadow-2xl rounded-b-xl border border-slate-100 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-[110] p-2">
+                                    <div class="flex flex-col">
+                                        @foreach($page->children as $child)
+                                            <a href="{{ route('page.show', $child->slug) }}"
+                                                class="px-4 py-3 text-slate-700 {{ (request()->routeIs('page.show') && request()->route('slug') === $child->slug) ? 'bg-[#123B2D]/5 text-[#123B2D]' : 'hover:bg-[#123B2D]/5 hover:text-[#123B2D]' }} rounded-lg transition-colors flex items-center justify-between group/item text-sm">
+                                                {{ $child->title }}
+                                                <i data-lucide="chevron-right" class="w-3 h-3 {{ (request()->routeIs('page.show') && request()->route('slug') === $child->slug) ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2' }} group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all"></i>
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </li>
+                        @else
+                            <li>
+                                <a href="{{ route('page.show', $page->slug) }}"
+                                    class="flex items-center gap-2 px-5 py-4 text-white {{ (request()->routeIs('page.show') && request()->route('slug') === $page->slug) ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm">
+                                    <span>{{ $page->title }}</span>
+                                </a>
+                            </li>
+                        @endif
+                    @endforeach
                     
                     <li><a href="{{ route('contact_us') }}"
                             class="flex items-center gap-2 px-5 py-4 text-white {{ request()->routeIs('contact_us') ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm"><span>Contact Us</span></a></li>
@@ -396,20 +468,26 @@
 
                         <div class="mobile-dropdown group">
                             <div
-                                class="flex items-center justify-between w-full p-3 rounded-xl text-slate-700 font-bold {{ request()->routeIs('introduction', 'ourteam') ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
+                                class="flex items-center justify-between w-full p-3 rounded-xl text-slate-700 font-bold {{ (request()->routeIs('introduction', 'ourteam') || $whoWeArePages->contains('slug', request()->route('slug'))) ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
                                 <a href="{{ route('introduction') }}" class="flex items-center gap-3 flex-1">
                                     <i data-lucide="users" class="w-5 h-5"></i> Who We Are
                                 </a>
                                 <button class="p-2 dropdown-trigger">
                                     <i data-lucide="chevron-down"
-                                        class="w-4 h-4 transition-transform duration-300 dropdown-icon"></i>
+                                        class="w-4 h-4 transition-transform duration-300 dropdown-icon {{ (request()->routeIs('introduction', 'ourteam') || $whoWeArePages->contains('slug', request()->route('slug'))) ? 'rotate-180' : '' }}"></i>
                                 </button>
                             </div>
-                            <div class="hidden space-y-1 mt-1 ml-11 dropdown-content">
+                            <div class="{{ (request()->routeIs('introduction', 'ourteam') || $whoWeArePages->contains('slug', request()->route('slug'))) ? '' : 'hidden' }} space-y-1 mt-1 ml-11 dropdown-content">
                                 <a href="{{ route('introduction') }}"
-                                    class="block p-2 text-sm text-slate-500 italic">Introduction</a>
-                                <a href="{{ route('ourteam') }}" class="block p-2 text-sm text-slate-500 italic">Our
+                                    class="block p-2 text-sm {{ request()->routeIs('introduction') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Introduction</a>
+                                <a href="{{ route('ourteam') }}" class="block p-2 text-sm {{ request()->routeIs('ourteam') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Our
                                     Team</a>
+                                @foreach($whoWeArePages as $p)
+                                    <a href="{{ route('page.show', $p->slug) }}"
+                                        class="block p-2 text-sm {{ request()->route('slug') === $p->slug ? 'text-primary font-bold' : 'text-slate-500' }} italic">
+                                        {{ $p->title }}
+                                    </a>
+                                @endforeach
                             </div>
                         </div>
 
@@ -441,30 +519,36 @@
 
                         <div class="mobile-dropdown group">
                             <div
-                                class="flex items-center justify-between w-full p-3 rounded-xl text-slate-700 font-bold {{ request()->routeIs('ngo_*', 'registration_form_*') ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
+                                class="flex items-center justify-between w-full p-3 rounded-xl text-slate-700 font-bold {{ (request()->routeIs('ngo_*', 'registration_form_*') || $ngoRegistrationPages->contains('slug', request()->route('slug'))) ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
                                 <a href="{{ route('ngo_required_documents') }}" class="flex items-center gap-3 flex-1">
                                     <i data-lucide="file-check" class="w-5 h-5"></i> NGO Registration
                                 </a>
                                 <button class="p-2 dropdown-trigger">
                                     <i data-lucide="chevron-down"
-                                        class="w-4 h-4 transition-transform duration-300 dropdown-icon"></i>
+                                        class="w-4 h-4 transition-transform duration-300 dropdown-icon {{ (request()->routeIs('ngo_*', 'registration_form_*') || $ngoRegistrationPages->contains('slug', request()->route('slug'))) ? 'rotate-180' : '' }}"></i>
                                 </button>
                             </div>
-                            <div class="hidden space-y-1 mt-1 ml-11 dropdown-content">
+                            <div class="{{ (request()->routeIs('ngo_*', 'registration_form_*') || $ngoRegistrationPages->contains('slug', request()->route('slug'))) ? '' : 'hidden' }} space-y-1 mt-1 ml-11 dropdown-content">
                                 <a href="{{ route('ngo_required_documents') }}"
-                                    class="block p-2 text-sm text-slate-500 italic">Required Documents</a>
+                                    class="block p-2 text-sm {{ request()->routeIs('ngo_required_documents') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Required Documents</a>
                                 <a href="{{ route('ngo_guidelines') }}"
-                                    class="block p-2 text-sm text-slate-500 italic">Registration Guidelines</a>
+                                    class="block p-2 text-sm {{ request()->routeIs('ngo_guidelines') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Registration Guidelines</a>
                                 <a href="{{ route('ngo_directives') }}"
-                                    class="block p-2 text-sm text-slate-500 italic">Mandatory Directives</a>
+                                    class="block p-2 text-sm {{ request()->routeIs('ngo_directives') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Mandatory Directives</a>
                                 <a href="{{ route('ngo_notices') }}"
-                                    class="block p-2 text-sm text-slate-500 italic">Latest Notice Board</a>
+                                    class="block p-2 text-sm {{ request()->routeIs('ngo_notices') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Latest Notice Board</a>
                                 <a href="{{ route('registration_form_part1') }}"
-                                    class="block p-2 text-sm text-slate-500 italic">Online Registration</a>
+                                    class="block p-2 text-sm {{ request()->routeIs('registration_form_*') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Online Registration</a>
                                 <a href="{{ route('ngo_registered') }}"
-                                    class="block p-2 text-sm text-slate-500 italic">Registered NGOs</a>
+                                    class="block p-2 text-sm {{ request()->routeIs('ngo_registered') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Registered NGOs</a>
                                 <a href="{{ route('ngo_suspended') }}"
-                                    class="block p-2 text-sm text-slate-500 italic">Suspended NGOs</a>
+                                    class="block p-2 text-sm {{ request()->routeIs('ngo_suspended') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Suspended NGOs</a>
+                                @foreach($ngoRegistrationPages as $p)
+                                    <a href="{{ route('page.show', $p->slug) }}"
+                                        class="block p-2 text-sm {{ request()->route('slug') === $p->slug ? 'text-primary font-bold' : 'text-slate-500' }} italic">
+                                        {{ $p->title }}
+                                    </a>
+                                @endforeach
                             </div>
                         </div>
 
@@ -473,20 +557,37 @@
                             <i data-lucide="book-open" class="w-5 h-5"></i> Resources
                         </a>
 
-                        @php
-                            $dynamicPages = \App\Models\Page::published()
-                                ->inNavigation()
-                                ->ordered()
-                                ->get();
-                        @endphp
-                        @if($dynamicPages->count() > 0)
-                            @foreach($dynamicPages as $dynamicPage)
-                                <a href="{{ route('page.show', $dynamicPage->slug) }}"
-                                    class="flex items-center gap-3 p-3 rounded-xl text-slate-700 font-bold {{ request()->routeIs('page.show') && request()->route('slug') === $dynamicPage->slug ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
-                                    <i data-lucide="file-text" class="w-5 h-5"></i> {{ $dynamicPage->title }}
+                        @foreach($mobileTopLevelPages as $page)
+                            @php
+                                $hasChildren = $page->children->count() > 0;
+                                $isHierarchyActive = request()->routeIs('page.show') && 
+                                                    (request()->route('slug') === $page->slug || 
+                                                     $page->children->contains('slug', request()->route('slug')));
+                            @endphp
+
+                            @if($hasChildren)
+                                <div class="mobile-dropdown group">
+                                    <div class="flex items-center justify-between w-full p-3 rounded-xl {{ $isHierarchyActive ? 'bg-slate-50 text-primary' : 'text-slate-700 hover:bg-slate-50 hover:text-primary' }} font-bold transition-all">
+                                        <a href="{{ route('page.show', $page->slug) }}" class="flex items-center gap-3 flex-1">
+                                            <i data-lucide="file-text" class="w-5 h-5"></i> {{ $page->title }}
+                                        </a>
+                                        <button class="p-2 dropdown-trigger">
+                                            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-300 dropdown-icon {{ $isHierarchyActive ? 'rotate-180' : '' }}"></i>
+                                        </button>
+                                    </div>
+                                    <div class="{{ $isHierarchyActive ? '' : 'hidden' }} space-y-1 mt-1 ml-11 dropdown-content">
+                                        @foreach($page->children as $child)
+                                            <a href="{{ route('page.show', $child->slug) }}" class="block p-2 text-sm {{ (request()->routeIs('page.show') && request()->route('slug') === $child->slug) ? 'text-primary font-bold' : 'text-slate-500' }} italic">{{ $child->title }}</a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @else
+                                <a href="{{ route('page.show', $page->slug) }}"
+                                    class="flex items-center gap-3 p-3 rounded-xl text-slate-700 font-bold {{ (request()->routeIs('page.show') && request()->route('slug') === $page->slug) ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
+                                    <i data-lucide="file-text" class="w-5 h-5"></i> {{ $page->title }}
                                 </a>
-                            @endforeach
-                        @endif
+                            @endif
+                        @endforeach
 
                         <a href="{{ route('contact_us') }}"
                             class="flex items-center gap-3 p-3 rounded-xl text-slate-700 font-bold {{ request()->routeIs('contact_us') ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
