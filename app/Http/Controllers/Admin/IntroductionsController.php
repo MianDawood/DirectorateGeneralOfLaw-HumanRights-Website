@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class IntroductionsController extends Controller
 {
@@ -62,18 +63,10 @@ class IntroductionsController extends Controller
 
                     // Handle image upload
                     if ($request->hasFile("introductions.{$id}.image")) {
-                        if ($introduction->image && File::exists(public_path($introduction->image))) {
-                            File::delete(public_path($introduction->image));
-                        }
+                        $this->deleteImage($introduction->image);
 
-                        $image = $request->file("introductions.{$id}.image");
-                        $filename = time() . '_intro_' . $id . '.' . $image->getClientOriginalExtension();
-                        $uploadPath = public_path('uploads/introductions');
-                        if (!File::isDirectory($uploadPath)) {
-                            File::makeDirectory($uploadPath, 0755, true);
-                        }
-                        $image->move($uploadPath, $filename);
-                        $introduction->update(['image' => 'uploads/introductions/' . $filename]);
+                        $path = $request->file("introductions.{$id}.image")->store('introductions', 'public');
+                        $introduction->update(['image' => $path]);
                     }
                 }
             }
@@ -113,18 +106,10 @@ class IntroductionsController extends Controller
 
                 // Handle Image Upload for Head
                 if (isset($head) && $request->hasFile("heads.{$key}.image")) {
-                    if ($head->image && File::exists(public_path($head->image))) {
-                        File::delete(public_path($head->image));
-                    }
+                    $this->deleteImage($head->image);
 
-                    $image = $request->file("heads.{$key}.image");
-                    $filename = time() . '_head_' . ($head->id ?? $key) . '.' . $image->getClientOriginalExtension();
-                    $uploadPath = public_path('uploads/introductions');
-                    if (!File::isDirectory($uploadPath)) {
-                        File::makeDirectory($uploadPath, 0755, true);
-                    }
-                    $image->move($uploadPath, $filename);
-                    $head->update(['image' => 'uploads/introductions/' . $filename]);
+                    $path = $request->file("heads.{$key}.image")->store('introductions', 'public');
+                    $head->update(['image' => $path]);
                 }
             }
         }
@@ -139,10 +124,24 @@ class IntroductionsController extends Controller
      */
     public function destroyHead(IntroductionHead $head): JsonResponse
     {
-        if ($head->image && File::exists(public_path($head->image))) {
-            File::delete(public_path($head->image));
-        }
+        $this->deleteImage($head->image);
         $head->delete();
         return response()->json(['success' => true]);
+    }
+
+    private function deleteImage(?string $path): void
+    {
+        if (!$path) {
+            return;
+        }
+
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+            return;
+        }
+
+        if (File::exists(public_path($path))) {
+            File::delete(public_path($path));
+        }
     }
 }

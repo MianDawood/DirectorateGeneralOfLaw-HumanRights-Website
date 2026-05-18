@@ -2,6 +2,16 @@
 use App\Models\Introduction;
 use App\Models\IntroductionHead;
 
+$introImageUrl = static function ($path, $fallback) {
+    if (!$path) {
+        return asset($fallback);
+    }
+
+    return str_starts_with($path, 'uploads/') || str_starts_with($path, 'images/')
+        ? asset($path)
+        : asset('storage/' . $path);
+};
+
 // Fetch all active introduction sections ordered by their ID
 $introSections = Introduction::where('is_active', true)->orderBy('id')->get();
 
@@ -64,7 +74,7 @@ $heads = IntroductionHead::where('is_active', true)->orderBy('order')->get();
                         </div>
 
                         <div class="relative b p-2 rounded-2xl  ">
-                            <img src="{{ asset($hero?->image ?? 'images/hero image 5.jpg') }}" alt="Directorate Activities"
+                            <img src="{{ $introImageUrl($hero?->image, 'images/hero image 5.jpg') }}" alt="Directorate Activities"
                                 class="w-full h-[350px] lg:h-[450px] object-cover rounded-xl grayscale-[0.2] hover:grayscale-0 transition-all duration-700">
                         </div>
 
@@ -114,7 +124,7 @@ $heads = IntroductionHead::where('is_active', true)->orderBy('order')->get();
                                 <div class="absolute left-1/2 lg:left-0 top-0 lg:top-1/2 shrink-0 z-20 slide-image transition-all duration-1000 ease-out"
                                      style="transform: translate({{ 'window.innerWidth < 1024 ? \'-50%\' : \'-33.33%\'' }}, -50%) scale(1);">
                                     <div class="w-[200px] h-[200px] lg:w-[290px] lg:h-[370px] rounded-full lg:rounded-[50px] overflow-hidden shadow-2xl">
-                                        <img src="{{ asset($head->image ?? 'images/introduction 1.jpeg') }}" alt="{{ $head->name }}"
+                                        <img src="{{ $introImageUrl($head->image, 'images/introduction 1.jpeg') }}" alt="{{ $head->name }}"
                                             class="w-full h-full object-cover">
                                     </div>
                                 </div>

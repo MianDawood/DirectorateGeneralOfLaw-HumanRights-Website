@@ -1,3 +1,15 @@
+@php
+    $introImageUrl = static function ($path) {
+        if (!$path) {
+            return null;
+        }
+
+        return str_starts_with($path, 'uploads/') || str_starts_with($path, 'images/')
+            ? asset($path)
+            : asset('storage/' . $path);
+    };
+@endphp
+
 @extends('layouts.app')
 
 @section('content')
@@ -67,7 +79,7 @@
                                     </div>
                                     @if($intro->image)
                                         <div class="relative group">
-                                            <img src="{{ asset($intro->image) }}" class="h-16 w-16 object-cover rounded-lg border border-gray-200 shadow-sm" alt="Preview">
+                                            <img src="{{ $introImageUrl($intro->image) }}" class="h-16 w-16 object-cover rounded-lg border border-gray-200 shadow-sm" alt="Preview">
                                         </div>
                                     @endif
                                 </div>
@@ -149,7 +161,7 @@
                                 <div class="flex items-center gap-4">
                                     <input type="file" :name="'heads[' + (head.id || 'new_' + index) + '][image]'" accept="image/*" class="flex-1 text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700">
                                     <template x-if="head.image">
-                                        <img :src="'/' + head.image" class="w-10 h-10 object-cover rounded-lg border">
+                                        <img :src="head.image.startsWith('uploads/') || head.image.startsWith('images/') ? '/' + head.image : '/storage/' + head.image" class="w-10 h-10 object-cover rounded-lg border">
                                     </template>
                                 </div>
                             </div>
