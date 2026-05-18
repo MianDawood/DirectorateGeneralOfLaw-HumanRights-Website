@@ -13,9 +13,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="px-4 py-8 mx-auto max-w-5xl" 
+<div class="px-4 py-8 mx-auto max-w-5xl"
      x-data="headManager({{ json_encode($heads) }})">
-    
+
     <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Introduction Page</h1>
@@ -53,7 +53,7 @@
                 <svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 Page Content Sections
             </h2>
-            
+
             @foreach($introductions as $index => $intro)
                 <div class="rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800 overflow-hidden transition-all hover:shadow-md">
                     <div class="border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 px-6 py-4 flex items-center justify-between">
@@ -63,14 +63,14 @@
                             <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 group-hover/check:text-brand-600 transition">Active Status</span>
                         </label>
                     </div>
-                    
+
                     <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title</label>
                                 <input type="text" name="introductions[{{ $intro->id }}][title]" value="{{ old('introductions.' . $intro->id . '.title', $intro->title) }}" class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm transition focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-900 dark:text-white">
                             </div>
-                            
+
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Image</label>
                                 <div class="flex items-start gap-4">
@@ -85,7 +85,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
                             <textarea name="introductions[{{ $intro->id }}][description]" rows="5" class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm transition focus:border-brand-500 focus:ring-1 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-900 dark:text-white">{{ old('introductions.' . $intro->id . '.description', $intro->description) }}</textarea>
@@ -107,16 +107,12 @@
                         <p class="text-sm text-gray-500">Manage names, roles, and messages of key leaders.</p>
                     </div>
                 </div>
-                <button type="button" @click="addHead" class="inline-flex items-center px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold rounded-xl transition-all shadow-lg shadow-brand-500/20 hover:-translate-y-0.5 active:translate-y-0">
-                    <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                    Add Head
-                </button>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <template x-for="(head, index) in heads" :key="head.local_id || head.id">
                     <div class="group relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 transition-all hover:border-brand-300 dark:hover:border-brand-700 hover:shadow-xl">
-                        
+
                         <!-- Header -->
                         <div class="flex items-start justify-between gap-4 mb-5">
                             <div class="flex-1">
@@ -128,7 +124,7 @@
                                 </div>
                                 <input type="text" :name="'heads[' + (head.id || 'new_' + index) + '][name]'" x-model="head.name" placeholder="Full Name" class="w-full text-lg font-bold bg-transparent border-none p-0 focus:ring-0 placeholder-gray-300 dark:text-white">
                             </div>
-                            
+
                             <div class="flex items-center gap-3 pt-1">
                                 <label class="flex items-center gap-2 cursor-pointer group/check">
                                     <input type="checkbox" :name="'heads[' + (head.id || 'new_' + index) + '][is_active]'" :checked="head.is_active" class="w-5 h-5 rounded border-gray-300 text-brand-600 focus:ring-brand-500">
@@ -144,7 +140,7 @@
                         <!-- Body -->
                         <div class="space-y-4">
                             <input type="hidden" :name="'heads[' + (head.id || 'new_' + index) + '][order]'" :value="index">
-                            
+
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Role / Designation</label>
@@ -175,7 +171,7 @@
                     </div>
                 </template>
             </div>
-            
+
             <div class="flex justify-center pt-4">
                 <button type="button" @click="addHead" class="inline-flex items-center px-6 py-3 bg-white dark:bg-gray-800 text-brand-600 dark:text-brand-400 text-sm font-bold rounded-xl border-2 border-dashed border-brand-200 dark:border-brand-900/50 hover:border-brand-500 hover:bg-brand-50 transition-all group">
                     <svg class="w-5 h-5 mr-2 transition-transform group-hover:scale-125" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>

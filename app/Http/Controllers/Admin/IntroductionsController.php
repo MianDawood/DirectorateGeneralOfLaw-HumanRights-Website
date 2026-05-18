@@ -34,7 +34,7 @@ class IntroductionsController extends Controller
             'introductions' => 'nullable|array',
             'introductions.*.title' => 'nullable|string',
             'introductions.*.description' => 'nullable|string',
-            'introductions.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'introductions.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp',
             'introductions.*.is_active' => 'nullable',
             'heads' => 'nullable|array',
             'heads.*.name' => 'nullable|string',
@@ -43,7 +43,7 @@ class IntroductionsController extends Controller
             'heads.*.profile_url' => 'nullable|string',
             'heads.*.order' => 'nullable|integer',
             'heads.*.is_active' => 'nullable',
-            'heads.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'heads.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp',
             'deleted_heads' => 'nullable|array',
             'deleted_heads.*' => 'nullable|integer',
         ]);
