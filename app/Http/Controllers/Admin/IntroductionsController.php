@@ -119,12 +119,12 @@ class IntroductionsController extends Controller
 
                     $image = $request->file("heads.{$key}.image");
                     $filename = time() . '_head_' . ($head->id ?? $key) . '.' . $image->getClientOriginalExtension();
-                    $uploadPath = public_path('uploads/introductions/heads');
+                    $uploadPath = public_path('uploads/introductions');
                     if (!File::isDirectory($uploadPath)) {
                         File::makeDirectory($uploadPath, 0755, true);
                     }
                     $image->move($uploadPath, $filename);
-                    $head->update(['image' => 'uploads/introductions/heads/' . $filename]);
+                    $head->update(['image' => 'uploads/introductions/' . $filename]);
                 }
             }
         }

@@ -72,12 +72,12 @@ $heads = IntroductionHead::where('is_active', true)->orderBy('order')->get();
                         <div
                             class="absolute -bottom-6 -left-6 bg-secondary text-white p-6 rounded-2xl shadow-2xl hidden xl:block">
                             <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
+                                <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
                                     <i data-lucide="shield-check" class="w-7 h-7 text-white"></i>
                                 </div>
                                 <div>
-                                    <p class="text-[10px] font-bold uppercase tracking-widest opacity-70">Official</p>
-                                    <p class="text-sm font-black uppercase tracking-tight">KPK Government</p>
+                                    <p class="text-[10px] text-black font-bold uppercase tracking-widest opacity-70">Official</p>
+                                    <p class="text-sm font-black text-black uppercase tracking-tight">KPK Government</p>
                                 </div>
                             </div>
                         </div>
@@ -107,11 +107,11 @@ $heads = IntroductionHead::where('is_active', true)->orderBy('order')->get();
 
                     @forelse($heads as $index => $head)
                         <!-- Slide: {{ $head->name }} -->
-                        <div class="leader-slide absolute inset-0 flex items-center group/slide overflow-visible" 
+                        <div class="leader-slide absolute inset-0 flex items-center group/slide overflow-visible"
                              style="{{ $index === 0 ? 'opacity: 1; z-index: 10; visibility: visible;' : 'opacity: 0; z-index: 0; visibility: hidden;' }}">
                             <div class="relative w-full max-w-4xl mx-auto h-[500px] bg-[#0f1115] rounded-[50px] p-8 pt-28 lg:p-14 lg:pl-56 flex flex-col lg:flex-row items-center gap-10 overflow-visible transition-all duration-700">
                                 <!-- Image (Floating) -->
-                                <div class="absolute left-1/2 lg:left-0 top-0 lg:top-1/2 shrink-0 z-20 slide-image transition-all duration-1000 ease-out" 
+                                <div class="absolute left-1/2 lg:left-0 top-0 lg:top-1/2 shrink-0 z-20 slide-image transition-all duration-1000 ease-out"
                                      style="transform: translate({{ 'window.innerWidth < 1024 ? \'-50%\' : \'-33.33%\'' }}, -50%) scale(1);">
                                     <div class="w-[200px] h-[200px] lg:w-[290px] lg:h-[370px] rounded-full lg:rounded-[50px] overflow-hidden shadow-2xl">
                                         <img src="{{ asset($head->image ?? 'images/introduction 1.jpeg') }}" alt="{{ $head->name }}"
