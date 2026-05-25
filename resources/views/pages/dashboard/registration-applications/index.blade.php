@@ -49,6 +49,10 @@
                                                    class="text-blue-600 hover:text-blue-900">View</a>
                                                 <a href="{{ route('admin.registration-applications.edit', $application) }}"
                                                    class="text-indigo-600 hover:text-indigo-900">Review</a>
+                                                @if($application->status === 'approved' && $application->certificate_path)
+                                                    <a href="{{ asset('storage/' . $application->certificate_path) }}" target="_blank"
+                                                       class="text-green-600 hover:text-green-900">Download</a>
+                                                @endif
                                                 <form method="POST" action="{{ route('admin.registration-applications.destroy', $application) }}"
                                                       onsubmit="return confirm('Are you sure you want to delete this application?')"
                                                       class="inline">

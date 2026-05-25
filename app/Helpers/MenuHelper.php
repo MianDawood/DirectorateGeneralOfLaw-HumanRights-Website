@@ -34,11 +34,7 @@ class MenuHelper
                                 'path' => route('admin.news.index'),
                             ],
                             [
-                                'name' => 'Gallery',
-                                'path' => route('admin.gallery-items.index'),
-                            ],
-                            [
-                                'name' => 'Events',
+                                'name' => 'Events & Media',
                                 'path' => route('admin.events.index'),
                             ],
                         ]
@@ -118,6 +114,10 @@ class MenuHelper
                             [
                                 'name' => 'Site Settings',
                                 'path' => route('admin.site-settings.index'),
+                            ],
+                            [
+                                'name' => 'Header Campaigns',
+                                'path' => route('admin.header-campaigns.index'),
                             ],
                         ]
                     ],

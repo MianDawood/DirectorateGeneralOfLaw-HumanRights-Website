@@ -26,7 +26,8 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Event Date</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Venue</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Media</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Featured</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -36,8 +37,8 @@
                                 @forelse($events as $event)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            @if($event->image_path)
-                                                <img src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->title }}"
+                                            @if($event->coverImageUrl())
+                                                <img src="{{ $event->coverImageUrl() }}" alt="{{ $event->title }}"
                                                      class="w-12 h-12 rounded-full object-cover">
                                             @else
                                                 <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
@@ -53,6 +54,9 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {{ Str::limit($event->location, 30) }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {{ $event->images_count }} img / {{ $event->videos_count }} vid
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             @if($event->is_featured)
@@ -86,7 +90,7 @@
                                     </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                                    <td colspan="8" class="px-6 py-4 text-center text-gray-500">
                                         No events found.
                                         <a href="{{ route('admin.events.create') }}" class="text-blue-600 hover:text-blue-900 ml-2">Create one now</a>
                                     </td>

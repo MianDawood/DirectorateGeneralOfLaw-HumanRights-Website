@@ -2,31 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\GalleryItem;
+use Illuminate\Http\RedirectResponse;
 
 class GalleryController extends Controller
 {
-    public function photos()
+    public function photos(): RedirectResponse
     {
-        $photos = GalleryItem::query()
-            ->where('type', 'photo')
-            ->where('status', 'active')
-            ->orderBy('order')
-            ->orderBy('id')
-            ->get();
-
-        return view('pages.photogallery', compact('photos'));
+        return redirect()->to(route('mediacorner') . '#events');
     }
 
-    public function videos()
+    public function videos(): RedirectResponse
     {
-        $videos = GalleryItem::query()
-            ->where('type', 'video')
-            ->where('status', 'active')
-            ->orderBy('order')
-            ->orderBy('id')
-            ->get();
-
-        return view('pages.videogallery', compact('videos'));
+        return redirect()->to(route('mediacorner') . '#events');
     }
 }

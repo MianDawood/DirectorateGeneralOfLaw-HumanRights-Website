@@ -138,6 +138,51 @@
             box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.03);
         }
 
+        .remove-project-row {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            color: #64748b;
+            cursor: pointer;
+        }
+
+        .remove-project-row:hover {
+            border-color: #fecaca;
+            color: #dc2626;
+            background: #fef2f2;
+        }
+
+        .add-project-row-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: 2px dashed #cbd5e1;
+            background: #f8fafc;
+            color: #123B2D;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .add-project-row-btn:hover {
+            border-color: #02B1EB;
+            background: #eff6ff;
+            color: #02B1EB;
+        }
+
         .sno-badge {
             position: absolute;
             top: -10px;
@@ -229,228 +274,36 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
                         <div class="space-y-4 p-6 bg-slate-50/50 rounded-2xl border border-slate-100">
                             <label class="label-compact">Number of Ongoing Projects:</label>
-                            <input type="number" required placeholder="0"
+                            <input type="number" name="ongoing_projects_count" min="0" placeholder="0"
                                 class="w-full input-compact bg-white border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#02b1eb]">
                         </div>
                         <div class="space-y-4 p-6 bg-slate-50/50 rounded-2xl border border-slate-100">
                             <label class="label-compact">Total Ongoing Projects (Summary):</label>
-                            <input type="text" required placeholder="Summary"
+                            <input type="text" name="ongoing_projects_summary" placeholder="Summary"
                                 class="w-full input-compact bg-white border border-slate-200 rounded-lg">
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <!-- Project Blocks (Consistent 1-6) -->
-                        <div class="project-block"><span class="sno-badge">S.No. 1</span>
-                            <div class="space-y-4">
-                                <div><label class="label-compact">Project Name:</label><input type="text"
-                                        class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                </div>
-                                <div><label class="label-compact">Target Area:</label><input type="text"
-                                        class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="label-compact">Start Date:</label><input type="month"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                    <div><label class="label-compact">Exp Completion:</label><input type="month"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="label-compact">Total Funds:</label><input type="text"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                    <div><label class="label-compact">Donor:</label><input type="text"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="label-compact">Thematic Focus:</label><input type="text"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                    <div><label class="label-compact">Beneficiaries:</label><input type="number"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-2">
+                            <h3 class="label-compact mb-0">Ongoing Project Details</h3>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Add only the projects you have</p>
                         </div>
 
-                        <div class="project-block"><span class="sno-badge">S.No. 2</span>
-                            <div class="space-y-4">
-                                <div><label class="label-compact">Project Name:</label><input type="text"
-                                        class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                </div>
-                                <div><label class="label-compact">Target Area:</label><input type="text"
-                                        class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="label-compact">Start Date:</label><input type="month"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                    <div><label class="label-compact">Exp Completion:</label><input type="month"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="label-compact">Total Funds:</label><input type="text"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                    <div><label class="label-compact">Donor:</label><input type="text"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="label-compact">Thematic Focus:</label><input type="text"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                    <div><label class="label-compact">Beneficiaries:</label><input type="number"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                </div>
-                            </div>
+                        <div id="ongoing-projects-list" class="grid grid-cols-1 lg:grid-cols-2 gap-8" data-repeat-group="ongoing_projects">
                         </div>
 
-                        <div class="project-block"><span class="sno-badge">S.No. 3</span>
-                            <div class="space-y-4">
-                                <div><label class="label-compact">Project Name:</label><input type="text"
-                                        class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                </div>
-                                <div><label class="label-compact">Target Area:</label><input type="text"
-                                        class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="label-compact">Start Date:</label><input type="month"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                    <div><label class="label-compact">Exp Completion:</label><input type="month"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="label-compact">Total Funds:</label><input type="text"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                    <div><label class="label-compact">Donor:</label><input type="text"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="label-compact">Thematic Focus:</label><input type="text"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                    <div><label class="label-compact">Beneficiaries:</label><input type="number"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="project-block"><span class="sno-badge">S.No. 4</span>
-                            <div class="space-y-4">
-                                <div><label class="label-compact">Project Name:</label><input type="text"
-                                        class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                </div>
-                                <div><label class="label-compact">Target Area:</label><input type="text"
-                                        class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="label-compact">Start Date:</label><input type="month"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                    <div><label class="label-compact">Exp Completion:</label><input type="month"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="label-compact">Total Funds:</label><input type="text"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                    <div><label class="label-compact">Donor:</label><input type="text"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="label-compact">Thematic Focus:</label><input type="text"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                    <div><label class="label-compact">Beneficiaries:</label><input type="number"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="project-block"><span class="sno-badge">S.No. 5</span>
-                            <div class="space-y-4">
-                                <div><label class="label-compact">Project Name:</label><input type="text"
-                                        class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                </div>
-                                <div><label class="label-compact">Target Area:</label><input type="text"
-                                        class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="label-compact">Start Date:</label><input type="month"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                    <div><label class="label-compact">Exp Completion:</label><input type="month"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="label-compact">Total Funds:</label><input type="text"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                    <div><label class="label-compact">Donor:</label><input type="text"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="label-compact">Thematic Focus:</label><input type="text"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                    <div><label class="label-compact">Beneficiaries:</label><input type="number"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="project-block"><span class="sno-badge">S.No. 6</span>
-                            <div class="space-y-4">
-                                <div><label class="label-compact">Project Name:</label><input type="text"
-                                        class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                </div>
-                                <div><label class="label-compact">Target Area:</label><input type="text"
-                                        class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="label-compact">Start Date:</label><input type="month"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                    <div><label class="label-compact">Exp Completion:</label><input type="month"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="label-compact">Total Funds:</label><input type="text"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                    <div><label class="label-compact">Donor:</label><input type="text"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div><label class="label-compact">Thematic Focus:</label><input type="text"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                    <div><label class="label-compact">Beneficiaries:</label><input type="number"
-                                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg">
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="flex justify-center pt-2">
+                            <button type="button" class="add-project-row-btn" data-add-row="ongoing_projects">
+                                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                                <span>Add another project</span>
+                            </button>
                         </div>
                     </div>
+
+                    <template id="ongoing-project-row-template">
+                        @include('pages.partials.ongoing_project_row')
+                    </template>
                 </section>
 
                 <section class="grid grid-cols-1 md:grid-cols-2 gap-10 pt-8 border-t border-slate-200/60">
@@ -570,6 +423,7 @@
     </main>
 
     <script src="js/form-draft.js"></script>
+    <script src="js/registration-repeat-rows.js"></script>
     <script src="js/registration-form-sync.js"></script>
     <script>
         try { lucide.createIcons(); } catch (err) { console.error(err); }

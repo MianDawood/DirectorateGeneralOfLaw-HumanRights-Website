@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\ServicesController;
 use App\Http\Controllers\Admin\SiteSettingsController;
 use App\Http\Controllers\Admin\UserProfileController;
 use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\HeaderCampaignController;
 use App\Http\Controllers\Admin\PageContentsController;
 use App\Http\Controllers\Admin\IntroductionsController;
 use App\Http\Controllers\Admin\WhatWeDosController;
@@ -212,6 +213,16 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     Route::post('pages/{page}/duplicate', [PageController::class, 'duplicate'])->name('admin.pages.duplicate');
     Route::post('pages/upload-image', [PageController::class, 'uploadImage'])->name('admin.pages.upload-image');
 
+    // Header Campaigns Management
+    Route::resource('header-campaigns', HeaderCampaignController::class)->except(['show'])->names([
+        'index' => 'admin.header-campaigns.index',
+        'create' => 'admin.header-campaigns.create',
+        'store' => 'admin.header-campaigns.store',
+        'edit' => 'admin.header-campaigns.edit',
+        'update' => 'admin.header-campaigns.update',
+        'destroy' => 'admin.header-campaigns.destroy',
+    ]);
+
     // Introduction Page Management
     Route::get('introductions', [IntroductionsController::class, 'edit'])->name('admin.introductions.edit');
     Route::put('introductions', [IntroductionsController::class, 'update'])->name('admin.introductions.update');
@@ -220,7 +231,7 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     // What We Do Page Management
     Route::get('what-we-dos', [WhatWeDosController::class, 'edit'])->name('admin.what-we-dos.edit');
     Route::put('what-we-dos', [WhatWeDosController::class, 'update'])->name('admin.what-we-dos.update');
-    
+
 Route::delete('/what-we-dos/activity/{activity}', [WhatWeDosController::class, 'destroyActivity'])
     ->name('admin.what-we-dos.activity.destroy');
 
@@ -262,6 +273,8 @@ Route::get('/introduction', function () {
 })->name('introduction');
 
 Route::get('/mediacorner', [MediaCornerController::class, 'index'])->name('mediacorner');
+
+Route::get('/events/{event}', [\App\Http\Controllers\EventController::class, 'show'])->name('events.show');
 
 Route::get('/resources', function () {
     return view('pages.resources');
@@ -341,3 +354,20 @@ Route::get('/page/{slug}', [FrontPageController::class, 'show'])->name('page.sho
 Route::get('/pages', [FrontPageController::class, 'index'])->name('pages.index');
 Route::get('/pages/search', [FrontPageController::class, 'search'])->name('pages.search');
 Route::get('/search', [SearchController::class, 'index'])->name('search');
+
+// Certificate Verification
+Route::get('/verify-certificate/{registration_no}', [\App\Http\Controllers\VerificationController::class, 'verifyNgo'])->name('verify.certificate');
+
+Route::get('/certificate/design-preview', function () {
+    $dummyData = [
+        'application' => (object) [
+            'registration_no' => 'KP-DGLHR-999',
+            'certificate_issue_date' => now(),
+        ],
+        'ngoName' => 'PARTICIPATORY RURAL DEVELOPMENT SOCIETY (PRDS)',
+        'qrCodeImage' => 'data:image/png;base64,...', // placeholder
+        'signatureImage' => null,
+        // 'logoSrc' => 'data:image/jpeg;base64,...',
+    ];
+    return view('pdf.ngo_certificate', $dummyData);
+});

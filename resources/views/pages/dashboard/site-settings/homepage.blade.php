@@ -33,7 +33,7 @@
                         <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
                 </div>
-
+<!-- 
                 <div>
                     <label for="home_campaign_secondary" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
                         Secondary Campaign Label
@@ -48,7 +48,7 @@
                     @error('home_campaign_secondary')
                         <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
-                </div>
+                </div> -->
 
                 <div class="flex items-center justify-end">
                     <button

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Event extends Model
 {
@@ -11,6 +12,7 @@ class Event extends Model
 
     protected $fillable = [
         'title',
+        'subject',
         'description',
         'location',
         'event_date',
@@ -26,27 +28,45 @@ class Event extends Model
         'is_active' => 'boolean',
     ];
 
-    /**
-     * Scope for active events
-     */
+    public function images(): HasMany
+    {
+        return $this->hasMany(EventImage::class)->orderBy('order')->orderBy('id');
+    }
+
+    public function videos(): HasMany
+    {
+        return $this->hasMany(EventVideo::class)->orderBy('order')->orderBy('id');
+    }
+
+    public function coverImageUrl(): ?string
+    {
+        $first = $this->relationLoaded('images')
+            ? $this->images->first()
+            : $this->images()->first();
+
+        if ($first?->image_path) {
+            return asset('storage/' . $first->image_path);
+        }
+
+        if ($this->image_path) {
+            return asset('storage/' . $this->image_path);
+        }
+
+        return null;
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
     }
 
-    /**
-     * Scope for featured events
-     */
     public function scopeFeatured($query)
     {
         return $query->where('is_featured', true);
     }
 
-    /**
-     * Scope for ordering by event date
-     */
     public function scopeOrdered($query)
     {
-        return $query->orderBy('event_date', 'asc')->orderBy('order', 'asc');
+        return $query->orderBy('event_date', 'desc')->orderBy('order', 'asc');
     }
 }

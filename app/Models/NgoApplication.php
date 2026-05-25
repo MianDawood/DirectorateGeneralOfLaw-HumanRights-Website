@@ -11,14 +11,18 @@ class NgoApplication extends Model
 
     protected $fillable = [
         'application_no',
+        'registration_no',
         'status',
         'current_step',
         'submitted_at',
         'review_notes',
         'created_by',
+        'certificate_issue_date',
+        'certificate_path',
     ];
 
     protected $casts = [
         'submitted_at' => 'datetime',
+        'certificate_issue_date' => 'datetime',
     ];
 }

@@ -17,7 +17,7 @@ class RegistrationApplicationController extends Controller
     {
         abort_unless($part >= 1 && $part <= 11, 404);
 
-        $payload = $request->except(['_token']);
+        $payload = $this->normalizeStepPayload($request->except(['_token']), $part);
 
         $applicationId = DB::transaction(function () use ($request, $part, $payload) {
             $applicationId = $request->input('application_id');
@@ -142,5 +142,44 @@ class RegistrationApplicationController extends Controller
     private function generateApplicationNo(): string
     {
         return 'NGO-' . now()->format('Ymd') . '-' . strtoupper(substr(md5((string) microtime(true)), 0, 6));
+    }
+
+    /**
+     * Drop empty repeat rows and re-index project arrays before JSON storage.
+     */
+    private function normalizeStepPayload(array $payload, int $part): array
+    {
+        if ($part === 6 && isset($payload['ongoing_projects']) && is_array($payload['ongoing_projects'])) {
+            $payload['ongoing_projects'] = array_values(array_filter(
+                $payload['ongoing_projects'],
+                fn ($row) => is_array($row) && $this->repeatRowHasData($row)
+            ));
+        }
+
+        if ($part === 7 && isset($payload['planned_projects']) && is_array($payload['planned_projects'])) {
+            $payload['planned_projects'] = array_values(array_filter(
+                $payload['planned_projects'],
+                fn ($row) => is_array($row) && $this->repeatRowHasData($row)
+            ));
+        }
+
+        return $payload;
+    }
+
+    private function repeatRowHasData(array $row): bool
+    {
+        foreach ($row as $value) {
+            if (is_array($value)) {
+                continue;
+            }
+            if (is_string($value) && trim($value) !== '') {
+                return true;
+            }
+            if ($value !== null && $value !== '' && !is_bool($value)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

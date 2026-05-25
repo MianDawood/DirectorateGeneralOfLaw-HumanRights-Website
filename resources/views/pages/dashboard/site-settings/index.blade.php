@@ -17,7 +17,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('admin.site-settings.update') }}" class="space-y-8">
+    <form method="POST" action="{{ route('admin.site-settings.update') }}" enctype="multipart/form-data" class="space-y-8">
         @csrf
         @method('PUT')
 
@@ -101,21 +101,20 @@
             </div>
         </div>
 
-        <!-- Campaign Section -->
+        <!-- Certificate Settings Section -->
         <div class="space-y-4">
-            <h2 class="text-xs font-black text-gray-400 uppercase tracking-[0.2em] px-2">3. Campaign Highlights</h2>
+            <h2 class="text-xs font-black text-gray-400 uppercase tracking-[0.2em] px-2">3. NGO Certificate Settings</h2>
             <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Primary Campaign (Green Badge)</label>
-                        <input type="text" name="home_campaign_primary" value="{{ old('home_campaign_primary', $settings->home_campaign_primary) }}" 
-                               class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-sm font-bold focus:border-slate-900 outline-none transition-all">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Secondary Campaign (Blue Badge)</label>
-                        <input type="text" name="home_campaign_secondary" value="{{ old('home_campaign_secondary', $settings->home_campaign_secondary) }}" 
-                               class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-sm font-bold focus:border-slate-900 outline-none transition-all">
-                    </div>
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Director General Signature Image</label>
+                    @if($settings->dg_signature_image)
+                        <div class="mb-4">
+                            <img src="{{ asset('storage/' . $settings->dg_signature_image) }}" alt="Current Signature" class="h-20 object-contain border p-2 rounded bg-gray-50">
+                        </div>
+                    @endif
+                    <input type="file" name="dg_signature_image" accept="image/*"
+                           class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-sm focus:border-slate-900 outline-none transition-all">
+                    <p class="mt-2 text-xs text-gray-500">Upload a transparent PNG for best results on the certificate.</p>
                 </div>
             </div>
         </div>

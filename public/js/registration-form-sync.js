@@ -6,11 +6,19 @@
     const partMatch = path.match(/registration_form_part(\d+)/);
     const part = partMatch ? Number(partMatch[1]) : 1;
 
+    const REPEAT_GROUP_KEYS = ['ongoing_projects', 'planned_projects', 'security_companies'];
+
     const toSlug = (text) => (text || '')
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '_')
         .replace(/^_+|_+$/g, '')
         .slice(0, 48);
+
+    const parseRepeatFieldName = (name) => {
+        const match = (name || '').match(/^([a-z0-9_]+)\[(\d+)\]\[([a-z0-9_]+)\]$/i);
+        if (!match) return null;
+        return { group: match[1], index: Number(match[2]), field: match[3] };
+    };
 
     const safeLabel = (el) => {
         const label = el.closest('div')?.querySelector('label');
@@ -23,12 +31,13 @@
         const fields = form.querySelectorAll('input, textarea, select');
         fields.forEach((el) => {
             if (el.type === 'submit' || el.type === 'button' || el.type === 'hidden') return;
+            if (el.closest('[data-repeat-item]') && el.hasAttribute('data-field')) return;
             if (!el.name || !el.name.trim()) {
                 const group = el.closest('[data-repeat-group]')?.getAttribute('data-repeat-group');
                 const item = el.closest('[data-repeat-item]');
                 const fieldName = safeLabel(el) || `field_${index + 1}`;
-                if (group && item) {
-                    const itemIndex = [...item.parentElement.children].indexOf(item);
+                if (group && item && !el.hasAttribute('data-field')) {
+                    const itemIndex = [...item.parentElement.querySelectorAll('[data-repeat-item]')].indexOf(item);
                     el.name = `${group}[${itemIndex}][${fieldName}]`;
                 } else {
                     el.name = `part_${part}_${fieldName}_${index + 1}`;
@@ -40,20 +49,51 @@
 
     const normalizeName = (name) => (name || '').endsWith('[]') ? name.slice(0, -2) : name;
 
+    const setFieldValue = (el, value) => {
+        if (el.type === 'checkbox') {
+            if (Array.isArray(value)) {
+                el.checked = value.includes(el.value);
+            } else {
+                el.checked = value === el.value || value === true || value === '1' || value === 'on';
+            }
+            return;
+        }
+        if (el.type === 'radio') {
+            el.checked = value === el.value;
+            return;
+        }
+        el.value = value ?? '';
+    };
+
     const collectFormData = () => {
         assignMissingNames();
         const data = {};
         const elements = form.querySelectorAll('input, textarea, select');
 
         elements.forEach((el) => {
-            if (!el.name) return;
+            if (!el.name || el.type === 'submit' || el.type === 'button') return;
+
+            const repeat = parseRepeatFieldName(el.name);
+            if (repeat) {
+                if (!data[repeat.group]) data[repeat.group] = [];
+                if (!data[repeat.group][repeat.index]) data[repeat.group][repeat.index] = {};
+                if (el.type === 'checkbox') {
+                    data[repeat.group][repeat.index][repeat.field] = el.checked ? (el.value || true) : null;
+                } else if (el.type === 'radio') {
+                    if (el.checked) data[repeat.group][repeat.index][repeat.field] = el.value;
+                } else {
+                    data[repeat.group][repeat.index][repeat.field] = el.value;
+                }
+                return;
+            }
+
             const fieldName = normalizeName(el.name);
             if (el.type === 'checkbox') {
                 const group = form.querySelectorAll(`input[name="${el.name}"][type="checkbox"]`);
                 if (group.length > 1) {
                     data[fieldName] = Array.from(group).filter((x) => x.checked).map((x) => x.value);
                 } else {
-                    data[fieldName] = el.checked ? el.value : null;
+                    data[fieldName] = el.checked ? (el.value || true) : null;
                 }
                 return;
             }
@@ -64,32 +104,37 @@
             data[fieldName] = el.value;
         });
 
+        REPEAT_GROUP_KEYS.forEach((groupKey) => {
+            if (Array.isArray(data[groupKey])) {
+                data[groupKey] = data[groupKey].filter((row) => row && typeof row === 'object');
+            }
+        });
+
         return data;
     };
 
-    const applyFormData = (data) => {
-        if (!data || typeof data !== 'object') return;
+    const applyScalarFields = (data) => {
         assignMissingNames();
         const elements = form.querySelectorAll('input, textarea, select');
 
         elements.forEach((el) => {
-            if (!el.name) return;
+            if (!el.name || el.closest('[data-repeat-item]')) return;
             const fieldName = normalizeName(el.name);
+            if (parseRepeatFieldName(el.name)) return;
+            if (REPEAT_GROUP_KEYS.includes(fieldName)) return;
             if (data[fieldName] === undefined || data[fieldName] === null) return;
-            if (el.type === 'checkbox') {
-                if (Array.isArray(data[fieldName])) {
-                    el.checked = data[fieldName].includes(el.value);
-                } else {
-                    el.checked = data[fieldName] === el.value;
-                }
-                return;
-            }
-            if (el.type === 'radio') {
-                el.checked = data[fieldName] === el.value;
-                return;
-            }
-            el.value = data[fieldName];
+            setFieldValue(el, data[fieldName]);
         });
+    };
+
+    const applyFormData = (data) => {
+        if (!data || typeof data !== 'object') return;
+
+        if (window.NgoRepeatRows) {
+            window.NgoRepeatRows.hydratePayload(data);
+        }
+
+        applyScalarFields(data);
     };
 
     const getDraftKey = () => `ngo_registration_step_${part}_draft`;
@@ -123,7 +168,6 @@
     };
 
     const loadServerDraft = async () => {
-        if (!isDraftMode()) return;
         const appId = localStorage.getItem('ngo_application_id');
         if (!appId) return;
         const response = await fetch(`/registration/part/${part}/data?application_id=${encodeURIComponent(appId)}`, {
@@ -133,14 +177,13 @@
         const result = await response.json();
         const payload = result && result.payload ? result.payload : null;
         if (payload && typeof payload === 'object' && Object.keys(payload).length > 0) {
-            applyFormData(result.payload);
+            applyFormData(payload);
             localStorage.setItem(getDraftKey(), JSON.stringify(payload));
         }
     };
 
     const setupRepeatGroups = () => {
         const repeatConfigs = [
-            { selector: '.project-block', group: part === 7 ? 'planned_projects' : 'ongoing_projects' },
             { selector: '.security-card', group: 'security_companies' },
         ];
 
@@ -160,6 +203,7 @@
 
     const saveStep = async () => {
         persistLocalDraft();
+        assignMissingNames();
         const fd = new FormData(form);
         const appId = localStorage.getItem('ngo_application_id');
         if (appId) fd.append('application_id', appId);
@@ -223,11 +267,23 @@
         });
     };
 
+    if (window.NgoRepeatRows) {
+        window.NgoRepeatRows.initForPart(part);
+    }
     setupRepeatGroups();
     assignMissingNames();
-    loadLocalDraft();
-    loadServerDraft().catch((err) => console.error(err));
+    const loadPersistedData = async () => {
+        const appId = localStorage.getItem('ngo_application_id');
+        if (appId) {
+            await loadServerDraft();
+            return;
+        }
+        loadLocalDraft();
+    };
+
+    loadPersistedData().catch((err) => console.error(err));
     bindNextLinks();
     bindFinalSubmit();
     form.addEventListener('input', persistLocalDraft);
+    document.addEventListener('ngo-repeat-rows-changed', persistLocalDraft);
 })();

@@ -1,10 +1,7 @@
 @props(['title' => 'Directorate of Human Rights | Khyber Pakhtunkhwa'])
 @php
     $settings = \App\Models\SiteSetting::getSettings();
-    $campaignHighlights = [
-        'home_campaign_primary' => $settings->home_campaign_primary ?? 'Marka-E-Haq',
-        'home_campaign_secondary' => $settings->home_campaign_secondary ?? 'Anti-Corruption Week',
-    ];
+    $headerCampaigns = \App\Models\HeaderCampaign::active()->ordered()->get();
 @endphp
 @php
     $topLevelPages = \App\Models\Page::published()
@@ -14,13 +11,13 @@
         ->ordered()
         ->with('children')
         ->get();
-    
+
     $whoWeArePages = \App\Models\Page::published()
         ->where('static_parent', 'who_we_are')
         ->inNavigation()
         ->ordered()
         ->get();
-        
+
     $ngoRegistrationPages = \App\Models\Page::published()
         ->where('static_parent', 'ngo_registration')
         ->inNavigation()
@@ -197,13 +194,15 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-4 border-l border-white/20 pl-10">
-                    @if($settings->facebook_url)
-                    <a href="{{ $settings->facebook_url }}" target="_blank" class="text-white/60 hover:text-[#02B1EB] transition-all-custom"><i
-                            data-lucide="facebook" class="w-4 h-4"></i></a>
+                    @if ($settings->facebook_url)
+                        <a href="{{ $settings->facebook_url }}" target="_blank"
+                            class="text-white/60 hover:text-[#02B1EB] transition-all-custom"><i data-lucide="facebook"
+                                class="w-4 h-4"></i></a>
                     @endif
-                    @if($settings->twitter_url)
-                    <a href="{{ $settings->twitter_url }}" target="_blank" class="text-white/60 hover:text-[#02B1EB] transition-all-custom"><i
-                            data-lucide="twitter" class="w-4 h-4"></i></a>
+                    @if ($settings->twitter_url)
+                        <a href="{{ $settings->twitter_url }}" target="_blank"
+                            class="text-white/60 hover:text-[#02B1EB] transition-all-custom"><i data-lucide="twitter"
+                                class="w-4 h-4"></i></a>
                     @endif
                 </div>
             </div>
@@ -226,12 +225,12 @@
                         </h1>
                         <h1
                             class="font-outfit text-sm md:text-lg lg:text-[22px] font-extrabold text-[#123B2D] leading-tight uppercase tracking-tight">
-                            of Law &
+                            of Law & <span
+                                class="font-outfit text-sm md:text-lg lg:text-[22px] font-extrabold text-[#02B1EB] leading-tight uppercase tracking-tight">
+                                Human Rights
+                            </span>
                         </h1>
-                        <h1
-                            class="font-outfit text-sm md:text-lg lg:text-[22px] font-extrabold text-[#02B1EB] leading-tight uppercase tracking-tight">
-                            Human Rights
-                        </h1>
+
                         <p
                             class="font-outfit text-[9px] md:text-[10px] lg:text-[11px] font-bold text-slate-400 uppercase tracking-[0.3em] mt-1">
                             Khyber Pakhtunkhwa
@@ -239,29 +238,46 @@
                     </div>
                 </div>
 
-                <!-- Center: Campaign Highlights (Desktop) -->
-                <div class="hidden xl:flex items-center gap-4" id="campaignHighlights">
-                    <div class="flex items-center gap-3 overflow-hidden">
-                        <div
-                            class="campaign-badge flex items-center gap-2 px-4 py-2 bg-[#123B2D]/5 border border-[#123B2D]/10 rounded-lg hover:bg-[#123B2D]/10 transition-all cursor-pointer">
-                            <i data-lucide="shield-check" class="w-4 h-4 text-[#123B2D]"></i>
-                            <span
-                                class="text-[10px] font-black uppercase tracking-wider text-[#123B2D] whitespace-nowrap">{{ $campaignHighlights['home_campaign_primary'] }}</span>
-                        </div>
-                        <div
-                            class="campaign-badge flex items-center gap-2 px-4 py-2 bg-[#02B1EB]/5 border border-[#02B1EB]/10 rounded-lg hover:bg-[#02B1EB]/10 transition-all cursor-pointer">
-                            <i data-lucide="alert-triangle" class="w-4 h-4 text-[#02B1EB]"></i>
-                            <span
-                                class="text-[10px] font-black uppercase tracking-wider text-[#02B1EB] whitespace-nowrap">{{ $campaignHighlights['home_campaign_secondary'] }}</span>
-                        </div>
+             <!-- Campaign Highlights -->
+@if ($headerCampaigns->isNotEmpty())
+    <div class="hidden xl:block w-[500px]" id="campaignHighlights">
+
+        <div class="grid {{ $headerCampaigns->count() === 1 ? 'grid-cols-1' : 'grid-cols-2' }} gap-3" style="margin: 10px;">
+
+            @foreach ($headerCampaigns as $campaign)
+                <a href="{{ $campaign->url }}"
+                    class="block overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-lg transition duration-300">
+
+                    <!-- Campaign Image -->
+                    <div style="height: 50px" class="w-full {{ $headerCampaigns->count() === 1 ? 'h-[180px]' : 'h-[120px]' }}">
+                        <img src="{{ asset('storage/' . $campaign->image_path) }}"
+                            alt="{{ $campaign->title ?: 'Campaign banner' }}"
+                            class="w-full h-full object-fill">
                     </div>
-                </div>
+
+                    <!-- Campaign Title -->
+                    @if ($campaign->title)
+                        <div class="p-1">
+                            <h3 class="text-sm text-center text-slate-800 line-clamp-2">
+                                {{ $campaign->title }}
+                            </h3>
+                        </div>
+                    @endif
+
+                </a>
+            @endforeach
+
+        </div>
+
+    </div>
+@endif
 
                 <!-- Desktop Search Bar -->
                 <div class="hidden lg:block w-[280px] xl:w-[300px]">
                     <form action="{{ route('search') }}" method="GET"
                         class="search-container relative flex items-center bg-slate-50 border border-slate-200 rounded-xl overflow-hidden shadow-sm transition-all duration-300 focus-within:ring-2 focus-within:ring-[#02B1EB]/20">
-                        <input type="text" name="query" value="{{ request('query') }}" placeholder="Search services..."
+                        <input type="text" name="query" value="{{ request('query') }}"
+                            placeholder="Search services..."
                             class="w-full pl-5 pr-12 py-3 text-sm text-slate-700 bg-transparent focus:outline-none" />
                         <button type="submit"
                             class="absolute right-0 h-full w-11 bg-[#123B2D] flex items-center justify-center text-white hover:bg-[#02B1EB] transition-colors">
@@ -287,7 +303,7 @@
                                 data-lucide="home" class="w-4 h-4"></i><span>Home</span></a></li>
                     <li class="group relative">
                         <button
-                            class="flex items-center gap-2 px-5 py-4 text-white {{ (request()->routeIs('introduction', 'ourteam') || $whoWeArePages->contains('slug', request()->route('slug'))) ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm"><span>Who
+                            class="flex items-center gap-2 px-5 py-4 text-white {{ request()->routeIs('introduction', 'ourteam') || $whoWeArePages->contains('slug', request()->route('slug')) ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm"><span>Who
                                 We Are</span><i data-lucide="chevron-down"
                                 class="w-3.5 h-3.5 opacity-60 group-hover:rotate-180 transition-transform duration-300"></i></button>
                         <div
@@ -301,12 +317,13 @@
                                     class="px-4 py-3 text-slate-700 hover:bg-[#123B2D]/5 hover:text-[#123B2D] rounded-lg transition-colors flex items-center justify-between group/item text-sm">Our
                                     Team<i data-lucide="chevron-right"
                                         class="w-3 h-3 opacity-0 group-hover/item:opacity-100 -translate-x-2 group-hover/item:translate-x-0 transition-all"></i></a>
-                                
-                                @foreach($whoWeArePages as $p)
+
+                                @foreach ($whoWeArePages as $p)
                                     <a href="{{ route('page.show', $p->slug) }}"
                                         class="px-4 py-3 text-slate-700 {{ request()->route('slug') === $p->slug ? 'bg-[#123B2D]/5 text-[#123B2D]' : 'hover:bg-[#123B2D]/5 hover:text-[#123B2D]' }} rounded-lg transition-colors flex items-center justify-between group/item text-sm">
                                         {{ $p->title }}
-                                        <i data-lucide="chevron-right" class="w-3 h-3 {{ request()->route('slug') === $p->slug ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2' }} group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all"></i>
+                                        <i data-lucide="chevron-right"
+                                            class="w-3 h-3 {{ request()->route('slug') === $p->slug ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2' }} group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all"></i>
                                     </a>
                                 @endforeach
                             </div>
@@ -317,25 +334,22 @@
                                 We Do</span></a></li>
                     <li class="group relative">
                         <a href="{{ route('mediacorner') }}"
-                            class="flex items-center gap-2 px-5 py-4 text-white {{ request()->routeIs('mediacorner', 'photogallery', 'videogallery') ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm"><span>Media
+                            class="flex items-center gap-2 px-5 py-4 text-white {{ request()->routeIs('mediacorner', 'events.show', 'photogallery', 'videogallery') ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm"><span>Media
                                 Corner</span><i data-lucide="chevron-down"
                                 class="w-3.5 h-3.5 opacity-60 group-hover:rotate-180 transition-transform duration-300"></i></a>
                         <div
                             class="absolute left-0 top-full w-64 bg-white shadow-2xl rounded-b-xl border border-slate-100 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-[110] p-2">
                             <div class="flex flex-col">
-                                <a href="{{ route('photogallery') }}"
+                                <a href="{{ route('mediacorner') }}#events"
                                     class="px-4 py-3 text-slate-700 hover:bg-[#123B2D]/5 hover:text-[#123B2D] rounded-lg transition-colors flex items-center gap-3 text-sm"><i
-                                        data-lucide="image" class="w-4 h-4 text-[#123B2D]"></i>Photo Gallery</a>
-                                <a href="{{ route('videogallery') }}"
-                                    class="px-4 py-3 text-slate-700 hover:bg-[#123B2D]/5 hover:text-[#123B2D] rounded-lg transition-colors flex items-center gap-3 text-sm"><i
-                                        data-lucide="video" class="w-4 h-4 text-[#123B2D]"></i>Video Gallery</a>
+                                        data-lucide="calendar" class="w-4 h-4 text-[#123B2D]"></i>Events &amp; Media</a>
                             </div>
                         </div>
                     </li>
                     <!-- NGO Registration with Sub-Menu -->
                     <li class="group relative">
                         <a href="{{ route('ngo_required_documents') }}"
-                            class="flex items-center gap-2 px-5 py-4 text-white {{ (request()->routeIs('ngo_*', 'registration_form_*') || $ngoRegistrationPages->contains('slug', request()->route('slug'))) ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm"><span>NGO
+                            class="flex items-center gap-2 px-5 py-4 text-white {{ request()->routeIs('ngo_*', 'registration_form_*') || $ngoRegistrationPages->contains('slug', request()->route('slug')) ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm"><span>NGO
                                 Registration</span><i data-lucide="chevron-down"
                                 class="w-3.5 h-3.5 opacity-60 group-hover:rotate-180 transition-transform duration-300"></i></a>
                         <div
@@ -367,15 +381,16 @@
                                 <a href="{{ route('ngo_suspended') }}"
                                     class="px-4 py-3 text-slate-700 hover:bg-[#123B2D]/5 hover:text-[#123B2D] rounded-lg transition-colors flex items-center gap-3 text-sm"><i
                                         data-lucide="x-circle" class="w-4 h-4 text-[#02B1EB]"></i>Suspended NGOs</a>
-                                
-                                @foreach($ngoRegistrationPages as $p)
+
+                                @foreach ($ngoRegistrationPages as $p)
                                     <a href="{{ route('page.show', $p->slug) }}"
                                         class="px-4 py-3 text-slate-700 {{ request()->route('slug') === $p->slug ? 'bg-[#123B2D]/5 text-[#123B2D]' : 'hover:bg-[#123B2D]/5 hover:text-[#123B2D]' }} rounded-lg transition-colors flex items-center justify-between group/item text-sm">
                                         <div class="flex items-center gap-3">
                                             <i data-lucide="file-text" class="w-4 h-4 text-[#02B1EB]"></i>
                                             {{ $p->title }}
                                         </div>
-                                        <i data-lucide="chevron-right" class="w-3 h-3 {{ request()->route('slug') === $p->slug ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2' }} group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all"></i>
+                                        <i data-lucide="chevron-right"
+                                            class="w-3 h-3 {{ request()->route('slug') === $p->slug ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2' }} group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all"></i>
                                     </a>
                                 @endforeach
                             </div>
@@ -384,30 +399,34 @@
                     <li><a href="{{ route('resources') }}"
                             class="flex items-center gap-2 px-5 py-4 text-white {{ request()->routeIs('resources') ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm"><span>Resources</span></a>
                     </li>
-                    
+
                     <!-- Dynamic Pages -->
-                    @foreach($topLevelPages as $page)
+                    @foreach ($topLevelPages as $page)
                         @php
                             $hasChildren = $page->children->count() > 0;
-                            $isHierarchyActive = request()->routeIs('page.show') && 
-                                                (request()->route('slug') === $page->slug || 
-                                                 $page->children->contains('slug', request()->route('slug')));
+                            $isHierarchyActive =
+                                request()->routeIs('page.show') &&
+                                (request()->route('slug') === $page->slug ||
+                                    $page->children->contains('slug', request()->route('slug')));
                         @endphp
 
-                        @if($hasChildren)
+                        @if ($hasChildren)
                             <li class="group relative">
                                 <a href="{{ route('page.show', $page->slug) }}"
                                     class="flex items-center gap-2 px-5 py-4 text-white {{ $isHierarchyActive ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm">
                                     <span>{{ $page->title }}</span>
-                                    <i data-lucide="chevron-down" class="w-3.5 h-3.5 opacity-60 group-hover:rotate-180 transition-transform duration-300"></i>
+                                    <i data-lucide="chevron-down"
+                                        class="w-3.5 h-3.5 opacity-60 group-hover:rotate-180 transition-transform duration-300"></i>
                                 </a>
-                                <div class="absolute left-0 top-full w-64 bg-white shadow-2xl rounded-b-xl border border-slate-100 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-[110] p-2">
+                                <div
+                                    class="absolute left-0 top-full w-64 bg-white shadow-2xl rounded-b-xl border border-slate-100 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-[110] p-2">
                                     <div class="flex flex-col">
-                                        @foreach($page->children as $child)
+                                        @foreach ($page->children as $child)
                                             <a href="{{ route('page.show', $child->slug) }}"
-                                                class="px-4 py-3 text-slate-700 {{ (request()->routeIs('page.show') && request()->route('slug') === $child->slug) ? 'bg-[#123B2D]/5 text-[#123B2D]' : 'hover:bg-[#123B2D]/5 hover:text-[#123B2D]' }} rounded-lg transition-colors flex items-center justify-between group/item text-sm">
+                                                class="px-4 py-3 text-slate-700 {{ request()->routeIs('page.show') && request()->route('slug') === $child->slug ? 'bg-[#123B2D]/5 text-[#123B2D]' : 'hover:bg-[#123B2D]/5 hover:text-[#123B2D]' }} rounded-lg transition-colors flex items-center justify-between group/item text-sm">
                                                 {{ $child->title }}
-                                                <i data-lucide="chevron-right" class="w-3 h-3 {{ (request()->routeIs('page.show') && request()->route('slug') === $child->slug) ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2' }} group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all"></i>
+                                                <i data-lucide="chevron-right"
+                                                    class="w-3 h-3 {{ request()->routeIs('page.show') && request()->route('slug') === $child->slug ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2' }} group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all"></i>
                                             </a>
                                         @endforeach
                                     </div>
@@ -416,15 +435,16 @@
                         @else
                             <li>
                                 <a href="{{ route('page.show', $page->slug) }}"
-                                    class="flex items-center gap-2 px-5 py-4 text-white {{ (request()->routeIs('page.show') && request()->route('slug') === $page->slug) ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm">
+                                    class="flex items-center gap-2 px-5 py-4 text-white {{ request()->routeIs('page.show') && request()->route('slug') === $page->slug ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm">
                                     <span>{{ $page->title }}</span>
                                 </a>
                             </li>
                         @endif
                     @endforeach
-                    
+
                     <li><a href="{{ route('contact_us') }}"
-                            class="flex items-center gap-2 px-5 py-4 text-white {{ request()->routeIs('contact_us') ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm"><span>Contact Us</span></a></li>
+                            class="flex items-center gap-2 px-5 py-4 text-white {{ request()->routeIs('contact_us') ? 'bg-[#02B1EB]' : 'hover:bg-white/10' }} transition-all-custom font-medium text-sm"><span>Contact
+                                Us</span></a></li>
                 </ul>
             </div>
         </nav>
@@ -468,21 +488,23 @@
 
                         <div class="mobile-dropdown group">
                             <div
-                                class="flex items-center justify-between w-full p-3 rounded-xl text-slate-700 font-bold {{ (request()->routeIs('introduction', 'ourteam') || $whoWeArePages->contains('slug', request()->route('slug'))) ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
+                                class="flex items-center justify-between w-full p-3 rounded-xl text-slate-700 font-bold {{ request()->routeIs('introduction', 'ourteam') || $whoWeArePages->contains('slug', request()->route('slug')) ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
                                 <a href="{{ route('introduction') }}" class="flex items-center gap-3 flex-1">
                                     <i data-lucide="users" class="w-5 h-5"></i> Who We Are
                                 </a>
                                 <button class="p-2 dropdown-trigger">
                                     <i data-lucide="chevron-down"
-                                        class="w-4 h-4 transition-transform duration-300 dropdown-icon {{ (request()->routeIs('introduction', 'ourteam') || $whoWeArePages->contains('slug', request()->route('slug'))) ? 'rotate-180' : '' }}"></i>
+                                        class="w-4 h-4 transition-transform duration-300 dropdown-icon {{ request()->routeIs('introduction', 'ourteam') || $whoWeArePages->contains('slug', request()->route('slug')) ? 'rotate-180' : '' }}"></i>
                                 </button>
                             </div>
-                            <div class="{{ (request()->routeIs('introduction', 'ourteam') || $whoWeArePages->contains('slug', request()->route('slug'))) ? '' : 'hidden' }} space-y-1 mt-1 ml-11 dropdown-content">
+                            <div
+                                class="{{ request()->routeIs('introduction', 'ourteam') || $whoWeArePages->contains('slug', request()->route('slug')) ? '' : 'hidden' }} space-y-1 mt-1 ml-11 dropdown-content">
                                 <a href="{{ route('introduction') }}"
                                     class="block p-2 text-sm {{ request()->routeIs('introduction') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Introduction</a>
-                                <a href="{{ route('ourteam') }}" class="block p-2 text-sm {{ request()->routeIs('ourteam') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Our
+                                <a href="{{ route('ourteam') }}"
+                                    class="block p-2 text-sm {{ request()->routeIs('ourteam') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Our
                                     Team</a>
-                                @foreach($whoWeArePages as $p)
+                                @foreach ($whoWeArePages as $p)
                                     <a href="{{ route('page.show', $p->slug) }}"
                                         class="block p-2 text-sm {{ request()->route('slug') === $p->slug ? 'text-primary font-bold' : 'text-slate-500' }} italic">
                                         {{ $p->title }}
@@ -498,7 +520,7 @@
 
                         <div class="mobile-dropdown group">
                             <div
-                                class="flex items-center justify-between w-full p-3 rounded-xl text-slate-700 font-bold {{ request()->routeIs('mediacorner', 'photogallery', 'videogallery') ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
+                                class="flex items-center justify-between w-full p-3 rounded-xl text-slate-700 font-bold {{ request()->routeIs('mediacorner', 'events.show', 'photogallery', 'videogallery') ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
                                 <a href="{{ route('mediacorner') }}" class="flex items-center gap-3 flex-1">
                                     <i data-lucide="layers" class="w-5 h-5"></i> Media Corner
                                 </a>
@@ -508,42 +530,49 @@
                                 </button>
                             </div>
                             <div class="hidden space-y-1 mt-1 ml-11 dropdown-content">
-                                <a href="{{ route('mediacorner') }}" class="block p-2 text-sm text-slate-500 italic">News &
-                                    Events</a>
-                                <a href="{{ route('photogallery') }}" class="block p-2 text-sm text-slate-500 italic">Photo
-                                    Gallery</a>
-                                <a href="{{ route('videogallery') }}" class="block p-2 text-sm text-slate-500 italic">Video
-                                    Gallery</a>
+                                <a href="{{ route('mediacorner') }}"
+                                    class="block p-2 text-sm text-slate-500 italic">Media Corner</a>
+                                <a href="{{ route('mediacorner') }}#events"
+                                    class="block p-2 text-sm text-slate-500 italic">Events &amp; Media</a>
                             </div>
                         </div>
 
                         <div class="mobile-dropdown group">
                             <div
-                                class="flex items-center justify-between w-full p-3 rounded-xl text-slate-700 font-bold {{ (request()->routeIs('ngo_*', 'registration_form_*') || $ngoRegistrationPages->contains('slug', request()->route('slug'))) ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
-                                <a href="{{ route('ngo_required_documents') }}" class="flex items-center gap-3 flex-1">
+                                class="flex items-center justify-between w-full p-3 rounded-xl text-slate-700 font-bold {{ request()->routeIs('ngo_*', 'registration_form_*') || $ngoRegistrationPages->contains('slug', request()->route('slug')) ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
+                                <a href="{{ route('ngo_required_documents') }}"
+                                    class="flex items-center gap-3 flex-1">
                                     <i data-lucide="file-check" class="w-5 h-5"></i> NGO Registration
                                 </a>
                                 <button class="p-2 dropdown-trigger">
                                     <i data-lucide="chevron-down"
-                                        class="w-4 h-4 transition-transform duration-300 dropdown-icon {{ (request()->routeIs('ngo_*', 'registration_form_*') || $ngoRegistrationPages->contains('slug', request()->route('slug'))) ? 'rotate-180' : '' }}"></i>
+                                        class="w-4 h-4 transition-transform duration-300 dropdown-icon {{ request()->routeIs('ngo_*', 'registration_form_*') || $ngoRegistrationPages->contains('slug', request()->route('slug')) ? 'rotate-180' : '' }}"></i>
                                 </button>
                             </div>
-                            <div class="{{ (request()->routeIs('ngo_*', 'registration_form_*') || $ngoRegistrationPages->contains('slug', request()->route('slug'))) ? '' : 'hidden' }} space-y-1 mt-1 ml-11 dropdown-content">
+                            <div
+                                class="{{ request()->routeIs('ngo_*', 'registration_form_*') || $ngoRegistrationPages->contains('slug', request()->route('slug')) ? '' : 'hidden' }} space-y-1 mt-1 ml-11 dropdown-content">
                                 <a href="{{ route('ngo_required_documents') }}"
-                                    class="block p-2 text-sm {{ request()->routeIs('ngo_required_documents') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Required Documents</a>
+                                    class="block p-2 text-sm {{ request()->routeIs('ngo_required_documents') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Required
+                                    Documents</a>
                                 <a href="{{ route('ngo_guidelines') }}"
-                                    class="block p-2 text-sm {{ request()->routeIs('ngo_guidelines') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Registration Guidelines</a>
+                                    class="block p-2 text-sm {{ request()->routeIs('ngo_guidelines') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Registration
+                                    Guidelines</a>
                                 <a href="{{ route('ngo_directives') }}"
-                                    class="block p-2 text-sm {{ request()->routeIs('ngo_directives') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Mandatory Directives</a>
+                                    class="block p-2 text-sm {{ request()->routeIs('ngo_directives') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Mandatory
+                                    Directives</a>
                                 <a href="{{ route('ngo_notices') }}"
-                                    class="block p-2 text-sm {{ request()->routeIs('ngo_notices') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Latest Notice Board</a>
+                                    class="block p-2 text-sm {{ request()->routeIs('ngo_notices') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Latest
+                                    Notice Board</a>
                                 <a href="{{ route('registration_form_part1') }}"
-                                    class="block p-2 text-sm {{ request()->routeIs('registration_form_*') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Online Registration</a>
+                                    class="block p-2 text-sm {{ request()->routeIs('registration_form_*') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Online
+                                    Registration</a>
                                 <a href="{{ route('ngo_registered') }}"
-                                    class="block p-2 text-sm {{ request()->routeIs('ngo_registered') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Registered NGOs</a>
+                                    class="block p-2 text-sm {{ request()->routeIs('ngo_registered') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Registered
+                                    NGOs</a>
                                 <a href="{{ route('ngo_suspended') }}"
-                                    class="block p-2 text-sm {{ request()->routeIs('ngo_suspended') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Suspended NGOs</a>
-                                @foreach($ngoRegistrationPages as $p)
+                                    class="block p-2 text-sm {{ request()->routeIs('ngo_suspended') ? 'text-primary font-bold' : 'text-slate-500' }} italic">Suspended
+                                    NGOs</a>
+                                @foreach ($ngoRegistrationPages as $p)
                                     <a href="{{ route('page.show', $p->slug) }}"
                                         class="block p-2 text-sm {{ request()->route('slug') === $p->slug ? 'text-primary font-bold' : 'text-slate-500' }} italic">
                                         {{ $p->title }}
@@ -557,33 +586,39 @@
                             <i data-lucide="book-open" class="w-5 h-5"></i> Resources
                         </a>
 
-                        @foreach($mobileTopLevelPages as $page)
+                        @foreach ($mobileTopLevelPages as $page)
                             @php
                                 $hasChildren = $page->children->count() > 0;
-                                $isHierarchyActive = request()->routeIs('page.show') && 
-                                                    (request()->route('slug') === $page->slug || 
-                                                     $page->children->contains('slug', request()->route('slug')));
+                                $isHierarchyActive =
+                                    request()->routeIs('page.show') &&
+                                    (request()->route('slug') === $page->slug ||
+                                        $page->children->contains('slug', request()->route('slug')));
                             @endphp
 
-                            @if($hasChildren)
+                            @if ($hasChildren)
                                 <div class="mobile-dropdown group">
-                                    <div class="flex items-center justify-between w-full p-3 rounded-xl {{ $isHierarchyActive ? 'bg-slate-50 text-primary' : 'text-slate-700 hover:bg-slate-50 hover:text-primary' }} font-bold transition-all">
-                                        <a href="{{ route('page.show', $page->slug) }}" class="flex items-center gap-3 flex-1">
+                                    <div
+                                        class="flex items-center justify-between w-full p-3 rounded-xl {{ $isHierarchyActive ? 'bg-slate-50 text-primary' : 'text-slate-700 hover:bg-slate-50 hover:text-primary' }} font-bold transition-all">
+                                        <a href="{{ route('page.show', $page->slug) }}"
+                                            class="flex items-center gap-3 flex-1">
                                             <i data-lucide="file-text" class="w-5 h-5"></i> {{ $page->title }}
                                         </a>
                                         <button class="p-2 dropdown-trigger">
-                                            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-300 dropdown-icon {{ $isHierarchyActive ? 'rotate-180' : '' }}"></i>
+                                            <i data-lucide="chevron-down"
+                                                class="w-4 h-4 transition-transform duration-300 dropdown-icon {{ $isHierarchyActive ? 'rotate-180' : '' }}"></i>
                                         </button>
                                     </div>
-                                    <div class="{{ $isHierarchyActive ? '' : 'hidden' }} space-y-1 mt-1 ml-11 dropdown-content">
-                                        @foreach($page->children as $child)
-                                            <a href="{{ route('page.show', $child->slug) }}" class="block p-2 text-sm {{ (request()->routeIs('page.show') && request()->route('slug') === $child->slug) ? 'text-primary font-bold' : 'text-slate-500' }} italic">{{ $child->title }}</a>
+                                    <div
+                                        class="{{ $isHierarchyActive ? '' : 'hidden' }} space-y-1 mt-1 ml-11 dropdown-content">
+                                        @foreach ($page->children as $child)
+                                            <a href="{{ route('page.show', $child->slug) }}"
+                                                class="block p-2 text-sm {{ request()->routeIs('page.show') && request()->route('slug') === $child->slug ? 'text-primary font-bold' : 'text-slate-500' }} italic">{{ $child->title }}</a>
                                         @endforeach
                                     </div>
                                 </div>
                             @else
                                 <a href="{{ route('page.show', $page->slug) }}"
-                                    class="flex items-center gap-3 p-3 rounded-xl text-slate-700 font-bold {{ (request()->routeIs('page.show') && request()->route('slug') === $page->slug) ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
+                                    class="flex items-center gap-3 p-3 rounded-xl text-slate-700 font-bold {{ request()->routeIs('page.show') && request()->route('slug') === $page->slug ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary' }} transition-all">
                                     <i data-lucide="file-text" class="w-5 h-5"></i> {{ $page->title }}
                                 </a>
                             @endif
@@ -618,23 +653,23 @@
 
                     <!-- Socials in Mobile Menu -->
                     <div class="flex items-center gap-3 pt-2">
-                        @if($settings->facebook_url)
-                        <a href="{{ $settings->facebook_url }}" target="_blank"
-                            class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-slate-400 hover:text-[#1877F2] hover:bg-blue-50 transition-all border border-slate-100">
-                            <i data-lucide="facebook" class="w-5 h-5"></i>
-                        </a>
+                        @if ($settings->facebook_url)
+                            <a href="{{ $settings->facebook_url }}" target="_blank"
+                                class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-slate-400 hover:text-[#1877F2] hover:bg-blue-50 transition-all border border-slate-100">
+                                <i data-lucide="facebook" class="w-5 h-5"></i>
+                            </a>
                         @endif
-                        @if($settings->twitter_url)
-                        <a href="{{ $settings->twitter_url }}" target="_blank"
-                            class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-slate-400 hover:text-[#1DA1F2] hover:bg-blue-50 transition-all border border-slate-100">
-                            <i data-lucide="twitter" class="w-5 h-5"></i>
-                        </a>
+                        @if ($settings->twitter_url)
+                            <a href="{{ $settings->twitter_url }}" target="_blank"
+                                class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-slate-400 hover:text-[#1DA1F2] hover:bg-blue-50 transition-all border border-slate-100">
+                                <i data-lucide="twitter" class="w-5 h-5"></i>
+                            </a>
                         @endif
-                        @if($settings->instagram_url)
-                        <a href="{{ $settings->instagram_url }}" target="_blank"
-                            class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-slate-400 hover:text-[#E4405F] hover:bg-pink-50 transition-all border border-slate-100">
-                            <i data-lucide="instagram" class="w-5 h-5"></i>
-                        </a>
+                        @if ($settings->instagram_url)
+                            <a href="{{ $settings->instagram_url }}" target="_blank"
+                                class="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-slate-400 hover:text-[#E4405F] hover:bg-pink-50 transition-all border border-slate-100">
+                                <i data-lucide="instagram" class="w-5 h-5"></i>
+                            </a>
                         @endif
                     </div>
                 </div>
@@ -666,11 +701,14 @@
                     @php
                         $tickerNews = App\Models\News::active()->latest()->take(3)->get();
                     @endphp
-                    @foreach($tickerNews as $item)
-                    <a href="{{ route('news_details', $item->id) }}" class="text-xs font-bold text-white/90 hover:text-[#02B1EB] uppercase tracking-wider">{{ Str::limit($item->title, 60) }}</a>
+                    @foreach ($tickerNews as $item)
+                        <a href="{{ route('news_details', $item->id) }}"
+                            class="text-xs font-bold text-white/90 hover:text-[#02B1EB] uppercase tracking-wider">{{ Str::limit($item->title, 60) }}</a>
                     @endforeach
-                    @if($tickerNews->count() < 3)
-                    <a href="{{ route('mediacorner') }}" class="text-xs font-bold text-white/90 hover:text-[#02B1EB] uppercase tracking-wider">VIEW ALL NEWS</a>
+                    @if ($tickerNews->count() < 3)
+                        <a href="{{ route('mediacorner') }}"
+                            class="text-xs font-bold text-white/90 hover:text-[#02B1EB] uppercase tracking-wider">VIEW
+                            ALL NEWS</a>
                     @endif
                 </div>
             </div>
@@ -687,7 +725,7 @@
     <main>
         {{ $slot }}
     </main>
-<!-- Footer start here -->
+    <!-- Footer start here -->
 
     <!-- Global Scrollbar Styles -->
     <style>
@@ -730,7 +768,8 @@
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3319.4623722216584!2d73.0766373!3d33.7032793!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38dfbf978e723533%3A0x6b72d2459c36db4b!2sPrinting%20Corporation%20of%20Pakistan!5e0!3m2!1sen!2s!4v1709710000000!5m2!1sen!2s"
                                 class="w-full h-52 border-0 grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
                                 allowfullscreen="" loading="lazy"></iframe>
-                            <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-[#0b0f19] to-transparent">
+                            <div
+                                class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-[#0b0f19] to-transparent">
                                 <a href="https://maps.google.com" target="_blank"
                                     class="flex items-center justify-center gap-2 w-full py-2.5 bg-white text-[#0b0f19] text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-primary hover:text-white transition-all shadow-lg">
                                     <i data-lucide="map-pin" class="w-3 h-3"></i>
@@ -904,25 +943,32 @@
                     <form class="space-y-4" method="POST" action="{{ route('contact.store') }}">
                         @csrf
                         <div>
-                            <input type="text" name="full_name" value="{{ old('full_name') }}" placeholder="Enter Name"
+                            <input type="text" name="full_name" value="{{ old('full_name') }}"
+                                placeholder="Enter Name"
                                 class="w-full bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none">
                         </div>
                         <div>
-                            <input type="email" name="email" value="{{ old('email') }}" placeholder="Enter Email"
+                            <input type="email" name="email" value="{{ old('email') }}"
+                                placeholder="Enter Email"
                                 class="w-full bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none">
                         </div>
                         <div>
-                            <input type="text" name="phone" value="{{ old('phone') }}" placeholder="Enter Phone"
+                            <input type="text" name="phone" value="{{ old('phone') }}"
+                                placeholder="Enter Phone"
                                 class="w-full bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none">
                         </div>
                         <div>
                             <select name="subject"
                                 class="w-full bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none">
                                 <option value="">Select Subject</option>
-                                <option value="general" {{ old('subject') === 'general' ? 'selected' : '' }}>General Inquiry</option>
-                                <option value="complaint" {{ old('subject') === 'complaint' ? 'selected' : '' }}>File a Complaint</option>
-                                <option value="legal" {{ old('subject') === 'legal' ? 'selected' : '' }}>Legal Assistance</option>
-                                <option value="feedback" {{ old('subject') === 'feedback' ? 'selected' : '' }}>Feedback</option>
+                                <option value="general" {{ old('subject') === 'general' ? 'selected' : '' }}>General
+                                    Inquiry</option>
+                                <option value="complaint" {{ old('subject') === 'complaint' ? 'selected' : '' }}>File
+                                    a Complaint</option>
+                                <option value="legal" {{ old('subject') === 'legal' ? 'selected' : '' }}>Legal
+                                    Assistance</option>
+                                <option value="feedback" {{ old('subject') === 'feedback' ? 'selected' : '' }}>
+                                    Feedback</option>
                             </select>
                         </div>
                         <div>
@@ -935,8 +981,9 @@
                             <i data-lucide="send"
                                 class="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
                         </button>
-                        @if($errors->any())
-                            <p class="text-xs text-red-300 leading-relaxed">Please check the form fields and try again.</p>
+                        @if ($errors->any())
+                            <p class="text-xs text-red-300 leading-relaxed">Please check the form fields and try again.
+                            </p>
                         @endif
                     </form>
                 </div>
@@ -963,29 +1010,29 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
-                    @if($settings->facebook_url)
-                    <a href="{{ $settings->facebook_url }}" target="_blank"
-                        class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center hover:bg-[#1877F2] hover:text-white transition-all shadow-lg group">
-                        <i data-lucide="facebook" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
-                    </a>
+                    @if ($settings->facebook_url)
+                        <a href="{{ $settings->facebook_url }}" target="_blank"
+                            class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center hover:bg-[#1877F2] hover:text-white transition-all shadow-lg group">
+                            <i data-lucide="facebook" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        </a>
                     @endif
-                    @if($settings->twitter_url)
-                    <a href="{{ $settings->twitter_url }}" target="_blank"
-                        class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center hover:bg-[#1DA1F2] hover:text-white transition-all shadow-lg group">
-                        <i data-lucide="twitter" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
-                    </a>
+                    @if ($settings->twitter_url)
+                        <a href="{{ $settings->twitter_url }}" target="_blank"
+                            class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center hover:bg-[#1DA1F2] hover:text-white transition-all shadow-lg group">
+                            <i data-lucide="twitter" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        </a>
                     @endif
-                    @if($settings->instagram_url)
-                    <a href="{{ $settings->instagram_url }}" target="_blank"
-                        class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center hover:bg-[#E4405F] hover:text-white transition-all shadow-lg group">
-                        <i data-lucide="instagram" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
-                    </a>
+                    @if ($settings->instagram_url)
+                        <a href="{{ $settings->instagram_url }}" target="_blank"
+                            class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center hover:bg-[#E4405F] hover:text-white transition-all shadow-lg group">
+                            <i data-lucide="instagram" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        </a>
                     @endif
-                    @if($settings->youtube_url)
-                    <a href="{{ $settings->youtube_url }}" target="_blank"
-                        class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center hover:bg-[#FF0000] hover:text-white transition-all shadow-lg group">
-                        <i data-lucide="youtube" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
-                    </a>
+                    @if ($settings->youtube_url)
+                        <a href="{{ $settings->youtube_url }}" target="_blank"
+                            class="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center hover:bg-[#FF0000] hover:text-white transition-all shadow-lg group">
+                            <i data-lucide="youtube" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        </a>
                     @endif
                 </div>
             </div>
@@ -1003,7 +1050,7 @@
 
 
     <script src="{{ asset('js/main.js') }}"></script>
-@stack('scripts')
+    @stack('scripts')
 </body>
 
 </html>

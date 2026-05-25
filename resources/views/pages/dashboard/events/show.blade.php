@@ -2,109 +2,54 @@
 
 @section('content')
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
+                <div class="p-6 lg:p-8">
                     <div class="flex justify-between items-center mb-6">
-                        <h1 class="text-2xl font-bold text-gray-900">Event Details</h1>
-                        <div class="flex space-x-2">
+                        <h1 class="text-2xl font-bold text-gray-900">{{ $event->title }}</h1>
+                        <div class="flex gap-2">
+                            <a href="{{ route('events.show', $event) }}" target="_blank"
+                               class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded text-sm">Public View</a>
                             <a href="{{ route('admin.events.edit', $event) }}"
-                               class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
-                                Edit Event
-                            </a>
+                               class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm">Edit</a>
                             <a href="{{ route('admin.events.index') }}"
-                               class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                                Back to List
-                            </a>
+                               class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded text-sm">Back</a>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <div class="lg:col-span-2">
-                            <div class="bg-gray-50 rounded-lg p-6">
-                                <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ $event->title }}</h2>
+                    <dl class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-8">
+                        <div><dt class="font-semibold text-gray-500">Date</dt><dd>{{ $event->event_date?->format('d M Y, h:i A') }}</dd></div>
+                        <div><dt class="font-semibold text-gray-500">Venue</dt><dd>{{ $event->location }}</dd></div>
+                        @if($event->subject)
+                            <div class="md:col-span-2"><dt class="font-semibold text-gray-500">Subject</dt><dd>{{ $event->subject }}</dd></div>
+                        @endif
+                        <div class="md:col-span-2"><dt class="font-semibold text-gray-500">Description</dt><dd class="whitespace-pre-wrap">{{ $event->description }}</dd></div>
+                    </dl>
 
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                    @if($event->is_featured)
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                            Featured
-                                        </span>
-                                    @endif
-                                    @if($event->is_active)
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                            Active
-                                        </span>
-                                    @else
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                            Inactive
-                                        </span>
-                                    @endif
-                                </div>
-
-                                <div class="mb-6">
-                                    <h3 class="text-sm font-medium text-gray-700 mb-2">Description:</h3>
-                                    <div class="text-gray-600 bg-white p-4 rounded border whitespace-pre-line">
-                                        {{ $event->description }}
-                                    </div>
-                                </div>
-                            </div>
+                    <h3 class="font-bold text-gray-900 mb-3">Images ({{ $event->images->count() }})</h3>
+                    @if($event->images->isNotEmpty())
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+                            @foreach($event->images as $image)
+                                <img src="{{ asset('storage/' . $image->image_path) }}" alt="" class="rounded-lg h-32 w-full object-cover">
+                            @endforeach
                         </div>
+                    @else
+                        <p class="text-gray-500 mb-8">No images uploaded.</p>
+                    @endif
 
-                        <div class="space-y-6">
-                            @if($event->image_path)
-                                <div class="bg-gray-50 rounded-lg p-4">
-                                    <h3 class="text-sm font-medium text-gray-700 mb-3">Event Image</h3>
-                                    <img src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->title }}"
-                                         class="w-full h-auto rounded-lg shadow-md">
+                    <h3 class="font-bold text-gray-900 mb-3">Videos ({{ $event->videos->count() }})</h3>
+                    @if($event->videos->isNotEmpty())
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            @foreach($event->videos as $video)
+                                <div>
+                                    <x-ui.youtube-embed :videoId="$video->youtube_video_id" :title="$event->title" />
+                                    <p class="text-xs text-gray-500 mt-1 truncate">{{ $video->youtube_url }}</p>
                                 </div>
-                            @endif
-
-                            <div class="bg-gray-50 rounded-lg p-4">
-                                <h3 class="text-sm font-medium text-gray-700 mb-3">Event Information</h3>
-                                <dl class="space-y-2">
-                                    <div>
-                                        <dt class="text-xs font-medium text-gray-500 uppercase tracking-wide">Location</dt>
-                                        <dd class="text-sm text-gray-900">{{ $event->location }}</dd>
-                                    </div>
-                                    <div>
-                                        <dt class="text-xs font-medium text-gray-500 uppercase tracking-wide">Event Date</dt>
-                                        <dd class="text-sm text-gray-900">{{ optional($event->event_date)->format('M j, Y g:i A') }}</dd>
-                                    </div>
-                                    <div>
-                                        <dt class="text-xs font-medium text-gray-500 uppercase tracking-wide">Display Order</dt>
-                                        <dd class="text-sm text-gray-900">{{ $event->order }}</dd>
-                                    </div>
-                                    <div>
-                                        <dt class="text-xs font-medium text-gray-500 uppercase tracking-wide">Created</dt>
-                                        <dd class="text-sm text-gray-900">{{ $event->created_at->format('M j, Y g:i A') }}</dd>
-                                    </div>
-                                    <div>
-                                        <dt class="text-xs font-medium text-gray-500 uppercase tracking-wide">Last Updated</dt>
-                                        <dd class="text-sm text-gray-900">{{ $event->updated_at->format('M j, Y g:i A') }}</dd>
-                                    </div>
-                                </dl>
-                            </div>
-
-                            <div class="bg-gray-50 rounded-lg p-4">
-                                <h3 class="text-sm font-medium text-gray-700 mb-3">Actions</h3>
-                                <div class="space-y-2">
-                                    <a href="{{ route('admin.events.edit', $event) }}"
-                                       class="w-full bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded text-center block">
-                                        Edit Event
-                                    </a>
-                                    <form method="POST" action="{{ route('admin.events.destroy', $event) }}"
-                                          onsubmit="return confirm('Are you sure you want to delete this event?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                                class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                            Delete Event
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
-                    </div>
+                    @else
+                        <p class="text-gray-500">No YouTube videos linked.</p>
+                    @endif
                 </div>
             </div>
         </div>

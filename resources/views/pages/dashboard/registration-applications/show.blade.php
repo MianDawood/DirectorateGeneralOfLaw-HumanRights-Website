@@ -54,6 +54,12 @@
                             <p class="mt-1 text-sm text-gray-500">Compact review view for submitted registration steps.</p>
                         </div>
                         <div class="flex flex-wrap gap-2">
+                            @if($application->status === 'approved' && $application->certificate_path)
+                                <a href="{{ asset('storage/' . $application->certificate_path) }}" target="_blank"
+                                   class="inline-flex items-center rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700">
+                                    <i data-lucide="download" class="w-4 h-4 mr-2"></i> Certificate
+                                </a>
+                            @endif
                             <a href="{{ route('admin.registration-applications.edit', $application) }}"
                                class="inline-flex items-center rounded-lg bg-yellow-500 px-4 py-2 text-sm font-semibold text-white hover:bg-yellow-600">
                                 Review

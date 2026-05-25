@@ -17,6 +17,7 @@ class SiteSetting extends Model
         'contact_address',
         'home_campaign_primary',
         'home_campaign_secondary',
+        'dg_signature_image',
     ];
 
     public static function getSettings()

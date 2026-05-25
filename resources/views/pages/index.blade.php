@@ -302,7 +302,7 @@
                     <div class="bg-[#123B2D] h-24 relative">
                         <div class="absolute -bottom-12 left-1/2 -translate-x-1/2">
                             <img src="{{ asset('storage/' . $message->image_path) }}" alt="{{ $message->name }}"
-                                class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg {{ $message->image_path === 'images/logo.jpg' ? 'p-2 bg-white' : '' }}" />
+                                class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg {{ $message->image_path === 'images/logo.jpg' ? 'p-2 bg-white' : '' }}" />
                         </div>
                     </div>
                     <div class="pt-16 pb-8 px-6 text-center">
