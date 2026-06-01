@@ -9,8 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
+
 
 class IntroductionsController extends Controller
 {
@@ -34,7 +33,7 @@ class IntroductionsController extends Controller
             'introductions' => 'nullable|array',
             'introductions.*.title' => 'nullable|string',
             'introductions.*.description' => 'nullable|string',
-            'introductions.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp',
+            'introductions.*.image' => 'nullable|file',
             'introductions.*.is_active' => 'nullable',
             'heads' => 'nullable|array',
             'heads.*.name' => 'nullable|string',
@@ -43,7 +42,7 @@ class IntroductionsController extends Controller
             'heads.*.profile_url' => 'nullable|string',
             'heads.*.order' => 'nullable|integer',
             'heads.*.is_active' => 'nullable',
-            'heads.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp',
+            'heads.*.image' => 'nullable|file',
             'deleted_heads' => 'nullable|array',
             'deleted_heads.*' => 'nullable|integer',
         ]);
@@ -65,8 +64,10 @@ class IntroductionsController extends Controller
                     if ($request->hasFile("introductions.{$id}.image")) {
                         $this->deleteImage($introduction->image);
 
-                        $path = $request->file("introductions.{$id}.image")->store('introductions', 'public');
-                        $introduction->update(['image' => $path]);
+                        $file = $request->file("introductions.{$id}.image");
+                        $filename = $file->hashName();
+                        $file->move(public_path('storage/introductions'), $filename);
+                        $introduction->update(['image' => 'introductions/' . $filename]);
                     }
                 }
             }
@@ -108,8 +109,10 @@ class IntroductionsController extends Controller
                 if (isset($head) && $request->hasFile("heads.{$key}.image")) {
                     $this->deleteImage($head->image);
 
-                    $path = $request->file("heads.{$key}.image")->store('introductions', 'public');
-                    $head->update(['image' => $path]);
+                    $file = $request->file("heads.{$key}.image");
+                    $filename = $file->hashName();
+                    $file->move(public_path('storage/introductions'), $filename);
+                    $head->update(['image' => 'introductions/' . $filename]);
                 }
             }
         }
@@ -131,17 +134,8 @@ class IntroductionsController extends Controller
 
     private function deleteImage(?string $path): void
     {
-        if (!$path) {
-            return;
-        }
-
-        if (storage_exists($path)) {
-            Storage::disk('public')->delete($path);
-            return;
-        }
-
-        if (File::exists(public_path($path))) {
-            File::delete(public_path($path));
+        if ($path) {
+            storage_delete($path);
         }
     }
 }

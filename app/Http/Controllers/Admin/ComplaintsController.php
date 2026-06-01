@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Complaint;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+
 
 class ComplaintsController extends Controller
 {
@@ -37,7 +37,7 @@ class ComplaintsController extends Controller
             'category' => 'nullable|string|max:255',
             'details' => 'required|string',
             'status' => 'required|string|max:20',
-            'attachment' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'attachment' => 'nullable|file|max:5120',
         ]);
 
         $data = $request->only([
@@ -51,7 +51,10 @@ class ComplaintsController extends Controller
         ]);
 
         if ($request->hasFile('attachment')) {
-            $data['attachment_path'] = $request->file('attachment')->store('complaints', 'public');
+            $file = $request->file('attachment');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/complaints'), $filename);
+            $data['attachment_path'] = 'complaints/' . $filename;
         }
 
         Complaint::create($data);
@@ -80,7 +83,7 @@ class ComplaintsController extends Controller
             'category' => 'nullable|string|max:255',
             'details' => 'required|string',
             'status' => 'required|string|max:20',
-            'attachment' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'attachment' => 'nullable|file|max:5120',
         ]);
 
         $data = $request->only([
@@ -94,10 +97,13 @@ class ComplaintsController extends Controller
         ]);
 
         if ($request->hasFile('attachment')) {
-            if ($complaint->attachment_path && storage_exists($complaint->attachment_path)) {
-                Storage::disk('public')->delete($complaint->attachment_path);
-            }
-            $data['attachment_path'] = $request->file('attachment')->store('complaints', 'public');
+        if ($complaint->attachment_path && storage_exists($complaint->attachment_path)) {
+            storage_delete($complaint->attachment_path);
+        }
+            $file = $request->file('attachment');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/complaints'), $filename);
+            $data['attachment_path'] = 'complaints/' . $filename;
         }
 
         $complaint->update($data);
@@ -109,8 +115,8 @@ class ComplaintsController extends Controller
     public function destroy(Complaint $complaint)
     {
         if ($complaint->attachment_path && storage_exists($complaint->attachment_path)) {
-            Storage::disk('public')->delete($complaint->attachment_path);
-        }
+                storage_delete($complaint->attachment_path);
+            }
 
         $complaint->delete();
 

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Publication;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+
 
 class PublicationsController extends Controller
 {
@@ -36,7 +36,7 @@ class PublicationsController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'category' => 'required|string|in:Annual Report,Legal Act,Policy',
-            'file' => 'required|file|mimes:pdf|max:10240',
+            'file' => 'required|file|max:10240',
             'published_date' => 'required|date',
             'is_active' => 'nullable|boolean',
             'order' => 'nullable|integer|min:0',
@@ -47,7 +47,9 @@ class PublicationsController extends Controller
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $data['file_path'] = $file->store('publications', 'public');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/publications'), $filename);
+            $data['file_path'] = 'publications/' . $filename;
             $data['file_size'] = $this->formatBytes($file->getSize());
             $data['file_type'] = strtoupper($file->getClientOriginalExtension());
         }
@@ -83,7 +85,7 @@ class PublicationsController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'category' => 'required|string|in:Annual Report,Legal Act,Policy',
-            'file' => 'nullable|file|mimes:pdf|max:10240',
+            'file' => 'nullable|file|max:10240',
             'published_date' => 'required|date',
             'is_active' => 'nullable|boolean',
             'order' => 'nullable|integer|min:0',
@@ -94,10 +96,12 @@ class PublicationsController extends Controller
 
         if ($request->hasFile('file')) {
             if ($publication->file_path && storage_exists($publication->file_path)) {
-                Storage::disk('public')->delete($publication->file_path);
+                storage_delete($publication->file_path);
             }
             $file = $request->file('file');
-            $data['file_path'] = $file->store('publications', 'public');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/publications'), $filename);
+            $data['file_path'] = 'publications/' . $filename;
             $data['file_size'] = $this->formatBytes($file->getSize());
             $data['file_type'] = strtoupper($file->getClientOriginalExtension());
         }
@@ -114,7 +118,7 @@ class PublicationsController extends Controller
     public function destroy(Publication $publication)
     {
         if ($publication->file_path && storage_exists($publication->file_path)) {
-            Storage::disk('public')->delete($publication->file_path);
+            storage_delete($publication->file_path);
         }
 
         $publication->delete();

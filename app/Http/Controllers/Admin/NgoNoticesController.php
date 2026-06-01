@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\NgoNotice;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+
 
 class NgoNoticesController extends Controller
 {
@@ -34,7 +34,7 @@ class NgoNoticesController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|file|max:2048',
             'is_public_notice' => 'nullable|boolean',
         ]);
 
@@ -42,7 +42,10 @@ class NgoNoticesController extends Controller
         $data['is_public_notice'] = $request->has('is_public_notice');
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('notices', 'public');
+            $file = $request->file('image');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/notices'), $filename);
+            $data['image'] = 'notices/' . $filename;
         }
 
         NgoNotice::create($data);
@@ -75,7 +78,7 @@ class NgoNoticesController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|file|max:2048',
             'is_public_notice' => 'nullable|boolean',
         ]);
 
@@ -83,11 +86,13 @@ class NgoNoticesController extends Controller
         $data['is_public_notice'] = $request->has('is_public_notice');
 
         if ($request->hasFile('image')) {
-            // Delete old image if exists
             if ($ngoNotice->image && storage_exists($ngoNotice->image)) {
-                Storage::disk('public')->delete($ngoNotice->image);
+                storage_delete($ngoNotice->image);
             }
-            $data['image'] = $request->file('image')->store('notices', 'public');
+            $file = $request->file('image');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/notices'), $filename);
+            $data['image'] = 'notices/' . $filename;
         }
 
         $ngoNotice->update($data);
@@ -102,7 +107,7 @@ class NgoNoticesController extends Controller
     public function destroy(NgoNotice $ngoNotice)
     {
         if ($ngoNotice->image && storage_exists($ngoNotice->image)) {
-            Storage::disk('public')->delete($ngoNotice->image);
+            storage_delete($ngoNotice->image);
         }
 
         $ngoNotice->delete();

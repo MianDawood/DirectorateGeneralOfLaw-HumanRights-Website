@@ -21,7 +21,7 @@ class ComplaintController extends Controller
             'district' => 'nullable|string|max:255',
             'category' => 'nullable|string|max:255',
             'details' => 'required|string',
-            'attachment' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'attachment' => 'nullable|file|max:5120',
         ]);
 
         $data = $request->only([
@@ -34,7 +34,10 @@ class ComplaintController extends Controller
         ]);
 
         if ($request->hasFile('attachment')) {
-            $data['attachment_path'] = $request->file('attachment')->store('complaints', 'public');
+            $file = $request->file('attachment');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/complaints'), $filename);
+            $data['attachment_path'] = 'complaints/' . $filename;
         }
 
         Complaint::create($data);

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\TeamMember;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+
 
 class TeamMembersController extends Controller
 {
@@ -31,7 +31,7 @@ class TeamMembersController extends Controller
             'position' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:30',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'image' => 'nullable|file|max:5120',
             'facebook_url' => 'nullable|url|max:255',
             'twitter_url' => 'nullable|url|max:255',
             'instagram_url' => 'nullable|url|max:255',
@@ -53,7 +53,10 @@ class TeamMembersController extends Controller
         $data['order'] = $data['order'] ?? 0;
 
         if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('team', 'public');
+            $file = $request->file('image');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/team'), $filename);
+            $data['image_path'] = 'team/' . $filename;
         }
 
         TeamMember::create($data);
@@ -79,7 +82,7 @@ class TeamMembersController extends Controller
             'position' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
             'phone' => 'nullable|string|max:30',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'image' => 'nullable|file|max:5120',
             'facebook_url' => 'nullable|url|max:255',
             'twitter_url' => 'nullable|url|max:255',
             'instagram_url' => 'nullable|url|max:255',
@@ -102,9 +105,12 @@ class TeamMembersController extends Controller
 
         if ($request->hasFile('image')) {
             if ($team_member->image_path && storage_exists($team_member->image_path)) {
-                Storage::disk('public')->delete($team_member->image_path);
+                storage_delete($team_member->image_path);
             }
-            $data['image_path'] = $request->file('image')->store('team', 'public');
+            $file = $request->file('image');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/team'), $filename);
+            $data['image_path'] = 'team/' . $filename;
         }
 
         $team_member->update($data);
@@ -116,7 +122,7 @@ class TeamMembersController extends Controller
     public function destroy(TeamMember $team_member)
     {
         if ($team_member->image_path && storage_exists($team_member->image_path)) {
-            Storage::disk('public')->delete($team_member->image_path);
+            storage_delete($team_member->image_path);
         }
 
         $team_member->delete();

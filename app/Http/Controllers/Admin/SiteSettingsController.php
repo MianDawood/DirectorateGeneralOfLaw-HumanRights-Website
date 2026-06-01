@@ -30,14 +30,17 @@ class SiteSettingsController extends Controller
             'contact_address' => 'nullable|string',
             'home_campaign_primary' => 'required|string|max:255',
             'home_campaign_secondary' => 'required|string|max:255',
-            'dg_signature_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'dg_signature_image' => 'nullable|file|max:2048',
         ]);
 
         if ($request->hasFile('dg_signature_image')) {
             if ($settings->dg_signature_image && storage_exists($settings->dg_signature_image)) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($settings->dg_signature_image);
+                storage_delete($settings->dg_signature_image);
             }
-            $validated['dg_signature_image'] = $request->file('dg_signature_image')->store('signatures', 'public');
+            $file = $request->file('dg_signature_image');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/signatures'), $filename);
+            $validated['dg_signature_image'] = 'signatures/' . $filename;
         }
 
         if ($settings->exists) {

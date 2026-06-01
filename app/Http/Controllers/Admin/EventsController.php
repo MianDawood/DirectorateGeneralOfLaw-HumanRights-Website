@@ -8,8 +8,6 @@ use App\Models\EventImage;
 use App\Models\EventVideo;
 use App\Support\YoutubeHelper;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-
 class EventsController extends Controller
 {
     public function index()
@@ -85,7 +83,7 @@ class EventsController extends Controller
             'location' => 'required|string|max:255',
             'event_date' => 'required|date',
             'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:4096',
+            'images.*' => 'file|max:4096',
             'youtube_urls' => 'nullable|array',
             'youtube_urls.*' => 'nullable|string|max:500',
             'remove_images' => 'nullable|array',
@@ -125,8 +123,10 @@ class EventsController extends Controller
                 continue;
             }
 
+            $filename = $file->hashName();
+            $file->move(public_path('storage/events/gallery'), $filename);
             $event->images()->create([
-                'image_path' => $file->store('events/gallery', 'public'),
+                'image_path' => 'events/gallery/' . $filename,
                 'order' => $maxOrder + $index + 1,
             ]);
         }
@@ -228,7 +228,7 @@ class EventsController extends Controller
     private function deleteImageFile(?string $path): void
     {
         if ($path && storage_exists($path)) {
-            Storage::disk('public')->delete($path);
+            storage_delete($path);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\GalleryItem;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+
 
 class GalleryItemsController extends Controller
 {
@@ -33,8 +33,8 @@ class GalleryItemsController extends Controller
             'type' => 'required|string|in:photo,video',
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'media' => 'nullable|file|mimes:jpg,jpeg,png,webp,mp4|max:20480',
-            'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'media' => 'nullable|file|max:20480',
+            'thumbnail' => 'nullable|file|max:5120',
             'duration' => 'nullable|string|max:20',
             'status' => 'required|string|max:20',
             'order' => 'nullable|integer|min:0',
@@ -51,10 +51,16 @@ class GalleryItemsController extends Controller
         $data['order'] = $data['order'] ?? 0;
 
         if ($request->hasFile('media')) {
-            $data['media_path'] = $request->file('media')->store('gallery', 'public');
+            $file = $request->file('media');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/gallery'), $filename);
+            $data['media_path'] = 'gallery/' . $filename;
         }
         if ($request->hasFile('thumbnail')) {
-            $data['thumbnail_path'] = $request->file('thumbnail')->store('gallery', 'public');
+            $file = $request->file('thumbnail');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/gallery'), $filename);
+            $data['thumbnail_path'] = 'gallery/' . $filename;
         }
 
         GalleryItem::create($data);
@@ -79,8 +85,8 @@ class GalleryItemsController extends Controller
             'type' => 'required|string|in:photo,video',
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'media' => 'nullable|file|mimes:jpg,jpeg,png,webp,mp4|max:20480',
-            'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'media' => 'nullable|file|max:20480',
+            'thumbnail' => 'nullable|file|max:5120',
             'duration' => 'nullable|string|max:20',
             'status' => 'required|string|max:20',
             'order' => 'nullable|integer|min:0',
@@ -98,15 +104,21 @@ class GalleryItemsController extends Controller
 
         if ($request->hasFile('media')) {
             if ($gallery_item->media_path && storage_exists($gallery_item->media_path)) {
-                Storage::disk('public')->delete($gallery_item->media_path);
+                storage_delete($gallery_item->media_path);
             }
-            $data['media_path'] = $request->file('media')->store('gallery', 'public');
+            $file = $request->file('media');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/gallery'), $filename);
+            $data['media_path'] = 'gallery/' . $filename;
         }
         if ($request->hasFile('thumbnail')) {
             if ($gallery_item->thumbnail_path && storage_exists($gallery_item->thumbnail_path)) {
-                Storage::disk('public')->delete($gallery_item->thumbnail_path);
+                storage_delete($gallery_item->thumbnail_path);
             }
-            $data['thumbnail_path'] = $request->file('thumbnail')->store('gallery', 'public');
+            $file = $request->file('thumbnail');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/gallery'), $filename);
+            $data['thumbnail_path'] = 'gallery/' . $filename;
         }
 
         $gallery_item->update($data);
@@ -118,10 +130,10 @@ class GalleryItemsController extends Controller
     public function destroy(GalleryItem $gallery_item)
     {
         if ($gallery_item->media_path && storage_exists($gallery_item->media_path)) {
-            Storage::disk('public')->delete($gallery_item->media_path);
+            storage_delete($gallery_item->media_path);
         }
         if ($gallery_item->thumbnail_path && storage_exists($gallery_item->thumbnail_path)) {
-            Storage::disk('public')->delete($gallery_item->thumbnail_path);
+            storage_delete($gallery_item->thumbnail_path);
         }
 
         $gallery_item->delete();

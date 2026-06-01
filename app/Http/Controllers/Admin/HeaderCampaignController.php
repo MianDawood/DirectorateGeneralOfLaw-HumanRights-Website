@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\HeaderCampaign;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class HeaderCampaignController extends Controller
@@ -27,7 +26,10 @@ class HeaderCampaignController extends Controller
     {
         $data = $this->validatedData($request, true);
         $data['is_active'] = $request->boolean('is_active');
-        $data['image_path'] = $request->file('image')->store('header-campaigns', 'public');
+        $file = $request->file('image');
+        $filename = $file->hashName();
+        $file->move(public_path('storage/header-campaigns'), $filename);
+        $data['image_path'] = 'header-campaigns/' . $filename;
 
         HeaderCampaign::create($data);
 
@@ -48,10 +50,13 @@ class HeaderCampaignController extends Controller
 
         if ($request->hasFile('image')) {
             if ($headerCampaign->image_path && storage_exists($headerCampaign->image_path)) {
-                Storage::disk('public')->delete($headerCampaign->image_path);
+                storage_delete($headerCampaign->image_path);
             }
 
-            $data['image_path'] = $request->file('image')->store('header-campaigns', 'public');
+            $file = $request->file('image');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/header-campaigns'), $filename);
+            $data['image_path'] = 'header-campaigns/' . $filename;
         }
 
         $headerCampaign->update($data);
@@ -64,7 +69,7 @@ class HeaderCampaignController extends Controller
     public function destroy(HeaderCampaign $headerCampaign): RedirectResponse
     {
         if ($headerCampaign->image_path && storage_exists($headerCampaign->image_path)) {
-            Storage::disk('public')->delete($headerCampaign->image_path);
+            storage_delete($headerCampaign->image_path);
         }
 
         $headerCampaign->delete();
@@ -81,7 +86,7 @@ class HeaderCampaignController extends Controller
             'url' => 'required|url|max:255',
             'order' => 'nullable|integer|min:0',
             'is_active' => 'nullable|boolean',
-            'image' => [$isCreate ? 'required' : 'nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
+            'image' => [$isCreate ? 'required' : 'nullable', 'file', 'max:4096'],
         ]);
     }
 }

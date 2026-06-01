@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\News;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+
 
 class NewsController extends Controller
 {
@@ -35,7 +35,7 @@ class NewsController extends Controller
             'title' => 'required|string|max:255',
             'excerpt' => 'required|string|max:500',
             'content' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|file|max:2048',
             'published_date' => 'required|date',
             'is_featured' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
@@ -47,7 +47,10 @@ class NewsController extends Controller
         $data['is_active'] = $request->has('is_active');
 
         if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('images', 'public');
+            $file = $request->file('image');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/images'), $filename);
+            $data['image_path'] = 'images/' . $filename;
         }
 
         News::create($data);
@@ -81,7 +84,7 @@ class NewsController extends Controller
             'title' => 'required|string|max:255',
             'excerpt' => 'required|string|max:500',
             'content' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|file|max:2048',
             'published_date' => 'required|date',
             'is_featured' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
@@ -93,11 +96,13 @@ class NewsController extends Controller
         $data['is_active'] = $request->has('is_active');
 
         if ($request->hasFile('image')) {
-            // Delete old image if exists
             if ($news->image_path && storage_exists($news->image_path)) {
-                Storage::disk('public')->delete($news->image_path);
+                storage_delete($news->image_path);
             }
-            $data['image_path'] = $request->file('image')->store('images', 'public');
+            $file = $request->file('image');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/images'), $filename);
+            $data['image_path'] = 'images/' . $filename;
         }
 
         $news->update($data);
@@ -111,9 +116,8 @@ class NewsController extends Controller
      */
     public function destroy(News $news)
     {
-        // Delete image if exists
         if ($news->image_path && storage_exists($news->image_path)) {
-            Storage::disk('public')->delete($news->image_path);
+            storage_delete($news->image_path);
         }
 
         $news->delete();

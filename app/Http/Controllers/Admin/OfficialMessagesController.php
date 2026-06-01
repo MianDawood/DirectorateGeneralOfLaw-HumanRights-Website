@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\OfficialMessage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+
 
 class OfficialMessagesController extends Controller
 {
@@ -35,7 +35,7 @@ class OfficialMessagesController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'position' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|file|max:2048',
             'statement' => 'required|string',
             'order' => 'nullable|integer|min:0',
             'is_active' => 'nullable|boolean',
@@ -45,7 +45,10 @@ class OfficialMessagesController extends Controller
         $data['is_active'] = $request->has('is_active');
 
         if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('images', 'public');
+            $file = $request->file('image');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/images'), $filename);
+            $data['image_path'] = 'images/' . $filename;
         }
 
         OfficialMessage::create($data);
@@ -78,7 +81,7 @@ class OfficialMessagesController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'position' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|file|max:2048',
             'statement' => 'required|string',
             'order' => 'nullable|integer|min:0',
             'is_active' => 'nullable|boolean',
@@ -88,11 +91,13 @@ class OfficialMessagesController extends Controller
         $data['is_active'] = $request->has('is_active');
 
         if ($request->hasFile('image')) {
-            // Delete old image if exists
             if ($officialMessage->image_path && storage_exists($officialMessage->image_path)) {
-                Storage::disk('public')->delete($officialMessage->image_path);
+                storage_delete($officialMessage->image_path);
             }
-            $data['image_path'] = $request->file('image')->store('images', 'public');
+            $file = $request->file('image');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/images'), $filename);
+            $data['image_path'] = 'images/' . $filename;
         }
 
         $officialMessage->update($data);
@@ -106,9 +111,8 @@ class OfficialMessagesController extends Controller
      */
     public function destroy(OfficialMessage $officialMessage)
     {
-        // Delete image if exists
         if ($officialMessage->image_path && storage_exists($officialMessage->image_path)) {
-            Storage::disk('public')->delete($officialMessage->image_path);
+            storage_delete($officialMessage->image_path);
         }
 
         $officialMessage->delete();

@@ -34,7 +34,7 @@ class WhatWeDosController extends Controller
             'what_we_dos.*.heading' => 'nullable|string',
             'what_we_dos.*.description' => 'nullable|string',
             'what_we_dos.*.extra_description' => 'nullable|string',
-            'what_we_dos.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'what_we_dos.*.image' => 'nullable|file|max:2048',
             'what_we_dos.*.is_active' => 'nullable',
             'activities' => 'nullable|array',
             'activities.*.title' => 'nullable|string',

@@ -197,13 +197,14 @@ class PageController extends Controller
     public function uploadImage(Request $request)
     {
         $request->validate([
-            'upload' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'upload' => 'required|file|max:2048'
         ]);
 
         if ($request->hasFile('upload')) {
             $file = $request->file('upload');
-            $path = $file->store('page-content-images', 'public');
-            $url = asset('storage/' . $path);
+            $filename = $file->hashName();
+            $file->move(public_path('storage/page-content-images'), $filename);
+            $url = asset('storage/page-content-images/' . $filename);
             
             return response()->json([
                 'uploaded' => true,

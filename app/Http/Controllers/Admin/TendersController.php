@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Tender;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+
 
 class TendersController extends Controller
 {
@@ -33,7 +33,7 @@ class TendersController extends Controller
             'publish_date' => 'required|date',
             'closing_date' => 'required|date|after_or_equal:publish_date',
             'status' => 'required|string|max:20',
-            'file' => 'nullable|file|mimes:pdf|max:10240',
+            'file' => 'nullable|file|max:10240',
         ]);
 
         $data = $request->only([
@@ -47,7 +47,9 @@ class TendersController extends Controller
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $data['file_path'] = $file->store('tenders', 'public');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/tenders'), $filename);
+            $data['file_path'] = 'tenders/' . $filename;
         }
 
         Tender::create($data);
@@ -75,7 +77,7 @@ class TendersController extends Controller
             'publish_date' => 'required|date',
             'closing_date' => 'required|date|after_or_equal:publish_date',
             'status' => 'required|string|max:20',
-            'file' => 'nullable|file|mimes:pdf|max:10240',
+            'file' => 'nullable|file|max:10240',
         ]);
 
         $data = $request->only([
@@ -89,10 +91,12 @@ class TendersController extends Controller
 
         if ($request->hasFile('file')) {
             if ($tender->file_path && storage_exists($tender->file_path)) {
-                Storage::disk('public')->delete($tender->file_path);
+                storage_delete($tender->file_path);
             }
             $file = $request->file('file');
-            $data['file_path'] = $file->store('tenders', 'public');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/tenders'), $filename);
+            $data['file_path'] = 'tenders/' . $filename;
         }
 
         $tender->update($data);
@@ -104,7 +108,7 @@ class TendersController extends Controller
     public function destroy(Tender $tender)
     {
         if ($tender->file_path && storage_exists($tender->file_path)) {
-            Storage::disk('public')->delete($tender->file_path);
+            storage_delete($tender->file_path);
         }
 
         $tender->delete();

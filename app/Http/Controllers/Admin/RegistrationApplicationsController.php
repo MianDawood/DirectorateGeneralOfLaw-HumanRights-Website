@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\NgoApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+
 use App\Support\CertificateQrGenerator;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\URL;
@@ -120,7 +120,7 @@ class RegistrationApplicationsController extends Controller
             // Save PDF to storage
             $pdfContent = $pdf->output();
             $path = 'certificates/ngo_certificate_' . $registration_application->id . '.pdf';
-            Storage::disk('public')->put($path, $pdfContent);
+            storage_put($path, $pdfContent);
             $data['certificate_path'] = $path;
         }
         $registration_application->update($data);
