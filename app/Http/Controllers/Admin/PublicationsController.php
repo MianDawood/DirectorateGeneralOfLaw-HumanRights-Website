@@ -93,7 +93,7 @@ class PublicationsController extends Controller
         $data['is_active'] = $request->has('is_active');
 
         if ($request->hasFile('file')) {
-            if ($publication->file_path && Storage::disk('public')->exists($publication->file_path)) {
+            if ($publication->file_path && storage_exists($publication->file_path)) {
                 Storage::disk('public')->delete($publication->file_path);
             }
             $file = $request->file('file');
@@ -113,7 +113,7 @@ class PublicationsController extends Controller
      */
     public function destroy(Publication $publication)
     {
-        if ($publication->file_path && Storage::disk('public')->exists($publication->file_path)) {
+        if ($publication->file_path && storage_exists($publication->file_path)) {
             Storage::disk('public')->delete($publication->file_path);
         }
 

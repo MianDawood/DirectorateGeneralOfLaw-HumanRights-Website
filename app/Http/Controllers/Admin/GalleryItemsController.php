@@ -97,13 +97,13 @@ class GalleryItemsController extends Controller
         $data['order'] = $data['order'] ?? 0;
 
         if ($request->hasFile('media')) {
-            if ($gallery_item->media_path && Storage::disk('public')->exists($gallery_item->media_path)) {
+            if ($gallery_item->media_path && storage_exists($gallery_item->media_path)) {
                 Storage::disk('public')->delete($gallery_item->media_path);
             }
             $data['media_path'] = $request->file('media')->store('gallery', 'public');
         }
         if ($request->hasFile('thumbnail')) {
-            if ($gallery_item->thumbnail_path && Storage::disk('public')->exists($gallery_item->thumbnail_path)) {
+            if ($gallery_item->thumbnail_path && storage_exists($gallery_item->thumbnail_path)) {
                 Storage::disk('public')->delete($gallery_item->thumbnail_path);
             }
             $data['thumbnail_path'] = $request->file('thumbnail')->store('gallery', 'public');
@@ -117,10 +117,10 @@ class GalleryItemsController extends Controller
 
     public function destroy(GalleryItem $gallery_item)
     {
-        if ($gallery_item->media_path && Storage::disk('public')->exists($gallery_item->media_path)) {
+        if ($gallery_item->media_path && storage_exists($gallery_item->media_path)) {
             Storage::disk('public')->delete($gallery_item->media_path);
         }
-        if ($gallery_item->thumbnail_path && Storage::disk('public')->exists($gallery_item->thumbnail_path)) {
+        if ($gallery_item->thumbnail_path && storage_exists($gallery_item->thumbnail_path)) {
             Storage::disk('public')->delete($gallery_item->thumbnail_path);
         }
 

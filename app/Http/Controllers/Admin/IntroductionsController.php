@@ -135,7 +135,7 @@ class IntroductionsController extends Controller
             return;
         }
 
-        if (Storage::disk('public')->exists($path)) {
+        if (storage_exists($path)) {
             Storage::disk('public')->delete($path);
             return;
         }

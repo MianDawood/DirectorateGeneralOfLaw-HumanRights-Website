@@ -101,7 +101,7 @@ class TeamMembersController extends Controller
         $data['order'] = $data['order'] ?? 0;
 
         if ($request->hasFile('image')) {
-            if ($team_member->image_path && Storage::disk('public')->exists($team_member->image_path)) {
+            if ($team_member->image_path && storage_exists($team_member->image_path)) {
                 Storage::disk('public')->delete($team_member->image_path);
             }
             $data['image_path'] = $request->file('image')->store('team', 'public');
@@ -115,7 +115,7 @@ class TeamMembersController extends Controller
 
     public function destroy(TeamMember $team_member)
     {
-        if ($team_member->image_path && Storage::disk('public')->exists($team_member->image_path)) {
+        if ($team_member->image_path && storage_exists($team_member->image_path)) {
             Storage::disk('public')->delete($team_member->image_path);
         }
 

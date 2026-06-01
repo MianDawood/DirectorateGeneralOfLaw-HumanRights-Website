@@ -89,7 +89,7 @@ class OfficialMessagesController extends Controller
 
         if ($request->hasFile('image')) {
             // Delete old image if exists
-            if ($officialMessage->image_path && Storage::disk('public')->exists($officialMessage->image_path)) {
+            if ($officialMessage->image_path && storage_exists($officialMessage->image_path)) {
                 Storage::disk('public')->delete($officialMessage->image_path);
             }
             $data['image_path'] = $request->file('image')->store('images', 'public');
@@ -107,7 +107,7 @@ class OfficialMessagesController extends Controller
     public function destroy(OfficialMessage $officialMessage)
     {
         // Delete image if exists
-        if ($officialMessage->image_path && Storage::disk('public')->exists($officialMessage->image_path)) {
+        if ($officialMessage->image_path && storage_exists($officialMessage->image_path)) {
             Storage::disk('public')->delete($officialMessage->image_path);
         }
 

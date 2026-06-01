@@ -94,7 +94,7 @@ class NewsController extends Controller
 
         if ($request->hasFile('image')) {
             // Delete old image if exists
-            if ($news->image_path && Storage::disk('public')->exists($news->image_path)) {
+            if ($news->image_path && storage_exists($news->image_path)) {
                 Storage::disk('public')->delete($news->image_path);
             }
             $data['image_path'] = $request->file('image')->store('images', 'public');
@@ -112,7 +112,7 @@ class NewsController extends Controller
     public function destroy(News $news)
     {
         // Delete image if exists
-        if ($news->image_path && Storage::disk('public')->exists($news->image_path)) {
+        if ($news->image_path && storage_exists($news->image_path)) {
             Storage::disk('public')->delete($news->image_path);
         }
 

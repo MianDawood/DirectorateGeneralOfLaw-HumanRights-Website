@@ -94,7 +94,7 @@ class ComplaintsController extends Controller
         ]);
 
         if ($request->hasFile('attachment')) {
-            if ($complaint->attachment_path && Storage::disk('public')->exists($complaint->attachment_path)) {
+            if ($complaint->attachment_path && storage_exists($complaint->attachment_path)) {
                 Storage::disk('public')->delete($complaint->attachment_path);
             }
             $data['attachment_path'] = $request->file('attachment')->store('complaints', 'public');
@@ -108,7 +108,7 @@ class ComplaintsController extends Controller
 
     public function destroy(Complaint $complaint)
     {
-        if ($complaint->attachment_path && Storage::disk('public')->exists($complaint->attachment_path)) {
+        if ($complaint->attachment_path && storage_exists($complaint->attachment_path)) {
             Storage::disk('public')->delete($complaint->attachment_path);
         }
 

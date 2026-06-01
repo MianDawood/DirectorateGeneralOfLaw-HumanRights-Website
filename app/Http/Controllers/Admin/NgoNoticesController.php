@@ -84,7 +84,7 @@ class NgoNoticesController extends Controller
 
         if ($request->hasFile('image')) {
             // Delete old image if exists
-            if ($ngoNotice->image && Storage::disk('public')->exists($ngoNotice->image)) {
+            if ($ngoNotice->image && storage_exists($ngoNotice->image)) {
                 Storage::disk('public')->delete($ngoNotice->image);
             }
             $data['image'] = $request->file('image')->store('notices', 'public');
@@ -101,7 +101,7 @@ class NgoNoticesController extends Controller
      */
     public function destroy(NgoNotice $ngoNotice)
     {
-        if ($ngoNotice->image && Storage::disk('public')->exists($ngoNotice->image)) {
+        if ($ngoNotice->image && storage_exists($ngoNotice->image)) {
             Storage::disk('public')->delete($ngoNotice->image);
         }
 

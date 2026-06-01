@@ -34,7 +34,7 @@ class SiteSettingsController extends Controller
         ]);
 
         if ($request->hasFile('dg_signature_image')) {
-            if ($settings->dg_signature_image && \Illuminate\Support\Facades\Storage::disk('public')->exists($settings->dg_signature_image)) {
+            if ($settings->dg_signature_image && storage_exists($settings->dg_signature_image)) {
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($settings->dg_signature_image);
             }
             $validated['dg_signature_image'] = $request->file('dg_signature_image')->store('signatures', 'public');

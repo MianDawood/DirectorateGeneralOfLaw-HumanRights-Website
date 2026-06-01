@@ -88,7 +88,7 @@ class TendersController extends Controller
         ]);
 
         if ($request->hasFile('file')) {
-            if ($tender->file_path && Storage::disk('public')->exists($tender->file_path)) {
+            if ($tender->file_path && storage_exists($tender->file_path)) {
                 Storage::disk('public')->delete($tender->file_path);
             }
             $file = $request->file('file');
@@ -103,7 +103,7 @@ class TendersController extends Controller
 
     public function destroy(Tender $tender)
     {
-        if ($tender->file_path && Storage::disk('public')->exists($tender->file_path)) {
+        if ($tender->file_path && storage_exists($tender->file_path)) {
             Storage::disk('public')->delete($tender->file_path);
         }
 

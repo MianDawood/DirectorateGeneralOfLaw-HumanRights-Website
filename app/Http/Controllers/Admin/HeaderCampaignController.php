@@ -47,7 +47,7 @@ class HeaderCampaignController extends Controller
         $data['is_active'] = $request->boolean('is_active');
 
         if ($request->hasFile('image')) {
-            if ($headerCampaign->image_path && Storage::disk('public')->exists($headerCampaign->image_path)) {
+            if ($headerCampaign->image_path && storage_exists($headerCampaign->image_path)) {
                 Storage::disk('public')->delete($headerCampaign->image_path);
             }
 
@@ -63,7 +63,7 @@ class HeaderCampaignController extends Controller
 
     public function destroy(HeaderCampaign $headerCampaign): RedirectResponse
     {
-        if ($headerCampaign->image_path && Storage::disk('public')->exists($headerCampaign->image_path)) {
+        if ($headerCampaign->image_path && storage_exists($headerCampaign->image_path)) {
             Storage::disk('public')->delete($headerCampaign->image_path);
         }
 

@@ -159,27 +159,37 @@
         });
     };
 
-    const initForPart = (part) => {
-        if (part === 6) {
-            init({
-                groupName: 'ongoing_projects',
-                containerSelector: '#ongoing-projects-list',
-                templateSelector: '#ongoing-project-row-template',
-                minRows: 1,
-                maxRows: 20,
-            });
-        }
-
-        if (part === 7) {
-            init({
-                groupName: 'planned_projects',
-                containerSelector: '#planned-projects-list',
-                templateSelector: '#planned-project-row-template',
-                minRows: 1,
-                maxRows: 20,
-            });
-        }
-    };
+     const initForPart = (part) => {
+         if (part === 4) {
+             init({
+                 groupName: 'board_members',
+                 containerSelector: '#board-members-list',
+                 templateSelector: '#board-member-row-template',
+                 minRows: 1,
+                 maxRows: 20,
+             });
+         }
+ 
+         if (part === 6) {
+             init({
+                 groupName: 'ongoing_projects',
+                 containerSelector: '#ongoing-projects-list',
+                 templateSelector: '#ongoing-project-row-template',
+                 minRows: 1,
+                 maxRows: 20,
+             });
+         }
+ 
+         if (part === 7) {
+             init({
+                 groupName: 'planned_projects',
+                 containerSelector: '#planned-projects-list',
+                 templateSelector: '#planned-project-row-template',
+                 minRows: 1,
+                 maxRows: 20,
+             });
+         }
+     };
 
     const hydratePayload = (payload) => {
         if (!payload || typeof payload !== 'object') return;

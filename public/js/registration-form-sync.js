@@ -6,7 +6,7 @@
     const partMatch = path.match(/registration_form_part(\d+)/);
     const part = partMatch ? Number(partMatch[1]) : 1;
 
-    const REPEAT_GROUP_KEYS = ['ongoing_projects', 'planned_projects', 'security_companies'];
+    const REPEAT_GROUP_KEYS = ['ongoing_projects', 'planned_projects', 'security_companies', 'board_members'];
 
     const toSlug = (text) => (text || '')
         .toLowerCase()

@@ -227,7 +227,7 @@ class EventsController extends Controller
 
     private function deleteImageFile(?string $path): void
     {
-        if ($path && Storage::disk('public')->exists($path)) {
+        if ($path && storage_exists($path)) {
             Storage::disk('public')->delete($path);
         }
     }
