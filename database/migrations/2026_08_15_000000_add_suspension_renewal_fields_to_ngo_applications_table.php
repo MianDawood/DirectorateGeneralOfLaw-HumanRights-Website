@@ -1,0 +1,24 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('ngo_applications', function (Blueprint $table) {
+            $table->date('suspended_at')->nullable()->after('status');
+            $table->text('suspension_reason')->nullable()->after('suspended_at');
+            $table->date('last_renewal_date')->nullable()->after('expiry_date');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('ngo_applications', function (Blueprint $table) {
+            $table->dropColumn(['suspended_at', 'suspension_reason', 'last_renewal_date']);
+        });
+    }
+};

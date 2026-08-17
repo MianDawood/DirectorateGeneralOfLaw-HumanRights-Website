@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://humanrights.kp.gov.pk/view/sitemap.xml

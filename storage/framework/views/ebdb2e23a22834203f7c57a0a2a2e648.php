@@ -1,0 +1,34 @@
+<?php $__env->startSection('content'); ?>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
+                    <h1 class="text-2xl font-bold text-gray-900 mb-6">Edit NGO Notice Section</h1>
+                    <form method="POST" action="<?php echo e(route('admin.ngo-notices-pages.update', $ngoNoticesPage)); ?>">
+                        <?php echo csrf_field(); ?> <?php echo method_field('PUT'); ?>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">Section Key</label>
+                                <select name="section_key" class="w-full border-gray-300 rounded-md shadow-sm">
+                                    <option value="hero" <?php echo e($ngoNoticesPage->section_key == 'hero' ? 'selected' : ''); ?>>Hero Section</option>
+                                    <option value="notices" <?php echo e($ngoNoticesPage->section_key == 'notices' ? 'selected' : ''); ?>>Notices List</option>
+                                </select>
+                            </div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">Order</label><input type="number" name="order" value="<?php echo e($ngoNoticesPage->order); ?>" class="w-full border-gray-300 rounded-md shadow-sm"></div>
+                            <div class="md:col-span-2"><label class="block text-sm font-medium text-gray-700 mb-2">Title</label><input type="text" name="title" value="<?php echo e($ngoNoticesPage->title); ?>" class="w-full border-gray-300 rounded-md shadow-sm"></div>
+                            <div class="md:col-span-2"><label class="block text-sm font-medium text-gray-700 mb-2">Content</label><textarea name="content" rows="5" class="w-full border-gray-300 rounded-md shadow-sm"><?php echo e($ngoNoticesPage->content); ?></textarea></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">Image Path</label><input type="text" name="image" value="<?php echo e($ngoNoticesPage->image); ?>" class="w-full border-gray-300 rounded-md shadow-sm"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">Button Text</label><input type="text" name="button_text" value="<?php echo e($ngoNoticesPage->button_text); ?>" class="w-full border-gray-300 rounded-md shadow-sm"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">Button Link</label><input type="text" name="button_link" value="<?php echo e($ngoNoticesPage->button_link); ?>" class="w-full border-gray-300 rounded-md shadow-sm"></div>
+                            <div><label class="block text-sm font-medium text-gray-700 mb-2">Status</label><div class="flex items-center mt-4"><input type="checkbox" name="is_active" id="is_active" value="1" <?php echo e($ngoNoticesPage->is_active ? 'checked' : ''); ?> class="w-4 h-4"><label for="is_active" class="ml-2 text-sm text-gray-700">Active</label></div></div>
+                        </div>
+                        <div class="flex justify-end mt-6 gap-4">
+                            <a href="<?php echo e(route('admin.ngo-notices-pages.index')); ?>" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Cancel</a>
+                            <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-white font-bold py-2 px-4 rounded">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /Applications/MAMP/htdocs/human-rights-kp/resources/views/pages/dashboard/ngo-notices-pages/edit.blade.php ENDPATH**/ ?>
