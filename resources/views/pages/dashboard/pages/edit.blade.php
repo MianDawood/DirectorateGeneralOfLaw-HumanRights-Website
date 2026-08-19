@@ -19,7 +19,7 @@
                         </div>
                     </div>
 
-                    <form method="POST" action="{{ route('admin.pages.update', $page) }}">
+                    <form method="POST" action="{{ route('admin.pages.update', $page) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -35,7 +35,7 @@
                                 @enderror
                             </div>
 
-                            
+
                             <!-- Parent Page -->
                             <div>
                                 <label for="parent_id" class="block text-sm font-medium text-gray-700">Parent Page (Optional)</label>
@@ -85,7 +85,7 @@
                                 @enderror
                             </div>
 
-                            
+
                             <!-- Show in Navigation -->
                             <div class="md:col-span-2 flex items-center">
                                 <label class="inline-flex items-center">
@@ -142,6 +142,30 @@
                             </div>
                             <p class="mt-1 text-sm text-gray-500">Rich text editor for page content. Supports formatting, links, and media.</p>
                             @error('content')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Attach File -->
+                        <div class="mt-6">
+                            <label for="file_path" class="block text-sm font-medium text-gray-700">Attach File (PDF / DOC)</label>
+                            @if($page->file_path)
+                                <div class="mt-2 flex items-center gap-3 bg-gray-50 p-3 rounded-md">
+                                    <i class="text-gray-400">📎</i>
+                                    <a href="{{ asset('storage/' . $page->file_path) }}" target="_blank"
+                                       class="text-sm font-medium text-blue-600 hover:text-blue-900">{{ basename($page->file_path) }}</a>
+                                </div>
+                            @endif
+                            <input type="file" name="file_path" id="file_path" accept=".pdf,.doc,.docx"
+                                   class="mt-2 block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-500 file:text-white file:cursor-pointer hover:file:bg-blue-700">
+                            <p class="mt-1 text-sm text-gray-500">PDF, DOC or DOCX files only. Uploading a new file replaces the current one.</p>
+                            @if($page->file_path)
+                                <label class="mt-2 inline-flex items-center">
+                                    <input type="checkbox" name="remove_file" value="1" class="rounded border-gray-300 text-red-600 shadow-sm focus:ring-red-500">
+                                    <span class="ml-2 text-sm text-red-600">Remove current file</span>
+                                </label>
+                            @endif
+                            @error('file_path')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
@@ -213,12 +237,7 @@
 
                         <div class="mt-6 flex justify-between">
                             <div class="space-x-2">
-                                <form method="POST" action="{{ route('admin.pages.duplicate', $page) }}" class="inline">
-                                    @csrf
-                                    <button type="submit" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
-                                        Duplicate Page
-                                    </button>
-                                </form>
+
                             </div>
                             <div class="space-x-3">
                                 <a href="{{ route('admin.pages.index') }}"

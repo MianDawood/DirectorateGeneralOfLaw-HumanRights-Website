@@ -4,9 +4,80 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class RegistrationApplicationController extends Controller
 {
+    private const PART_REQUIRED_RULES = [
+        1 => [
+            'ngoName' => ['required', 'string'],
+            'estDate' => ['required', 'date'],
+            'district' => ['required', 'string'],
+            'headName' => ['required', 'string'],
+            'focalName' => ['required', 'string'],
+            'type' => ['required', 'array', 'min:1'],
+            'hrField' => ['required', 'array', 'min:1'],
+        ],
+        2 => [
+            'headRegisteredAddress' => ['required', 'string'],
+            'headPostalAddress' => ['required', 'string'],
+            'headMobile' => ['required'],
+            'headEmail' => ['required', 'email'],
+            'operationalArea' => ['required', 'string'],
+        ],
+        3 => [
+            'generalObjectives' => ['required', 'string'],
+            'geographicalFocus' => ['required', 'string'],
+            'thematicFocus' => ['required', 'array', 'min:1'],
+            'beneficiaries' => ['required', 'array', 'min:1'],
+            'operateMethod' => ['required', 'array', 'min:1'],
+        ],
+        4 => [
+            'focalName' => ['required', 'string'],
+            'focalDesignation' => ['required', 'string'],
+            'focalMobile' => ['required'],
+            'focalEmail' => ['required', 'email'],
+        ],
+        5 => [
+            'staffTotal' => ['required', 'numeric'],
+            'staffLocal' => ['required', 'numeric'],
+            'staffForeigner' => ['required', 'numeric'],
+            'staffMale' => ['required', 'numeric'],
+            'staffFemale' => ['required', 'numeric'],
+            'officeStatus' => ['required'],
+            'physicalAssets' => ['required', 'string'],
+            'accountTitle' => ['required', 'string'],
+            'bankAccountNo' => ['required', 'string'],
+            'bankName' => ['required', 'string'],
+            'yearlyBudget' => ['required', 'numeric'],
+            'sourceFunded' => ['required', 'string'],
+            'audited' => ['required'],
+            'fundingSource' => ['required', 'string'],
+            'legalStatus' => ['required'],
+        ],
+        6 => [],
+        7 => [],
+        8 => [
+            'ntn' => ['required', 'string'],
+            'accountTitle' => ['required', 'string'],
+            'accountIban' => ['required', 'string'],
+            'accountNumber' => ['required', 'string'],
+            'branchAddress' => ['required', 'string'],
+        ],
+        9 => [
+            'fundingSource' => ['required', 'array', 'min:1'],
+            'lastAuditDate' => ['required', 'date'],
+            'nextAuditDueDate' => ['required', 'date'],
+            'recognizedAuditor' => ['required', 'string'],
+        ],
+        10 => [
+            'property_status' => ['required'],
+            'property_usage' => ['required'],
+            'locationAddress' => ['required', 'string'],
+        ],
+        11 => [],
+    ];
+
     public function showPart(int $part)
     {
         abort_unless($part >= 1 && $part <= 11, 404);
@@ -16,6 +87,18 @@ class RegistrationApplicationController extends Controller
     public function savePart(Request $request, int $part)
     {
         abort_unless($part >= 1 && $part <= 11, 404);
+
+        $rules = self::PART_REQUIRED_RULES[$part] ?? [];
+        if ($rules) {
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please complete all mandatory fields before continuing.',
+                    'errors' => $validator->errors(),
+                ], 422);
+            }
+        }
 
         $payload = $this->normalizeStepPayload($request->except(['_token']), $part);
 
@@ -195,7 +278,7 @@ class RegistrationApplicationController extends Controller
             ->leftJoin('ngo_profiles as p', 'p.application_id', '=', 'a.id')
             ->leftJoin('ngo_addresses as ad', function ($join) {
                 $join->on('ad.application_id', '=', 'a.id')
-                     ->where('ad.address_type', '=', 'registered');
+                     ->where('ad.address_type', '=', 'head_office');
             })
             ->whereIn('a.status', ['submitted', 'under_review', 'approved'])
             ->select([
@@ -294,7 +377,7 @@ class RegistrationApplicationController extends Controller
             ->leftJoin('ngo_profiles as p', 'p.application_id', '=', 'a.id')
             ->leftJoin('ngo_addresses as ad', function ($join) {
                 $join->on('ad.application_id', '=', 'a.id')
-                     ->where('ad.address_type', '=', 'registered');
+                     ->where('ad.address_type', '=', 'head_office');
             })
             ->where('a.id', $id)
             ->select([
@@ -320,6 +403,17 @@ class RegistrationApplicationController extends Controller
                 'ad.postal_address',
             ])
             ->firstOrFail();
+
+        if (empty($application->district)) {
+            $step1 = DB::table('ngo_application_step_payloads')
+                ->where('application_id', $id)
+                ->where('step_no', 1)
+                ->first();
+            if ($step1) {
+                $payload = json_decode($step1->payload, true);
+                $application->district = $payload['district'] ?? $payload['localDistrict'] ?? null;
+            }
+        }
 
         $beneficiaries = DB::table('ngo_projects')
             ->where('application_id', $id)

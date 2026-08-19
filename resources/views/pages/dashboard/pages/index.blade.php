@@ -19,12 +19,28 @@
                         </div>
                     @endif
 
+                    <form method="GET" action="{{ route('admin.pages.index') }}"
+                          class="mb-4 flex items-center gap-2">
+                        <input type="text" name="search" value="{{ $search ?? '' }}"
+                               placeholder="Search by title, slug, content or meta title..."
+                               class="flex-1 rounded border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all">
+                        <button type="submit"
+                                class="bg-gray-800 hover:bg-gray-900 dark:bg-brand-600 dark:hover:bg-brand-700 text-white font-bold py-2 px-4 rounded text-sm">
+                            Search
+                        </button>
+                        @if(!empty($search))
+                            <a href="{{ route('admin.pages.index') }}"
+                               class="text-gray-500 hover:text-gray-700 text-sm font-medium">Clear</a>
+                        @endif
+                    </form>
+
                     <div class="overflow-x-auto">
                         <table class="min-w-full table-auto">
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Slug</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Attachment</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Navigation</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
@@ -43,6 +59,14 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             <code class="bg-gray-100 px-2 py-1 rounded text-xs">{{ $page->slug }}</code>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            @if($page->file_path)
+                                                <a href="{{ asset('storage/' . $page->file_path) }}" target="_blank"
+                                                   class="text-blue-600 hover:text-blue-900 text-sm font-medium">📎 View</a>
+                                            @else
+                                                <span class="text-gray-400 text-sm">—</span>
+                                            @endif
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             @if($page->status === 'published')
@@ -72,24 +96,24 @@
                                                    class="text-blue-600 hover:text-blue-900">View</a>
                                                 <a href="{{ route('admin.pages.edit', $page) }}"
                                                    class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                                
-                                                <form method="POST" action="{{ route('admin.pages.toggle-status', $page) }}" class="inline">
+
+                                                {{-- <form method="POST" action="{{ route('admin.pages.toggle-status', $page) }}" class="inline">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <button type="submit" class="text-yellow-600 hover:text-yellow-900" 
+                                                    <button type="submit" class="text-yellow-600 hover:text-yellow-900"
                                                             title="Toggle Status">
                                                         {{ $page->status === 'published' ? 'Draft' : 'Publish' }}
                                                     </button>
-                                                </form>
-                                                
-                                                <form method="POST" action="{{ route('admin.pages.toggle-navigation', $page) }}" class="inline">
+                                                </form> --}}
+
+                                                {{-- <form method="POST" action="{{ route('admin.pages.toggle-navigation', $page) }}" class="inline">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <button type="submit" class="text-purple-600 hover:text-purple-900" 
+                                                    <button type="submit" class="text-purple-600 hover:text-purple-900"
                                                             title="Toggle Navigation">
                                                         {{ $page->show_in_navigation ? 'Hide' : 'Show' }}
                                                     </button>
-                                                </form>
+                                                </form> --}}
                                                 
                                                 <form method="POST" action="{{ route('admin.pages.destroy', $page) }}"
                                                       onsubmit="return confirm('Are you sure you want to delete this page?')"
@@ -103,9 +127,11 @@
                                     </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="7" class="px-6 py-4 text-center text-gray-500">
-                                        No pages found.
-                                        <a href="{{ route('admin.pages.create') }}" class="text-blue-600 hover:text-blue-900 ml-2">Create one now</a>
+                                    <td colspan="8" class="px-6 py-4 text-center text-gray-500">
+                                        {{ empty($search) ? 'No pages found.' : 'No pages match your search.' }}
+                                        @if(empty($search))
+                                            <a href="{{ route('admin.pages.create') }}" class="text-blue-600 hover:text-blue-900 ml-2">Create one now</a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforelse

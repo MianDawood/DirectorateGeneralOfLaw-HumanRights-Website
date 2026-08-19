@@ -12,11 +12,23 @@ class OfficialMessagesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $messages = OfficialMessage::ordered()->paginate(10);
+        $search = trim($request->input('search'));
 
-        return view('pages.dashboard.official-messages.index', compact('messages'));
+        $messages = OfficialMessage::query()
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('position', 'like', "%{$search}%")
+                        ->orWhere('statement', 'like', "%{$search}%");
+                });
+            })
+            ->ordered()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('pages.dashboard.official-messages.index', compact('messages', 'search'));
     }
 
     /**

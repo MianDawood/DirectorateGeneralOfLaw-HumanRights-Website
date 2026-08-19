@@ -1,4 +1,7 @@
 @props(['title' => 'Registration Form', 'subtitle' => '', 'step' => '', 'backRoute' => 'ngo_required_documents', 'backLabel' => 'Back to NGOs'])
+@php
+    $settings = \App\Models\SiteSetting::getSettings();
+@endphp
 
 <x-layout>
     <style>
@@ -292,8 +295,8 @@
         </div>
     </div>
 
-    <script src="/js/form-draft.js"></script>
-    <script src="/js/registration-form-sync.js"></script>
+    <script src="{{ url('js/form-draft.js') }}"></script>
+    <script src="{{ url('js/registration-form-sync.js') }}"></script>
     <script>
         lucide.createIcons();
         const observer = new IntersectionObserver((entries) => {

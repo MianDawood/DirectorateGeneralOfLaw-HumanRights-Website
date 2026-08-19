@@ -37,7 +37,7 @@
                                 @endif
                             </p>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Navigation</h3>
                             <p class="mt-1">
@@ -48,12 +48,12 @@
                                 @endif
                             </p>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">URL Slug</h3>
                             <p class="mt-1 text-sm font-mono text-gray-900">{{ $page->slug }}</p>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Order</h3>
                             <p class="mt-1 text-lg font-semibold text-gray-900">{{ $page->order }}</p>
@@ -95,6 +95,18 @@
                         </div>
                     </div>
 
+                    <!-- Attached File -->
+                    @if($page->file_path)
+                        <div class="mb-8">
+                            <h2 class="text-lg font-semibold text-gray-900 mb-4">Attached File</h2>
+                            <div class="bg-gray-50 p-4 rounded-lg flex items-center gap-3">
+                                <i class="text-2xl">📎</i>
+                                <a href="{{ asset('storage/' . $page->file_path) }}" target="_blank"
+                                   class="text-sm font-medium text-blue-600 hover:text-blue-900">{{ basename($page->file_path) }}</a>
+                            </div>
+                        </div>
+                    @endif
+
                     <!-- Additional Information -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-gray-50 p-4 rounded-lg">
@@ -116,7 +128,7 @@
                                 {{ $page->status === 'published' ? 'Set to Draft' : 'Publish' }}
                             </button>
                         </form>
-                        
+
                         <form method="POST" action="{{ route('admin.pages.toggle-navigation', $page) }}" class="inline">
                             @csrf
                             @method('PATCH')
@@ -124,13 +136,13 @@
                                 {{ $page->show_in_navigation ? 'Hide from Navigation' : 'Show in Navigation' }}
                             </button>
                         </form>
-                        
-                        <form method="POST" action="{{ route('admin.pages.duplicate', $page) }}" class="inline">
+
+                        {{-- <form method="POST" action="{{ route('admin.pages.duplicate', $page) }}" class="inline">
                             @csrf
                             <button type="submit" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
                                 Duplicate Page
                             </button>
-                        </form>
+                        </form> --}}
                     </div>
                 </div>
             </div>

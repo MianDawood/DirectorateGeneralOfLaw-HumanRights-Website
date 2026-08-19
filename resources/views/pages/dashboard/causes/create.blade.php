@@ -13,7 +13,7 @@
                         </a>
                     </div>
 
-                    <form method="POST" action="{{ route('admin.causes.store') }}">
+                    <form method="POST" action="{{ route('admin.causes.store') }}" enctype="multipart/form-data">
                         @csrf
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -32,6 +32,16 @@
                                 <textarea name="description" id="description" rows="3"
                                           class="mt-1 block w-full px-3 py-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">{{ old('description') }}</textarea>
                                 @error('description')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label for="file_path" class="block text-sm font-medium text-gray-700">Attach File (PDF / DOC)</label>
+                                <input type="file" name="file_path" id="file_path" accept=".pdf,.doc,.docx"
+                                       class="mt-1 block w-full px-3 py-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                <p class="mt-1 text-xs text-gray-500">Optional. PDF, DOC or DOCX attachment for this cause.</p>
+                                @error('file_path')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>

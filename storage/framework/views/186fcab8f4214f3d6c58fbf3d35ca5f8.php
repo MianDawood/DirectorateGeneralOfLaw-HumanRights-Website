@@ -27,7 +27,7 @@
                         </div>
                         <div class="flex gap-2">
                             <button type="submit"
-                                    class="bg-gray-800 hover:bg-gray-900 dark:bg-brand-600 dark:hover:bg-brand-700 text-white font-bold py-2 px-4 rounded text-sm">Search</button>
+                                    class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded text-sm">Search</button>
                             <a href="<?php echo e(route('admin.tenders.index')); ?>"
                                class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded text-sm">Reset</a>
                         </div>

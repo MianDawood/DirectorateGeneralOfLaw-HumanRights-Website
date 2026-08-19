@@ -56,7 +56,7 @@
                         </div>
                         <div class="flex gap-2">
                             <button type="submit"
-                                    class="bg-gray-800 hover:bg-gray-900 dark:bg-brand-600 dark:hover:bg-brand-700 text-white font-bold py-2 px-3 rounded text-sm">Apply</button>
+                                    class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-3 rounded text-sm">Apply</button>
                             <a href="<?php echo e(route('admin.registration-applications.index')); ?>"
                                class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-3 rounded text-sm">Reset</a>
                         </div>
@@ -70,9 +70,9 @@
                         <span class="text-sm text-gray-500">Showing <?php echo e($applications->total()); ?> record(s)</span>
                         <span class="flex gap-2">
                             <a href="<?php echo e(route('admin.registration-applications.export', array_merge(['format' => 'pdf'], $query))); ?>"
-                               class="inline-flex items-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded text-sm">Export PDF</a>
+                               class="inline-flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-3 rounded text-sm">Export PDF</a>
                             <a href="<?php echo e(route('admin.registration-applications.export', array_merge(['format' => 'xlsx'], $query))); ?>"
-                               class="inline-flex items-center bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-3 rounded text-sm">Export Excel</a>
+                               class="inline-flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-3 rounded text-sm">Export Excel</a>
                         </span>
                     </div>
 
@@ -170,4 +170,5 @@
         </div>
     </div>
 <?php $__env->stopSection(); ?>
+
 <?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /Applications/MAMP/htdocs/human-rights-kp/resources/views/pages/dashboard/registration-applications/index.blade.php ENDPATH**/ ?>

@@ -11,7 +11,7 @@
                         </a>
                     </div>
 
-                    <form method="POST" action="<?php echo e(route('admin.causes.update', $cause)); ?>">
+                    <form method="POST" action="<?php echo e(route('admin.causes.update', $cause)); ?>" enctype="multipart/form-data">
                         <?php echo csrf_field(); ?>
                         <?php echo method_field('PUT'); ?>
 
@@ -38,6 +38,33 @@ unset($__errorArgs, $__bag); ?>
                                 <textarea name="description" id="description" rows="3"
                                           class="mt-1 block w-full px-3 py-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"><?php echo e(old('description', $cause->description)); ?></textarea>
                                 <?php $__errorArgs = ['description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                    <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p>
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label for="file_path" class="block text-sm font-medium text-gray-700">Attach File (PDF / DOC)</label>
+                                <?php if($cause->file_path): ?>
+                                    <div class="mt-1 flex items-center justify-between bg-gray-50 border border-gray-200 rounded-md px-3 py-2">
+                                        <a href="<?php echo e(asset('storage/' . $cause->file_path)); ?>" target="_blank"
+                                           class="text-sm font-medium text-blue-600 hover:text-blue-900"><?php echo e(basename($cause->file_path)); ?></a>
+                                        <label class="inline-flex items-center text-sm text-gray-600">
+                                            <input type="checkbox" name="remove_file" value="1" class="rounded border-gray-300 text-red-600 shadow-sm focus:ring-red-500 mr-2">
+                                            Remove file
+                                        </label>
+                                    </div>
+                                <?php endif; ?>
+                                <input type="file" name="file_path" id="file_path" accept=".pdf,.doc,.docx"
+                                       class="mt-1 block w-full px-3 py-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                <p class="mt-1 text-xs text-gray-500">Optional. Upload a new file to replace the current attachment.</p>
+                                <?php $__errorArgs = ['file_path'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }

@@ -1,14 +1,10 @@
 <x-layout>
-<main class="bg-slate-50/50 min-h-screen pt-24 lg:pt-28">
-    <div class="max-w-[1536px] mx-auto px-6 lg:px-20 py-10">
-        <a href="{{ route('mediacorner') }}#events"
-           class="inline-flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-[#02B1EB] mb-8 uppercase tracking-widest">
-            <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Events
-        </a>
+<main class="bg-slate-50/50 min-h-screen pt-3">
+    <div class="max-w-[1536px] mx-auto px-6 lg:px-20 pb-10">
 
         <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden mb-10">
             @if($cover = $event->coverImageUrl())
-                <div class="aspect-[21/9] max-h-[420px] overflow-hidden">
+                <div class="aspect-[21/9] max-h-[420px] overflow-hidden w-full">
                     <img src="{{ $cover }}" alt="{{ $event->title }}" class="w-full h-full object-cover">
                 </div>
             @endif

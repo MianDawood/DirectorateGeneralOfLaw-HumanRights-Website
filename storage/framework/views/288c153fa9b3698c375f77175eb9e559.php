@@ -1,58 +1,93 @@
 <?php if (isset($component)) { $__componentOriginalf8d66f80f26570d03f587b9301010d1d = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalf8d66f80f26570d03f587b9301010d1d = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.form-layout','data' => ['title' => 'Registration Form - PART-7','subtitle' => 'SCHEDULE-I | PART-7: PLANNED PROJECTS / PROGRAMMES','step' => 'Step 7 of 11: Planned Projects & Programmes','backRoute' => 'registration_form_part6','backLabel' => 'Back to Part 6']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.form-layout','data' => ['title' => 'Registration Form - PART-G','subtitle' => 'SCHEDULE-I | PART-7: PLANNED PROJECTS/PROGRAMMES/ASSIGNMENTS','step' => 'Step 7 of 11: Planned Projects','backRoute' => 'registration_form_part6','backLabel' => 'Back to Part 6']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('form-layout'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['title' => 'Registration Form - PART-7','subtitle' => 'SCHEDULE-I | PART-7: PLANNED PROJECTS / PROGRAMMES','step' => 'Step 7 of 11: Planned Projects & Programmes','backRoute' => 'registration_form_part6','backLabel' => 'Back to Part 6']); ?>
+<?php $component->withAttributes(['title' => 'Registration Form - PART-G','subtitle' => 'SCHEDULE-I | PART-7: PLANNED PROJECTS/PROGRAMMES/ASSIGNMENTS','step' => 'Step 7 of 11: Planned Projects','backRoute' => 'registration_form_part6','backLabel' => 'Back to Part 6']); ?>
+    <!-- Projects/Programmes/Assignments Planned -->
     <section>
         <div class="flex items-center gap-3 mb-8">
-            <div class="section-icon bg-[#123B2D] text-white shadow-sm">7</div>
             <div>
-                <h2 class="font-outfit text-sm font-black text-slate-900 uppercase tracking-wide">PART-7: Planned Projects / Programmes/ Assignments</h2>
-                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Future Implementation Strategy</p>
+                <h2 class="font-outfit text-sm font-black text-slate-900 uppercase tracking-wide">Planned Projects / Programmes / Assignments</h2>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-            <div class="space-y-4 p-6 bg-slate-50/50 rounded-2xl border border-slate-100">
-                <label class="label-compact">Number of planned Projects / Programmes / Assignments:</label>
-                <input type="number" name="planned_projects_count" min="0" placeholder="0" class="w-full input-compact bg-white border border-slate-200 rounded-lg">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Number of Planned Projects/Programmes/Assignments <span class="text-red-500">*</span></label>
+                <input type="number" name="total_planned_projects" required min="0"
+                    class="w-full input-compact bg-slate-50/50 border border-slate-200 rounded-lg focus:outline-none font-medium text-[13px]">
             </div>
-            <div class="space-y-4 p-6 bg-slate-50/50 rounded-2xl border border-slate-100">
-                <label class="label-compact">Total Planned Projects:</label>
-                <input type="text" name="planned_projects_summary" placeholder="Consolidated summary" class="w-full input-compact bg-white border border-slate-200 rounded-lg">
+        </div>
+    </section>
+
+    <!-- Planned Project Details -->
+    <section class="pt-10 border-t border-slate-100">
+        <div class="flex items-center gap-3 mb-8">
+            <div>
+                <h2 class="font-outfit text-sm font-black text-slate-900 uppercase tracking-wide">Planned Project Details</h2>
             </div>
         </div>
 
-        <div class="space-y-6">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-2">
-                <h3 class="label-compact mb-0">Planned Project Details</h3>
-                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Add only the projects you plan</p>
-            </div>
-
-            <div id="planned-projects-list" class="grid grid-cols-1 lg:grid-cols-3 gap-6" data-repeat-group="planned_projects">
-            </div>
+        <div class="space-y-6" data-repeat-group="planned_projects">
+            <div id="planned-projects-list"></div>
 
             <div class="flex justify-center pt-2">
                 <button type="button" class="add-project-row-btn" data-add-row="planned_projects">
                     <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                    <span>Add another project</span>
+                    <span>Add another planned project</span>
                 </button>
             </div>
         </div>
 
         <template id="planned-project-row-template">
-            <?php echo $__env->make('pages.partials.planned_project_row', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+            <div class="project-block p-6 bg-white border border-slate-200 rounded-xl relative" data-repeat-item>
+                <div class="flex items-center justify-between mb-4">
+                    <span class="sno-badge text-[13px] font-black text-slate-600">Project #<span class="sno-number">1</span></span>
+                    <button type="button" class="remove-project-row w-7 h-7 bg-red-50 border border-red-200 rounded-full flex items-center justify-center hover:bg-red-100 hover:border-red-300 transition-colors" data-remove-row title="Remove project" aria-label="Remove project">
+                        <i data-lucide="x" class="w-4 h-4 text-red-500"></i>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="md:col-span-2">
+                        <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Project Name <span class="text-red-500">*</span></label>
+                        <input type="text" data-field="planned_project_name" required placeholder="Enter project name"
+                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg focus:outline-none font-medium text-[13px]">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Thematic Focus <span class="text-red-500">*</span></label>
+                        <input type="text" data-field="planned_thematic_focus" required placeholder="e.g., Health, Education, Environment"
+                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg focus:outline-none font-medium text-[13px]">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Geographic Focus <span class="text-red-500">*</span></label>
+                        <input type="text" data-field="planned_geographic_focus" required placeholder="District/City/Province"
+                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg focus:outline-none font-medium text-[13px]">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Potential Funding Source <span class="text-red-500">*</span></label>
+                        <input type="text" data-field="planned_funding_source" required placeholder="e.g., Government, NGO, CSR"
+                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg focus:outline-none font-medium text-[13px]">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Expected Beneficiaries <span class="text-red-500">*</span></label>
+                        <input type="text" data-field="planned_beneficiaries" required placeholder="e.g., 500 farmers, 2,000 children"
+                            class="w-full input-compact bg-slate-50 border border-slate-200 rounded-lg focus:outline-none font-medium text-[13px]">
+                    </div>
+                </div>
+            </div>
         </template>
     </section>
 
+    <!-- Next Step Action -->
     <div class="pt-10 border-t border-slate-100 flex flex-col items-center gap-5">
         <div class="flex flex-col sm:flex-row gap-4 w-full max-w-2xl justify-center">
-            <button type="button" onclick="saveAsDraft()" 
+            <button type="button" onclick="saveAsDraft()"
                 class="save-draft-btn flex-1 py-4 bg-white text-slate-900 border-2 border-slate-100 font-bold text-sm rounded-2xl shadow-sm hover:bg-slate-50 hover:border-[#02b1eb]/30 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 uppercase tracking-widest">
                 <i data-lucide="save" class="w-4 h-4 text-[#02B1EB]"></i>
                 <span>Save as Draft</span>
@@ -66,7 +101,7 @@
     </div>
 
     <?php $__env->startPush('formScripts'); ?>
-        <script src="/js/registration-repeat-rows.js"></script>
+        <script src="<?php echo e(url('js/registration-repeat-rows.js')); ?>"></script>
     <?php $__env->stopPush(); ?>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>

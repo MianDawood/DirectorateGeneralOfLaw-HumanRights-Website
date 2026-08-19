@@ -30,6 +30,7 @@ unset($__defined_vars, $__key, $__value); ?>
 <?php
     $settings = \App\Models\SiteSetting::getSettings();
     $headerCampaigns = \App\Models\HeaderCampaign::active()->ordered()->get();
+    $departments = \App\Models\ProvincialDepartment::active()->ordered()->get();
 ?>
 <?php
     $topLevelPages = \App\Models\Page::published()
@@ -61,7 +62,7 @@ unset($__defined_vars, $__key, $__value); ?>
         ->get();
 ?>
 <!DOCTYPE html>
-<html lang="en" class="overflow-x-hidden overflow-y-auto" style="scroll-behavior: smooth">
+<html lang="en" class="overflow-x-clip overflow-y-auto">
 
 <head>
     <meta charset="UTF-8" />
@@ -84,6 +85,10 @@ unset($__defined_vars, $__key, $__value); ?>
     <!-- Lucide Icons -->
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.473.0/dist/umd/lucide.min.js"></script>
     <style>
+        html {
+            scrollbar-gutter: stable;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
         }
@@ -253,7 +258,7 @@ unset($__defined_vars, $__key, $__value); ?>
     </div>
 
     <header id="mainHeader"
-        class="w-full z-[100] sticky top-0 bg-white border-b border-slate-100 transition-transform duration-500 ease-in-out">
+        class="w-full z-[100] sticky top-0 bg-white border-b border-slate-100 transition-transform duration-500 ease-in-out will-change-transform">
         <!-- Tier 2: Main Header (Responsive) -->
         <div class="py-3 px-6 lg:px-8 bg-white border-b border-slate-100 lg:border-none">
             <div class="max-w-[1536px] mx-auto flex justify-between items-center">
@@ -264,11 +269,26 @@ unset($__defined_vars, $__key, $__value); ?>
                             class="h-14 md:h-18 lg:h-24 w-auto group-hover:scale-105 transition-transform duration-500" />
                     </a>
                     <div class="flex flex-col items-start">
+                        <?php
+                            $siteNameWords = preg_split('/\s+/', trim($settings->site_name ?? 'Directorate of Human Rights'));
+                            $siteNameLine1 = implode(' ', array_slice($siteNameWords, 0, 2));
+                            $siteNameLine2 = implode(' ', array_slice($siteNameWords, 2));
+                        ?>
                         <h1
                             class="font-outfit text-sm md:text-lg lg:text-[22px] font-extrabold text-[#123B2D] leading-tight uppercase tracking-tight">
-                            <?php echo e($settings->site_name ?? 'Directorate of Human Rights'); ?>
+                            <?php echo e($siteNameLine1); ?>
 
                         </h1>
+                        <?php if($siteNameLine2 !== ''): ?>
+                            <h1
+                                class="font-outfit text-sm md:text-lg lg:text-[22px] font-extrabold text-[#123B2D] leading-tight uppercase tracking-tight">
+                                <span
+                                    class="font-outfit text-sm md:text-lg lg:text-[22px] font-extrabold text-[#02B1EB] leading-tight uppercase tracking-tight">
+                                    <?php echo e($siteNameLine2); ?>
+
+                                </span>
+                            </h1>
+                        <?php endif; ?>
 
                         <p
                             class="font-outfit text-[9px] md:text-[10px] lg:text-[11px] font-bold text-slate-400 uppercase tracking-[0.3em] mt-1">
@@ -345,7 +365,7 @@ unset($__defined_vars, $__key, $__value); ?>
                                 data-lucide="home" class="w-4 h-4"></i><span>Home</span></a></li>
                     <li class="group relative">
                         <button
-                            class="flex items-center gap-2 px-5 py-4 text-white <?php echo e(request()->routeIs('introduction', 'ourteam') || $whoWeArePages->contains('slug', request()->route('slug')) ? 'bg-[#02B1EB]' : 'hover:bg-white/10'); ?> transition-all-custom font-medium text-sm"><span>About
+                            class="flex items-center gap-2 px-5 py-4 text-white <?php echo e(request()->routeIs('introduction', 'ourteam', 'vision_mission', 'org_structure') || $whoWeArePages->contains('slug', request()->route('slug')) ? 'bg-[#02B1EB]' : 'hover:bg-white/10'); ?> transition-all-custom font-medium text-sm"><span>About
                                 Directorate</span><i data-lucide="chevron-down"
                                 class="w-3.5 h-3.5 opacity-60 group-hover:rotate-180 transition-transform duration-300"></i></button>
                         <div
@@ -355,11 +375,11 @@ unset($__defined_vars, $__key, $__value); ?>
                                     class="px-4 py-3 text-slate-700 hover:bg-[#123B2D]/5 hover:text-[#123B2D] rounded-lg transition-colors flex items-center justify-between group/item text-sm">Introduction<i
                                         data-lucide="chevron-right"
                                         class="w-3 h-3 opacity-0 group-hover/item:opacity-100 -translate-x-2 group-hover/item:translate-x-0 transition-all"></i></a>
-                                <a href="<?php echo e(route('introduction') . '#vision-mission'); ?>"
+                                <a href="<?php echo e(route('vision_mission')); ?>"
                                     class="px-4 py-3 text-slate-700 hover:bg-[#123B2D]/5 hover:text-[#123B2D] rounded-lg transition-colors flex items-center justify-between group/item text-sm">Vision &amp; Mission<i
                                         data-lucide="chevron-right"
                                         class="w-3 h-3 opacity-0 group-hover/item:opacity-100 -translate-x-2 group-hover/item:translate-x-0 transition-all"></i></a>
-                                <a href="<?php echo e(route('introduction') . '#org-structure'); ?>"
+                                <a href="<?php echo e(route('org_structure')); ?>"
                                     class="px-4 py-3 text-slate-700 hover:bg-[#123B2D]/5 hover:text-[#123B2D] rounded-lg transition-colors flex items-center justify-between group/item text-sm">Organizational Structure<i
                                         data-lucide="chevron-right"
                                         class="w-3 h-3 opacity-0 group-hover/item:opacity-100 -translate-x-2 group-hover/item:translate-x-0 transition-all"></i></a>
@@ -545,23 +565,23 @@ unset($__defined_vars, $__key, $__value); ?>
 
                         <div class="mobile-dropdown group">
                             <div
-                                class="flex items-center justify-between w-full p-3 rounded-xl text-slate-700 font-bold <?php echo e(request()->routeIs('introduction', 'ourteam') || $whoWeArePages->contains('slug', request()->route('slug')) ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary'); ?> transition-all">
+                                class="flex items-center justify-between w-full p-3 rounded-xl text-slate-700 font-bold <?php echo e(request()->routeIs('introduction', 'ourteam', 'vision_mission', 'org_structure') || $whoWeArePages->contains('slug', request()->route('slug')) ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary'); ?> transition-all">
                                 <a href="<?php echo e(route('introduction')); ?>" class="flex items-center gap-3 flex-1">
                                     <i data-lucide="info" class="w-5 h-5"></i> About Directorate
                                 </a>
                                 <button class="p-2 dropdown-trigger">
                                     <i data-lucide="chevron-down"
-                                        class="w-4 h-4 transition-transform duration-300 dropdown-icon <?php echo e(request()->routeIs('introduction', 'ourteam') || $whoWeArePages->contains('slug', request()->route('slug')) ? 'rotate-180' : ''); ?>"></i>
+                                        class="w-4 h-4 transition-transform duration-300 dropdown-icon <?php echo e(request()->routeIs('introduction', 'ourteam', 'vision_mission', 'org_structure') || $whoWeArePages->contains('slug', request()->route('slug')) ? 'rotate-180' : ''); ?>"></i>
                                 </button>
                             </div>
                             <div
-                                class="<?php echo e(request()->routeIs('introduction', 'ourteam') || $whoWeArePages->contains('slug', request()->route('slug')) ? '' : 'hidden'); ?> space-y-1 mt-1 ml-11 dropdown-content">
+                                class="<?php echo e(request()->routeIs('introduction', 'ourteam', 'vision_mission', 'org_structure') || $whoWeArePages->contains('slug', request()->route('slug')) ? '' : 'hidden'); ?> space-y-1 mt-1 ml-11 dropdown-content">
                                 <a href="<?php echo e(route('introduction')); ?>"
                                     class="block p-2 text-sm <?php echo e(request()->routeIs('introduction') ? 'text-primary font-bold' : 'text-slate-500'); ?> italic">Introduction</a>
-                                <a href="<?php echo e(route('introduction') . '#vision-mission'); ?>"
-                                    class="block p-2 text-sm <?php echo e(request()->routeIs('introduction') ? 'text-primary font-bold' : 'text-slate-500'); ?> italic">Vision &amp; Mission</a>
-                                <a href="<?php echo e(route('introduction') . '#org-structure'); ?>"
-                                    class="block p-2 text-sm <?php echo e(request()->routeIs('introduction') ? 'text-primary font-bold' : 'text-slate-500'); ?> italic">Organizational Structure</a>
+                                <a href="<?php echo e(route('vision_mission')); ?>"
+                                    class="block p-2 text-sm <?php echo e(request()->routeIs('vision_mission') ? 'text-primary font-bold' : 'text-slate-500'); ?> italic">Vision &amp; Mission</a>
+                                <a href="<?php echo e(route('org_structure')); ?>"
+                                    class="block p-2 text-sm <?php echo e(request()->routeIs('org_structure') ? 'text-primary font-bold' : 'text-slate-500'); ?> italic">Organizational Structure</a>
                                 <a href="<?php echo e(route('ourteam')); ?>"
                                     class="block p-2 text-sm <?php echo e(request()->routeIs('ourteam') ? 'text-primary font-bold' : 'text-slate-500'); ?> italic">Our
                                     Team</a>
@@ -850,18 +870,22 @@ unset($__defined_vars, $__key, $__value); ?>
                     </h3>
                     <div class="relative group">
                         <div class="overflow-hidden rounded-2xl border border-slate-800 shadow-2xl">
+                            <?php if($settings->map_embed_url): ?>
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3319.4623722216584!2d73.0766373!3d33.7032793!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38dfbf978e723533%3A0x6b72d2459c36db4b!2sPrinting%20Corporation%20of%20Pakistan!5e0!3m2!1sen!2s!4v1709710000000!5m2!1sen!2s"
+                                src="<?php echo e($settings->map_embed_url); ?>"
                                 class="w-full h-52 border-0 grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
                                 allowfullscreen="" loading="lazy"></iframe>
+                            <?php endif; ?>
+                            <?php if($settings->map_link): ?>
                             <div
                                 class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-[#0b0f19] to-transparent">
-                                <a href="https://maps.app.goo.gl/CozMK7fdJnjdzHy69" target="_blank"
+                                <a href="<?php echo e($settings->map_link); ?>" target="_blank"
                                     class="flex items-center justify-center gap-2 w-full py-2.5 bg-white text-[#0b0f19] text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-primary hover:text-white transition-all shadow-lg">
                                     <i data-lucide="map-pin" class="w-3 h-3"></i>
                                     Open in Google Maps
                                 </a>
                             </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="mt-6 space-y-3 text-sm text-slate-300/90">
@@ -880,10 +904,14 @@ unset($__defined_vars, $__key, $__value); ?>
                                 <p class="flex items-center gap-2"><i data-lucide="mail"
                                         class="w-4 h-4 shrink-0"></i> <span><?php echo e($settings->contact_email); ?></span></p>
                             <?php endif; ?>
-                            <p class="flex items-center gap-2"><i data-lucide="headset"
-                                    class="w-4 h-4 shrink-0"></i> <span>0800-11180 (Toll Free)</span></p>
-                            <p class="flex items-center gap-2"><i data-lucide="clock"
-                                    class="w-4 h-4 shrink-0"></i> <span>09:00 am – 05:00 pm</span></p>
+                            <?php if($settings->toll_free): ?>
+                                <p class="flex items-center gap-2"><i data-lucide="headset"
+                                        class="w-4 h-4 shrink-0"></i> <span><?php echo e($settings->toll_free); ?> (Toll Free)</span></p>
+                            <?php endif; ?>
+                            <?php if($settings->working_hours): ?>
+                                <p class="flex items-center gap-2"><i data-lucide="clock"
+                                        class="w-4 h-4 shrink-0"></i> <span><?php echo nl2br(e($settings->working_hours)); ?></span></p>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -936,7 +964,7 @@ unset($__defined_vars, $__key, $__value); ?>
                             </a>
                         </li>
                         <li>
-                            <a href="<?php echo e(route('publications')); ?>"
+                            <a href="<?php echo e(route('ngo_required_documents')); ?>"
                                 class="flex items-center gap-3 text-sm  transition-colors group">
                                 <i data-lucide="chevron-right"
                                     class="w-4 h-4"></i>
@@ -953,65 +981,17 @@ unset($__defined_vars, $__key, $__value); ?>
                         Relevant Provincial Departments
                     </h3>
                     <ul class="space-y-4">
+                        <?php $__empty_1 = true; $__currentLoopData = $departments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $department): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                         <li>
-                            <a href="https://swkpk.gov.pk/" target="_blank"
+                            <a href="<?php echo e($department->url ?: '#'); ?>" target="_blank"
                                 class="flex items-center gap-3 text-sm transition-colors group">
                                 <i data-lucide="chevron-right"
                                     class="w-4 h-4"></i>
-                                <span class="leading-snug">Social Welfare, Special Education and Women Empowerment
-                                    Department</span>
+                                <span class="leading-snug"><?php echo e($department->name); ?></span>
                             </a>
                         </li>
-                        <li>
-                            <a href="https://kpcsw.gov.pk/" target="_blank"
-                                class="flex items-center gap-3 text-sm  transition-colors group">
-                                <i data-lucide="chevron-right"
-                                    class="w-4 h-4"></i>
-                                <span class="leading-snug">Khyber Pakhtunkhwa Commission on the Status of Women</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://kpcpwc.gov.pk/" target="_blank"
-                                class="flex items-center gap-3 text-sm  transition-colors group">
-                                <i data-lucide="chevron-right"
-                                    class="w-4 h-4"></i>
-                                <span class="leading-snug">Child Protection and Welfare Commission Khyber
-                                    Pakhtunkhwa</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://www.ombudsmankp.gov.pk/" target="_blank"
-                                class="flex items-center gap-3 text-sm  transition-colors group">
-                                <i data-lucide="chevron-right"
-                                    class="w-4 h-4"></i>
-                                <span class="leading-snug">Office of the Provincial Ombudsman Khyber Pakhtunkhwa</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://ombudsperson.kp.gov.pk/" target="_blank"
-                                class="flex items-center gap-3 text-sm  transition-colors group">
-                                <i data-lucide="chevron-right"
-                                    class="w-5 h-5"></i>
-                                <span class="leading-snug">Office of the Ombudsperson for Protection Against Harassment
-                                    of Women at Workplace</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://www.kprti.gov.pk/" target="_blank"
-                                class="flex items-center gap-3 text-sm  transition-colors group">
-                                <i data-lucide="chevron-right"
-                                    class="w-4 h-4"></i>
-                                <span class="leading-snug">Right to Information Commission Khyber Pakhtunkhwa</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://www.kprts.gov.pk/" target="_blank"
-                                class="flex items-center gap-3 text-sm  transition-colors group">
-                                <i data-lucide="chevron-right"
-                                    class="w-4 h-4"></i>
-                                <span class="leading-snug">Right to Services Commission Khyber Pakhtunkhwa</span>
-                            </a>
-                        </li>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                        <?php endif; ?>
                     </ul>
                 </div>
 
@@ -1021,7 +1001,7 @@ unset($__defined_vars, $__key, $__value); ?>
                         class="font-outfit text-lg font-bold text-white uppercase tracking-wider mb-8 flex items-center gap-2">
                         Newsletter
                     </h3>
-                    <form class="space-y-4" method="POST" action="<?php echo e(route('contact.store')); ?>">
+                    <form class="space-y-4" method="POST" action="<?php echo e(route('newsletter.subscribe')); ?>">
                         <?php echo csrf_field(); ?>
                         <div>
                             <input type="text" name="full_name" value="<?php echo e(old('full_name')); ?>"
@@ -1044,6 +1024,9 @@ unset($__defined_vars, $__key, $__value); ?>
                             <i data-lucide="send"
                                 class="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
                         </button>
+                        <?php if(session('success')): ?>
+                            <p class="text-xs text-green-300 leading-relaxed"><?php echo e(session('success')); ?></p>
+                        <?php endif; ?>
                         <?php if($errors->any()): ?>
                             <p class="text-xs text-red-300 leading-relaxed">Please check the form fields and try again.
                             </p>

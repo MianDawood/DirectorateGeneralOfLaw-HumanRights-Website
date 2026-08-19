@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContactMessage;
+use App\Models\NewsletterSubscription;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
     public function index()
     {
-        return view('pages.contact_us');
+        $settings = \App\Models\SiteSetting::getSettings();
+
+        return view('pages.contact_us', compact('settings'));
     }
 
     public function store(Request $request)
@@ -32,5 +35,24 @@ class ContactController extends Controller
 
         return redirect()->route('contact_us')
             ->with('success', 'Your message has been submitted successfully.');
+    }
+
+    public function newsletter(Request $request)
+    {
+        $request->validate([
+            'full_name' => 'nullable|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:30',
+        ]);
+
+        NewsletterSubscription::updateOrCreate(
+            ['email' => $request->input('email')],
+            [
+                'full_name' => $request->input('full_name'),
+                'phone' => $request->input('phone'),
+            ]
+        );
+
+        return back()->with('success', 'Thank you for subscribing to our newsletter.');
     }
 }

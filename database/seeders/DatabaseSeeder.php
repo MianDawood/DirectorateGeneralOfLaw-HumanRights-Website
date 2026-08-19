@@ -31,10 +31,14 @@ class DatabaseSeeder extends Seeder
             RegistrationApplicationsSeeder::class,
             WhatWeDoSeeder::class,
             IntroductionSeeder::class,
+            VisionMissionSeeder::class,
             NgoRequiredDocumentSeeder::class,
             NgoGuidelineSeeder::class,
             NgoDirectiveSeeder::class,
             SiteSettingSeeder::class,
+            ProvincialDepartmentSeeder::class,
+            ComplaintReferenceSeeder::class,
+            OrgStructurePositionSeeder::class,
         ]);
     }
 }

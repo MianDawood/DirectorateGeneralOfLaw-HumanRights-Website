@@ -57,7 +57,18 @@
             @foreach($introductions as $index => $intro)
                 <div class="rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800 overflow-hidden transition-all hover:shadow-md">
                     <div class="border-b border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 px-6 py-4 flex items-center justify-between">
-                        <h3 class="font-semibold text-gray-900 dark:text-white">Section #{{ $index + 1 }}</h3>
+                        <h3 class="font-semibold text-gray-900 dark:text-white">
+                        @php
+                            $sectionLabels = [
+                                0 => 'Hero (Introduction Page)',
+                                1 => 'Vision (Vision & Mission Page)',
+                                2 => 'Mission (Vision & Mission Page)',
+                                3 => 'Core Values (Vision & Mission Page)',
+                            ];
+                            $label = $sectionLabels[$index] ?? 'Section #' . ($index + 1);
+                        @endphp
+                        {{ $label }}
+                    </h3>
                         <label class="flex items-center gap-2 cursor-pointer group/check">
                             <input type="checkbox" name="introductions[{{ $intro->id }}][is_active]" value="1" {{ $intro->is_active ? 'checked' : '' }} class="w-5 h-5 rounded border-gray-300 text-brand-600 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700 transition">
                             <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 group-hover/check:text-brand-600 transition">Active Status</span>
@@ -181,11 +192,8 @@
         </div>
 
         <!-- Sticky Footer -->
-        <div class="sticky bottom-6 flex items-center justify-end">
-            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md p-2 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 flex items-center gap-3">
-                <a href="{{ route('admin.introductions.edit') }}" class="px-6 py-3 text-sm font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 transition">Reset Changes</a>
-                <button type="submit" class="inline-flex items-center px-8 py-3 bg-brand-500 hover:bg-brand-600 text-white text-sm font-bold rounded-xl shadow-xl transition-all hover:-translate-y-0.5 active:translate-y-0">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+        <div class="flex items-center justify-end">
+                <button type="submit" class="inline-flex items-center px-8 py-3 bg-brand-500 hover:bg-brand-600 text-white text-sm font-bold rounded-xl">
                     Update Introduction Page
                 </button>
             </div>

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="px-4 py-8 mx-auto max-w-4xl">
-    
+
     <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-gray-200 pb-6">
         <div>
             <h1 class="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-tight">Manage NGO Directives</h1>
@@ -27,7 +27,7 @@
             <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
                 <div>
                     <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Section Heading</label>
-                    <input type="text" name="heading" value="{{ old('heading', $directive->heading) }}" placeholder="e.g. Mandatory Registration Under" 
+                    <input type="text" name="heading" value="{{ old('heading', $directive->heading) }}" placeholder="e.g. Mandatory Registration Under"
                            class="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 p-4 text-sm font-bold text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all outline-none">
                 </div>
             </div>
@@ -57,7 +57,7 @@
                     </div>
                     <div>
                         <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5">Card Title</label>
-                        <input type="text" name="card_1_title" value="{{ old('card_1_title', $directive->card_1_title) }}" 
+                        <input type="text" name="card_1_title" value="{{ old('card_1_title', $directive->card_1_title) }}"
                                class="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 p-3 text-sm font-bold text-gray-900 dark:text-white focus:border-brand-500 outline-none transition-all">
                     </div>
                     <div>
@@ -75,7 +75,7 @@
                     </div>
                     <div>
                         <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1.5">Card Title</label>
-                        <input type="text" name="card_2_title" value="{{ old('card_2_title', $directive->card_2_title) }}" 
+                        <input type="text" name="card_2_title" value="{{ old('card_2_title', $directive->card_2_title) }}"
                                class="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 p-3 text-sm font-bold text-gray-900 dark:text-white focus:border-brand-500 outline-none transition-all">
                     </div>
                     <div>
@@ -89,7 +89,7 @@
 
         <!-- Action Button -->
         <div class="pt-6 border-t border-gray-200 flex justify-end">
-            <button type="submit" class="flex items-center gap-3 px-12 py-4 bg-slate-900 hover:bg-black text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-xl transition-all hover:-translate-y-1 active:scale-95">
+            <button type="submit" class="flex items-center gap-3 px-12 py-4 bg-brand bg-brand-500 text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-xl transition-all hover:-translate-y-1 active:scale-95">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 Save All Changes
             </button>

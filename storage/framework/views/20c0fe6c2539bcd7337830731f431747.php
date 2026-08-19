@@ -1,29 +1,3 @@
-<?php
-    $officialMessages = App\Models\OfficialMessage::active()->ordered()->get();
-    $latestNews = App\Models\News::active()->ordered()->take(3)->get();
-    $latestTenders = App\Models\Tender::query()
-        ->orderBy('publish_date', 'desc')
-        ->orderBy('reference_no')
-        ->take(2)
-        ->get();
-    $latestCauses = App\Models\Cause::query()
-        ->where('status', 'active')
-        ->orderBy('order')
-        ->orderBy('title')
-        ->take(5)
-        ->get();
-    $statsComplaintsTotal = App\Models\Complaint::count();
-    $statsComplaintsResolved = App\Models\Complaint::where('status', 'resolved')->count();
-    $statsNgosRegistered = App\Models\NgoApplication::where('status', 'approved')->count();
-    $statsTrainings = App\Models\Event::where(function($q) {
-        $q->where('subject', 'LIKE', '%Training%')->orWhere('subject', 'LIKE', '%Workshop%');
-    })->count();
-    $statsAwareness = App\Models\Event::where('subject', 'LIKE', '%Awareness%')->count();
-    $statsResearch = App\Models\Event::where(function($q) {
-        $q->where('subject', 'LIKE', '%Research%')->orWhere('subject', 'LIKE', '%Reporting%');
-    })->count();
-    $partners = App\Models\Partner::active()->ordered()->get();
-?>
 <?php if (isset($component)) { $__componentOriginal23a33f287873b564aaf305a1526eada4 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal23a33f287873b564aaf305a1526eada4 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layout','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -88,137 +62,69 @@
     <section class="w-full reveal-on-scroll">
         <div class="relative group overflow-hidden bg-white">
             <div id="hero-slider" class="relative h-[400px] lg:h-[600px] overflow-hidden">
-                <!-- Slide 1 -->
-                <div class="slide absolute inset-0 transition-opacity duration-1000 opacity-100 z-10">
-                    <img src="<?php echo e(asset('images/hero image 1.jpg')); ?>" alt="Innovation Award" class="w-full h-full object-cover" />
-                    <div class="absolute inset-0 bg-gradient-to-r from-[#123B2D]/90 via-[#123B2D]/50 to-transparent">
+                <?php $__empty_1 = true; $__currentLoopData = $slides; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slide): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <div class="slide absolute inset-0 transition-opacity duration-1000 <?php echo e($loop->first ? 'opacity-100 z-10' : 'opacity-0 z-0'); ?>">
+                        <img src="<?php echo e($slide->image_url); ?>" alt="<?php echo e($slide->title); ?>" class="w-full h-full object-cover" />
+                        <div class="absolute inset-0 bg-gradient-to-r from-[#123B2D]/90 via-[#123B2D]/50 to-transparent">
+                        </div>
+                        <div
+                            class="hero-content absolute inset-y-0 left-0 w-full md:w-3/4 flex flex-col justify-center p-6 lg:p-24 z-20">
+                            <div class="w-20 h-1.5 bg-[#02B1EB] mb-8 rounded-full"></div>
+                            <h2
+                                class="font-outfit text-3xl lg:text-6xl font-black text-white leading-[1] tracking-tight uppercase lg:mb-8 mb-4">
+                                <?php echo e($slide->line1); ?>
+
+                                <?php if($slide->line2 !== ''): ?>
+                                    <span class="block text-[#02B1EB]"><?php echo e($slide->line2); ?></span>
+                                <?php endif; ?>
+                            </h2>
+                            <?php if($slide->excerpt): ?>
+                                <p class="text-white/80 text-md lg:text-xl leading-relaxed max-w-xl lg:mb-12 mb-6 font-medium">
+                                    <?php echo e($slide->excerpt); ?>
+
+                                </p>
+                            <?php endif; ?>
+                            <a href="<?php echo e($slide->link); ?>"
+                                class="inline-flex items-center gap-3 px-6 lg:px-10 py-2 lg:py-4 bg-[#02B1EB] text-white font-bold uppercase tracking-widest text-xs hover:bg-white hover:text-[#123B2D] transition-all duration-500 rounded-xl w-fit shadow-xl group/btn">
+                                <span><?php echo e($slide->cta); ?></span>
+                                <i data-lucide="arrow-right"
+                                    class="w-5 h-5 group-hover/btn:translate-x-1 transition-transform"></i>
+                            </a>
+                        </div>
                     </div>
-                    <div
-                        class="hero-content absolute inset-y-0 left-0 w-full md:w-3/4 flex flex-col justify-center p-6 lg:p-24 z-20">
-                        <div class="w-20 h-1.5 bg-[#02B1EB] mb-8 rounded-full"></div>
-                        <h2
-                            class="font-outfit text-3xl lg:text-6xl font-black text-white leading-[1] tracking-tight uppercase lg:mb-8 mb-4">
-                            Protection of <span class="text-[#02B1EB]">human rights</span> is our ultimate goal
-                        </h2>
-                        <p class="text-white/80 text-md lg:text-xl leading-relaxed max-w-xl lg:mb-12 mb-6 font-medium">
-                            It is your duty to have full knowledge of your rights. If any individual or institution
-                            violates your rights, please contact the Human Rights Directorate.
-                        </p>
-                        <a href="<?php echo e(route('contact_us')); ?>""
-                            class="inline-flex items-center gap-3 px-6 lg:px-10 py-2 lg:py-4 bg-[#02B1EB] text-white font-bold uppercase tracking-widest text-xs hover:bg-white hover:text-[#123B2D] transition-all duration-500 rounded-xl w-fit shadow-xl group/btn">
-                            <span>Get in Touch</span>
-                            <i data-lucide="arrow-right"
-                                class="w-5 h-5 group-hover/btn:translate-x-1 transition-transform"></i>
-                        </a>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                    <div class="slide absolute inset-0 transition-opacity duration-1000 opacity-100 z-10">
+                        <img src="<?php echo e(asset('images/hero image 1.jpg')); ?>" alt="Directorate of Human Rights"
+                            class="w-full h-full object-cover" />
+                        <div class="absolute inset-0 bg-gradient-to-r from-[#123B2D]/90 via-[#123B2D]/50 to-transparent">
+                        </div>
+                        <div
+                            class="hero-content absolute inset-y-0 left-0 w-full md:w-3/4 flex flex-col justify-center p-6 lg:p-24 z-20">
+                            <div class="w-20 h-1.5 bg-[#02B1EB] mb-8 rounded-full"></div>
+                            <h2
+                                class="font-outfit text-3xl lg:text-6xl font-black text-white leading-[1] tracking-tight uppercase lg:mb-8 mb-4">
+                                Protection of <span class="text-[#02B1EB]">human rights</span> is our ultimate goal
+                            </h2>
+                            <p class="text-white/80 text-md lg:text-xl leading-relaxed max-w-xl lg:mb-12 mb-6 font-medium">
+                                It is your duty to have full knowledge of your rights. If any individual or institution
+                                violates your rights, please contact the Human Rights Directorate.
+                            </p>
+                            <a href="<?php echo e(route('contact_us')); ?>"
+                                class="inline-flex items-center gap-3 px-6 lg:px-10 py-2 lg:py-4 bg-[#02B1EB] text-white font-bold uppercase tracking-widest text-xs hover:bg-white hover:text-[#123B2D] transition-all duration-500 rounded-xl w-fit shadow-xl group/btn">
+                                <span>Get in Touch</span>
+                                <i data-lucide="arrow-right"
+                                    class="w-5 h-5 group-hover/btn:translate-x-1 transition-transform"></i>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <!-- Slide 2 -->
-                <div class="slide absolute inset-0 transition-opacity duration-1000 opacity-0 z-0">
-                    <img src="<?php echo e(asset('images/hero image 2.png')); ?>" alt="Legal Reforms" class="w-full h-full object-cover" />
-                    <div class="absolute inset-0 bg-gradient-to-r from-[#123B2D]/90 via-[#123B2D]/50 to-transparent">
-                    </div>
-                    <div
-                        class="hero-content absolute inset-y-0 left-0 w-full md:w-3/4 flex flex-col justify-center p-6 lg:p-24 z-20">
-                        <div class="w-20 h-1.5 bg-[#02B1EB] mb-8 rounded-full"></div>
-                        <h2
-                            class="font-outfit text-4xl lg:text-7xl font-black text-white leading-[1] tracking-tight uppercase lg:mb-8 mb-4">
-                            Orientation <br /> Session <span class="text-[#02B1EB]">KP NGO</span>
-                        </h2>
-                        <p class="text-white/80 text-md lg:text-xl leading-relaxed max-w-xl lg:mb-12 mb-6 font-medium">
-                            Capacity building workshop for Non-Governmental Organisations registration in Khyber
-                            Pakhtunkhwa.
-                        </p>
-                        <a href="<?php echo e(route('ngo_required_documents')); ?>""
-                            class="inline-flex items-center gap-3 px-6 lg:px-10 py-2 lg:py-4 bg-[#02B1EB] text-white font-bold uppercase tracking-widest text-xs hover:bg-white hover:text-[#123B2D] transition-all duration-500 rounded-xl w-fit shadow-xl group/btn">
-                            <span>View Details</span>
-                            <i data-lucide="arrow-right"
-                                class="w-5 h-5 group-hover/btn:translate-x-1 transition-transform"></i>
-                        </a>
-                    </div>
-                </div>
-                <!-- Slide 3 -->
-                <div class="slide absolute inset-0 transition-opacity duration-1000 opacity-0 z-0">
-                    <img src="<?php echo e(asset('images/hero image 3.png')); ?>" alt="Digital Services" class="w-full h-full object-cover" />
-                    <div class="absolute inset-0 bg-gradient-to-r from-[#123B2D]/90 via-[#123B2D]/50 to-transparent">
-                    </div>
-                    <div
-                        class="hero-content absolute inset-y-0 left-0 w-full md:w-3/4 flex flex-col justify-center p-6 lg:p-24 z-20">
-                        <div class="w-20 h-1.5 bg-[#02B1EB] mb-8 rounded-full"></div>
-                        <h2
-                            class="font-outfit text-4xl lg:text-7xl font-black text-white leading-[1] tracking-tight uppercase lg:mb-8 mb-4">
-                            Provincial <br /> <span class="text-[#02B1EB]">Steering</span> Meeting
-                        </h2>
-                        <p class="text-white/80 text-md lg:text-xl leading-relaxed max-w-xl lg:mb-12 mb-6 font-medium">
-                            High-level committee meeting on the National Action Plan for Business & Human Rights.
-                        </p>
-                        <a href="<?php echo e(route('publications')); ?>"
-                            class="inline-flex items-center gap-3 px-6 lg:px-10 py-2 lg:py-4 bg-[#02B1EB] text-white font-bold uppercase tracking-widest text-xs hover:bg-white hover:text-[#123B2D] transition-all duration-500 rounded-xl w-fit shadow-xl group/btn">
-                            <span>Download Report</span>
-                            <i data-lucide="arrow-right"
-                                class="w-5 h-5 group-hover/btn:translate-x-1 transition-transform"></i>
-                        </a>
-                    </div>
-                </div>
-                <!-- Slide 4 -->
-                <div class="slide absolute inset-0 transition-opacity duration-1000 opacity-0 z-0">
-                    <img src="<?php echo e(asset('images/hero image 4.jpg')); ?>" alt="DG sb Session" class="w-full h-full object-cover" />
-                    <div class="absolute inset-0 bg-gradient-to-r from-[#123B2D]/90 via-[#123B2D]/50 to-transparent">
-                    </div>
-                    <div
-                        class="hero-content absolute inset-y-0 left-0 w-full md:w-3/4 flex flex-col justify-center p-6 lg:p-24 z-20">
-                        <div class="w-20 h-1.5 bg-[#02B1EB] mb-8 rounded-full"></div>
-                        <h2
-                            class="font-outfit text-4xl lg:text-7xl font-black text-white leading-[1] tracking-tight uppercase lg:mb-8 mb-4">
-                            Strategic <br /> <span class="text-[#02B1EB]">Governance</span> Session
-                        </h2>
-                        <p class="text-white/80 text-md lg:text-xl leading-relaxed max-w-xl lg:mb-12 mb-6 font-medium">
-                            Director General Law & Human Rights presiding over the strategic planning session for
-                            provincial human rights initiatives.
-                        </p>
-                        <a href="<?php echo e(route('tenders')); ?>"
-                            class="inline-flex items-center gap-3 px-6 lg:px-10 py-2 lg:py-4 bg-[#02B1EB] text-white font-bold uppercase tracking-widest text-xs hover:bg-white hover:text-[#123B2D] transition-all duration-500 rounded-xl w-fit shadow-xl group/btn">
-                            <span>View Activities</span>
-                            <i data-lucide="arrow-right"
-                                class="w-5 h-5 group-hover/btn:translate-x-1 transition-transform"></i>
-                        </a>
-                    </div>
-                </div>
-                <!-- Slide 5 -->
-                <div class="slide absolute inset-0 transition-opacity duration-1000 opacity-0 z-0">
-                    <img src="<?php echo e(asset('images/hero image 5.jpg')); ?>" alt="DG sb Meeting" class="w-full h-full object-cover" />
-                    <div class="absolute inset-0 bg-gradient-to-r from-[#123B2D]/90 via-[#123B2D]/50 to-transparent">
-                    </div>
-                    <div
-                        class="hero-content absolute inset-y-0 left-0 w-full md:w-3/4 flex flex-col justify-center p-6 lg:p-24 z-20">
-                        <div class="w-20 h-1.5 bg-[#02B1EB] mb-8 rounded-full"></div>
-                        <h2
-                            class="font-outfit text-4xl lg:text-7xl font-black text-white leading-[1] tracking-tight uppercase lg:mb-8 mb-4">
-                            Community <br /> <span class="text-[#02B1EB]">Engagement</span> Forum
-                        </h2>
-                        <p class="text-white/80 text-md lg:text-xl leading-relaxed max-w-xl lg:mb-12 mb-6 font-medium">
-                            Director General highlighting the importance of grassroots awareness and community
-                            involvement in human rights protection.
-                        </p>
-                        <a href="<?php echo e(route('publications')); ?>"
-                            class="inline-flex items-center gap-3 px-6 lg:px-10 py-2 lg:py-4 bg-[#02B1EB] text-white font-bold uppercase tracking-widest text-xs hover:bg-white hover:text-[#123B2D] transition-all duration-500 rounded-xl w-fit shadow-xl group/btn">
-                            <span>Learn More</span>
-                            <i data-lucide="arrow-right"
-                                class="w-5 h-5 group-hover/btn:translate-x-1 transition-transform"></i>
-                        </a>
-                    </div>
-                </div>
+                <?php endif; ?>
             </div>
             <!-- Navigation Dots -->
             <div id="slider-dots" class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
-                <span class="dot w-12 h-1 bg-[#02B1EB] cursor-pointer transition-all duration-300"></span>
-                <span
-                    class="dot w-12 h-1 bg-white/40 cursor-pointer hover:bg-white/60 transition-all duration-300"></span>
-                <span
-                    class="dot w-12 h-1 bg-white/40 cursor-pointer hover:bg-white/60 transition-all duration-300"></span>
-                <span
-                    class="dot w-12 h-1 bg-white/40 cursor-pointer hover:bg-white/60 transition-all duration-300"></span>
-                <span
-                    class="dot w-12 h-1 bg-white/40 cursor-pointer hover:bg-white/60 transition-all duration-300"></span>
+                <?php $__currentLoopData = $slides; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $slide): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <span
+                        class="dot w-12 h-1 <?php echo e($i === 0 ? 'bg-[#02B1EB]' : 'bg-white/40'); ?> cursor-pointer hover:bg-white/60 transition-all duration-300"></span>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
             <!-- Nav Arrows -->
             <div class="absolute inset-y-0 left-0 flex items-center z-20">
@@ -481,7 +387,7 @@
                         <h2 class="font-outfit text-xl font-black text-slate-800 uppercase tracking-tight">Downloads
                         </h2>
                     </div>
-                    <a href="<?php echo e(route('publications')); ?>"
+                    <a href="<?php echo e(route('ngo_required_documents')); ?>"
                         class="text-[10px] font-bold text-secondary hover:text-primary uppercase tracking-widest flex items-center gap-1 transition-colors">
                         View All <i data-lucide="arrow-right" class="w-3 h-3"></i>
                     </a>
@@ -490,16 +396,22 @@
                 <div
                     class="bg-gradient-to-b from-[#02B1EB]/10  border-x border-b border-slate-100 rounded-2xl shadow-sm group-hover:shadow-xl transition-all duration-500 flex-1 overflow-hidden relative min-h-[420px] max-h-[420px]">
                     <div class="h-full overflow-y-auto p-6 scrollbar-thin">
-                        <?php $__empty_1 = true; $__currentLoopData = $publications; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $publication): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                        <!-- Publication Item -->
+                        <?php $__empty_1 = true; $__currentLoopData = $downloads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $document): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <?php
+                            $ext = pathinfo($document->file_path, PATHINFO_EXTENSION);
+                            $isPdf = strtolower($ext) === 'pdf';
+                        ?>
+                        <!-- Download Item -->
                         <div
                             class="p-4 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all duration-300 mb-4 group/item">
                         <h4
                             class="text-sm font-bold text-primary leading-snug mb-4 group-hover/item:text-secondary transition-colors">
-                            <?php echo e($publication->title); ?></h4>
+                            <?php echo e($document->name); ?></h4>
                             <div class="flex items-center justify-between">
-                                <span class="text-[10px] font-medium text-slate-400 capitalize"><?php echo e($publication->file_type); ?> • <?php echo e($publication->file_size); ?></span>
-                                <a href="<?php echo e(route('publications.download', $publication->id)); ?>"
+                                <span class="text-[10px] font-medium text-slate-400 uppercase"><?php echo e($ext); ?> DOCUMENT</span>
+                                <a href="<?php echo e(asset($document->file_path)); ?>"
+                                    <?php echo e($isPdf ? 'target="_blank"' : 'download'); ?>
+
                                     class="inline-flex items-center gap-2 px-5 py-2 border-2 border-secondary text-secondary text-[10px] font-bold uppercase tracking-widest hover:bg-secondary hover:text-primary transition-all rounded-lg">
                                     <i data-lucide="download" class="w-3 h-3"></i>
                                     Download
@@ -509,7 +421,7 @@
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                         <div class="text-center py-8">
                             <i data-lucide="file-x" class="w-8 h-8 text-slate-300 mx-auto mb-2"></i>
-                            <p class="text-xs text-slate-500">No publications available</p>
+                            <p class="text-xs text-slate-500">No downloads available</p>
                         </div>
                         <?php endif; ?>
                     </div>
@@ -595,11 +507,22 @@
                         <?php $__empty_1 = true; $__currentLoopData = $latestCauses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cause): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <div
                                 class="p-5 rounded-xl bg-slate-50/50 hover:bg-white border border-transparent hover:border-slate-100 hover:shadow-lg transition-all duration-300 mb-4 group/item">
-                                <h4
-                                    class="text-sm font-bold text-slate-700 leading-snug group-hover/item:text-primary transition-colors">
-                                    <?php echo e($cause->title); ?>
+                                <div class="flex items-start justify-between gap-2">
+                                    <h4
+                                        class="text-sm font-bold text-slate-700 leading-snug group-hover/item:text-primary transition-colors">
+                                        <a href="<?php echo e(route('causes')); ?>" class="hover:text-[#02B1EB] transition-colors">
+                                            <?php echo e($cause->title); ?>
 
-                                </h4>
+                                        </a>
+                                    </h4>
+                                    <?php if($cause->file_path): ?>
+                                        <a href="<?php echo e(asset('storage/' . $cause->file_path)); ?>" target="_blank"
+                                            class="shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-lg border border-[#02B1EB]/30 text-[#02B1EB] hover:bg-[#02B1EB] hover:text-white transition-all"
+                                            title="Download <?php echo e(strtoupper(pathinfo($cause->file_path, PATHINFO_EXTENSION))); ?>">
+                                            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <div class="text-center py-8">
@@ -633,8 +556,7 @@
         <div class="marquee-wrapper overflow-hidden">
             <div class="marquee-track flex items-center gap-10 md:gap-16">
                 <?php $__currentLoopData = $partners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $partner): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <a href="<?php echo e($partner->url ?: '#'); ?>"
-                       target="<?php echo e($partner->url ? '_blank' : '_self'); ?>"
+                    <a href="<?php echo e(route('partners.show', $partner)); ?>"
                        class="group block shrink-0 transition-all duration-300"
                        title="<?php echo e($partner->name); ?>">
                         <div class="bg-white/80 rounded-full w-32 h-32 md:w-48 md:h-48 shadow-sm hover:shadow-lg transition-shadow duration-300 flex items-center justify-center border-2 border-slate-100/80 p-2 overflow-hidden">

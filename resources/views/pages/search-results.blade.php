@@ -17,7 +17,7 @@
                 Search <span class="text-[#02B1EB]">Results</span>
             </h1>
             <p class="text-white/60 text-lg max-w-2xl font-medium">
-                Showing results for: <span class="text-white italic">"{{ $query }}"</span>
+                {{ $results->count() }} {{ Str::plural('result', $results->count()) }} for: <span class="text-white italic">"{{ $query }}"</span>
             </p>
         </div>
     </section>

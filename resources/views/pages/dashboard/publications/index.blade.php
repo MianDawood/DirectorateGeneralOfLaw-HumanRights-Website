@@ -49,7 +49,7 @@
                         </div>
                         <div class="md:col-span-3 flex gap-2">
                             <button type="submit"
-                                    class="bg-gray-800 hover:bg-gray-900 dark:bg-brand-600 dark:hover:bg-brand-700 text-white font-bold py-2 px-4 rounded text-sm">Apply Filters</button>
+                                    class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded text-sm">Apply Filters</button>
                             <a href="{{ route('admin.publications.index') }}"
                                class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded text-sm">Reset</a>
                         </div>
@@ -59,9 +59,9 @@
                         <span class="text-sm text-gray-500">Showing {{ $publications->total() }} record(s)</span>
                         <span>
                             <a href="{{ route('admin.publications.export', array_merge(['format' => 'pdf'], $query)) }}"
-                               class="inline-flex items-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded text-sm">Export PDF</a>
+                               class="inline-flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-3 rounded text-sm">Export PDF</a>
                             <a href="{{ route('admin.publications.export', array_merge(['format' => 'xlsx'], $query)) }}"
-                               class="inline-flex items-center bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-3 rounded text-sm">Export Excel</a>
+                               class="inline-flex items-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-3 rounded text-sm">Export Excel</a>
                         </span>
                     </div>
 

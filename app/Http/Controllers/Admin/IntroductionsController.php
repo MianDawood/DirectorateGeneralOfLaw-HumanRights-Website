@@ -18,7 +18,7 @@ class IntroductionsController extends Controller
      */
     public function edit(): View
     {
-        $introductions = Introduction::orderBy('id')->get();
+        $introductions = Introduction::orderBy('id')->limit(1)->get();
         $heads = IntroductionHead::orderBy('order')->get();
 
         return view('pages.dashboard.introductions.edit', compact('introductions', 'heads'));

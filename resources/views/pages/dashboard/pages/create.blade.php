@@ -11,7 +11,7 @@
                     <a href="{{ route('admin.pages.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Back to List</a>
                 </div>
 
-                <form method="POST" action="{{ route('admin.pages.store') }}">
+                <form method="POST" action="{{ route('admin.pages.store') }}" enctype="multipart/form-data">
                     @csrf
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -85,6 +85,15 @@
                         <label class="block text-sm font-medium text-gray-700">Page Content</label>
                         <textarea id="content" name="content" rows="15" class="mt-1 block w-full">{{ old('content') }}</textarea>
                         @error('content')<p class="text-red-600 text-sm mt-1">{{ $message }}</p>@enderror
+                    </div>
+
+                    <!-- Attach File -->
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium text-gray-700">Attach File (PDF / DOC)</label>
+                        <input type="file" name="file_path" accept=".pdf,.doc,.docx"
+                               class="mt-1 block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-500 file:text-white file:cursor-pointer hover:file:bg-blue-700">
+                        <p class="mt-1 text-sm text-gray-500">Optional. PDF, DOC or DOCX files only.</p>
+                        @error('file_path')<p class="text-red-600 text-sm mt-1">{{ $message }}</p>@enderror
                     </div>
 
                     <div class="mt-6 flex justify-end space-x-3">

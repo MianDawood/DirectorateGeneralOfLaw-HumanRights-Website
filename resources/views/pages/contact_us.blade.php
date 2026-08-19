@@ -20,54 +20,6 @@
             </div>
         </section>
 
-        <!-- Quick Contact Bar -->
-        <section class="bg-white border-b border-slate-100 reveal-on-scroll">
-            <div class="max-w-[1536px] mx-auto px-6 lg:px-20">
-                <div class="grid grid-cols-2 lg:grid-cols-4 divide-x divide-slate-100">
-                    <div class="flex items-center gap-4 py-6 px-4 lg:px-6 group cursor-pointer">
-                        <div
-                            class="w-10 h-10 bg-[#123B2D]/5 rounded-xl flex items-center justify-center text-[#123B2D] group-hover:bg-[#123B2D] group-hover:text-white transition-all shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5"></i>
-                        </div>
-                        <div class="min-w-0">
-                            <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-0.5">Address</p>
-                            <p class="text-xs font-bold text-slate-700 truncate">Hayatabad, Peshawar</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4 py-6 px-4 lg:px-6 group cursor-pointer">
-                        <div
-                            class="w-10 h-10 bg-[#02B1EB]/5 rounded-xl flex items-center justify-center text-[#02B1EB] group-hover:bg-[#02B1EB] group-hover:text-white transition-all shrink-0">
-                            <i data-lucide="phone" class="w-5 h-5"></i>
-                        </div>
-                        <div class="min-w-0">
-                            <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-0.5">Phone</p>
-                            <p class="text-xs font-bold text-slate-700">{{ $settings->contact_phone ?? '091-9217202' }}</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4 py-6 px-4 lg:px-6 group cursor-pointer">
-                        <div
-                            class="w-10 h-10 bg-[#123B2D]/5 rounded-xl flex items-center justify-center text-[#123B2D] group-hover:bg-[#123B2D] group-hover:text-white transition-all shrink-0">
-                            <i data-lucide="mail" class="w-5 h-5"></i>
-                        </div>
-                        <div class="min-w-0">
-                            <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-0.5">Email</p>
-                            <p class="text-xs font-bold text-slate-700 truncate">{{ $settings->contact_email ?? 'dhr.kpk@gmail.com' }}</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4 py-6 px-4 lg:px-6 group cursor-pointer">
-                        <div
-                            class="w-10 h-10 bg-[#02B1EB]/5 rounded-xl flex items-center justify-center text-[#02B1EB] group-hover:bg-[#02B1EB] group-hover:text-white transition-all shrink-0">
-                            <i data-lucide="clock" class="w-5 h-5"></i>
-                        </div>
-                        <div class="min-w-0">
-                            <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-0.5">Hours</p>
-                            <p class="text-xs font-bold text-slate-700">Mon–Fri, 9AM–5PM</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- Main Content: Map + Info | Form -->
         <section class="lg:py-16 py-10">
             <div class="max-w-[1536px] mx-auto px-6 lg:px-20">
@@ -90,7 +42,7 @@
                                     <div>
                                         <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
                                             Office Address</p>
-                                        <p class="text-sm text-slate-700 leading-relaxed">{!! nl2br(e($settings->contact_address ?? 'Plot No. 21, Sector B-2, Phase-V, Hayatabad, Peshawar, Khyber Pakhtunkhwa.')) !!}</p>
+                                        <p class="text-sm text-slate-700 leading-relaxed">{!! nl2br(e($settings->contact_address)) !!}</p>
                                     </div>
                                 </div>
                                 <div class="border-t border-slate-100"></div>
@@ -102,8 +54,12 @@
                                     <div>
                                         <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
                                             Phone Numbers</p>
-                                        <p class="text-sm text-slate-700 font-semibold">{{ $settings->contact_phone ?? '+92 91 9217202' }}</p>
-                                        <p class="text-sm text-slate-700 font-semibold">+92 91 9217203</p>
+                                        <p class="text-sm text-slate-700 font-semibold">{{ $settings->contact_phone }}</p>
+                                        @if($settings->toll_free)
+                                            <p class="text-sm text-slate-700 font-semibold mt-1">
+                                                <span class="text-slate-400 font-black uppercase tracking-widest">Toll Free: </span>{{ $settings->toll_free }}
+                                            </p>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="border-t border-slate-100"></div>
@@ -115,10 +71,8 @@
                                     <div>
                                         <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
                                             Email Addresses</p>
-                                        <a href="mailto:{{ $settings->contact_email ?? 'dhr.kpk@gmail.com' }}"
-                                            class="block text-sm text-[#02B1EB] font-semibold hover:underline">{{ $settings->contact_email ?? 'dhr.kpk@gmail.com' }}</a>
-                                        <a href="mailto:info@dglhr.gkp.pk"
-                                            class="block text-sm text-[#02B1EB] font-semibold hover:underline">info@dglhr.gkp.pk</a>
+                                        <a href="mailto:{{ $settings->contact_email }}"
+                                            class="block text-sm text-[#02B1EB] font-semibold hover:underline">{{ $settings->contact_email }}</a>
                                     </div>
                                 </div>
                                 <div class="border-t border-slate-100"></div>
@@ -130,9 +84,7 @@
                                     <div>
                                         <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
                                             Office Hours</p>
-                                        <p class="text-sm text-slate-700">Monday – Friday</p>
-                                        <p class="text-sm text-[#123B2D] font-black">9:00 AM – 5:00 PM</p>
-                                        <p class="text-xs text-slate-400 mt-1 italic">Closed on public holidays</p>
+                                        <p class="text-sm text-slate-700">{!! nl2br(e($settings->working_hours)) !!}</p>
                                     </div>
                                 </div>
                             </div>
@@ -142,16 +94,24 @@
                         <div
                             class="bg-white lg:block hidden rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
                             <div class="w-full h-64 lg:h-72 ">
-                                <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3319.4623722216584!2d73.0766373!3d33.7032793!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38dfbf978e723533%3A0x6b72d2459c36db4b!2sPrinting%20Corporation%20of%20Pakistan!5e0!3m2!1sen!2s!4v1709710000000!5m2!1sen!2s"
-                                    class="w-full h-full border-0 grayscale hover:grayscale-0 transition-all duration-700"
-                                    allowfullscreen="" loading="lazy"></iframe>
+                                @if($settings->map_embed_url)
+                                    <iframe
+                                        src="{{ $settings->map_embed_url }}"
+                                        class="w-full h-full border-0 grayscale hover:grayscale-0 transition-all duration-700"
+                                        allowfullscreen="" loading="lazy"></iframe>
+                                @else
+                                    <div class="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-semibold uppercase tracking-widest">
+                                        Map not configured
+                                    </div>
+                                @endif
                             </div>
                             <div class="px-7 py-4 border-t border-slate-100">
-                                <a href="https://maps.google.com" target="_blank"
-                                    class="flex items-center justify-center gap-2 w-full py-3 bg-[#123B2D] text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[#02B1EB] transition-all">
-                                    <i data-lucide="external-link" class="w-3 h-3"></i> Open in Google Maps
-                                </a>
+                                @if($settings->map_link)
+                                    <a href="{{ $settings->map_link }}" target="_blank"
+                                        class="flex items-center justify-center gap-2 w-full py-3 bg-[#123B2D] text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[#02B1EB] transition-all">
+                                        <i data-lucide="external-link" class="w-3 h-3"></i> Open in Google Maps
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -205,9 +165,6 @@
                                                 class="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#02B1EB]/20 focus:border-[#02B1EB] transition-all">
                                                 <option value="">Select a subject</option>
                                                 <option value="general" {{ old('subject') === 'general' ? 'selected' : '' }}>General Inquiry</option>
-                                                <option value="complaint" {{ old('subject') === 'complaint' ? 'selected' : '' }}>File a Complaint</option>
-                                                <option value="legal" {{ old('subject') === 'legal' ? 'selected' : '' }}>Legal Assistance</option>
-                                                <option value="human-rights" {{ old('subject') === 'human-rights' ? 'selected' : '' }}>Human Rights Issue</option>
                                                 <option value="feedback" {{ old('subject') === 'feedback' ? 'selected' : '' }}>Feedback</option>
                                                 <option value="other" {{ old('subject') === 'other' ? 'selected' : '' }}>Other</option>
                                             </select>
@@ -254,43 +211,6 @@
                                     </div>
                                 </form>
                             </div>
-                        </div>
-
-                        <!-- Assistance Strip -->
-                        <div class="grid sm:grid-cols-3 gap-4 mt-6">
-                            <a href="#"
-                                class="flex items-center gap-3 bg-white rounded-xl border border-slate-100 shadow-sm p-4 hover:border-[#123B2D]/20 hover:shadow-md transition-all group">
-                                <div
-                                    class="w-9 h-9 bg-[#123B2D]/5 rounded-lg flex items-center justify-center text-[#123B2D] group-hover:bg-[#123B2D] group-hover:text-white transition-all shrink-0">
-                                    <i data-lucide="shield" class="w-4 h-4"></i>
-                                </div>
-                                <div>
-                                    <p class="text-xs font-bold text-slate-700">Legal Aid</p>
-                                    <p class="text-[10px] text-slate-400">Get assistance</p>
-                                </div>
-                            </a>
-                            <a href="#"
-                                class="flex items-center gap-3 bg-white rounded-xl border border-slate-100 shadow-sm p-4 hover:border-[#02B1EB]/20 hover:shadow-md transition-all group">
-                                <div
-                                    class="w-9 h-9 bg-[#02B1EB]/5 rounded-lg flex items-center justify-center text-[#02B1EB] group-hover:bg-[#02B1EB] group-hover:text-white transition-all shrink-0">
-                                    <i data-lucide="heart-handshake" class="w-4 h-4"></i>
-                                </div>
-                                <div>
-                                    <p class="text-xs font-bold text-slate-700">HR Support</p>
-                                    <p class="text-[10px] text-slate-400">Report violations</p>
-                                </div>
-                            </a>
-                            <a href="#"
-                                class="flex items-center gap-3 bg-white rounded-xl border border-slate-100 shadow-sm p-4 hover:border-[#123B2D]/20 hover:shadow-md transition-all group">
-                                <div
-                                    class="w-9 h-9 bg-[#123B2D]/5 rounded-lg flex items-center justify-center text-[#123B2D] group-hover:bg-[#123B2D] group-hover:text-white transition-all shrink-0">
-                                    <i data-lucide="file-text" class="w-4 h-4"></i>
-                                </div>
-                                <div>
-                                    <p class="text-xs font-bold text-slate-700">Complaints</p>
-                                    <p class="text-[10px] text-slate-400">File online</p>
-                                </div>
-                            </a>
                         </div>
                     </div>
                 </div>

@@ -7,8 +7,15 @@ use Illuminate\Support\Facades\DB;
 
 class VerificationController extends Controller
 {
-    public function verifyNgo($registration_no)
+    public function verifyNgo(Request $request, $registration_no = null)
     {
+        $registration_no = trim($registration_no ?: $request->query('registration_no'));
+
+        if ($registration_no === '') {
+            return redirect()->route('verify.ngo')
+                ->with('error', 'Please enter an NGO registration number to verify.');
+        }
+
         // Find the application by registration number
         $application = DB::table('ngo_applications')
             ->where('registration_no', $registration_no)

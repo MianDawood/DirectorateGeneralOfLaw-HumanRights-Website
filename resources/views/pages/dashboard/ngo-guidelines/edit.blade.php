@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="px-4 py-8 mx-auto max-w-5xl" 
+<div class="px-4 py-8 mx-auto max-w-5xl"
      x-data="guidelineManager({{ json_encode($guidelines) }})">
-    
+
     <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Registration Guidelines</h1>
@@ -42,16 +42,13 @@
                         <p class="text-sm text-gray-500">Define the chronological steps for NGO registration.</p>
                     </div>
                 </div>
-                <button type="button" @click="addStep" class="inline-flex items-center px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold rounded-xl transition-all shadow-lg shadow-brand-500/20 hover:-translate-y-0.5 active:translate-y-0">
-                    <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                    Add Step
-                </button>
+
             </div>
 
             <div class="grid grid-cols-1 gap-4">
                 <template x-for="(step, index) in guidelines" :key="step.local_id || step.id">
                     <div class="group bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 transition-all hover:border-brand-300 dark:hover:border-brand-700 hover:shadow-xl">
-                        
+
                         <div class="flex items-start gap-6">
                             <!-- Step Number Icon -->
                             <div class="flex flex-col items-center gap-2">
@@ -63,7 +60,7 @@
                             <div class="flex-1 space-y-4">
                                 <div class="flex items-center justify-between">
                                     <input type="text" :name="'guidelines[' + (step.id || 'new_' + index) + '][title]'" x-model="step.title" placeholder="Step Title (e.g. Obtain Registration Form)" class="flex-1 bg-transparent border-none p-0 text-lg font-bold text-gray-900 dark:text-white placeholder:text-gray-300 focus:ring-0">
-                                    
+
                                     <div class="flex items-center gap-3">
                                         <label class="flex items-center gap-2 cursor-pointer">
                                             <input type="checkbox" :name="'guidelines[' + (step.id || 'new_' + index) + '][is_active]'" :checked="step.is_active" class="w-5 h-5 rounded border-gray-300 text-brand-600 focus:ring-brand-500">
@@ -76,7 +73,7 @@
                                 </div>
 
                                 <textarea :name="'guidelines[' + (step.id || 'new_' + index) + '][description]'" x-model="step.description" rows="3" placeholder="Describe the requirements for this step..." class="w-full rounded-xl border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 p-4 text-sm text-gray-600 dark:text-gray-300 focus:bg-white transition-all"></textarea>
-                                
+
                                 <input type="hidden" :name="'guidelines[' + (step.id || 'new_' + index) + '][order]'" :value="index">
                             </div>
                         </div>
@@ -84,7 +81,7 @@
                     </div>
                 </template>
             </div>
-            
+
             <div class="flex justify-center pt-4">
                 <button type="button" @click="addStep" class="inline-flex items-center px-6 py-3 bg-white dark:bg-gray-800 text-brand-600 dark:text-brand-400 text-sm font-bold rounded-xl border-2 border-dashed border-brand-200 dark:border-brand-900/50 hover:border-brand-500 hover:bg-brand-50 transition-all group">
                     <svg class="w-5 h-5 mr-2 transition-transform group-hover:scale-125" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
@@ -94,14 +91,10 @@
         </div>
 
         <!-- Sticky Footer -->
-        <div class="sticky bottom-6 flex items-center justify-end">
-            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md p-2 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 flex items-center gap-3">
-                <a href="{{ route('admin.ngo-guidelines.edit') }}" class="px-6 py-3 text-sm font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 transition">Reset</a>
-                <button type="submit" class="inline-flex items-center px-8 py-3 bg-brand-500 hover:bg-brand-600 text-white text-sm font-bold rounded-xl shadow-xl transition-all hover:-translate-y-0.5 active:translate-y-0">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002 2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+        <div class="flex items-center justify-end">
+                <button type="submit" class="inline-flex items-center px-8 py-3 bg-brand-500 hover:bg-brand-600 text-white uppercase text-sm font-bold rounded-xl shadow-xl transition-all">
                     Save Registration Process
                 </button>
-            </div>
         </div>
     </form>
 </div>

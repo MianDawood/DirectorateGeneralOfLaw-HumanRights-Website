@@ -12,6 +12,7 @@ class Cause extends Model
     protected $fillable = [
         'title',
         'description',
+        'file_path',
         'status',
         'order',
     ];

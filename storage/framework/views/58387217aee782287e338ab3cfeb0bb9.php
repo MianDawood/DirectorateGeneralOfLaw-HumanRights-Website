@@ -1,5 +1,7 @@
 <?php
 use App\Models\NgoDirective;
+use App\Models\SiteSetting;
+$settings = SiteSetting::getSettings();
 $directive = NgoDirective::first();
 
 /**
@@ -55,7 +57,7 @@ function parseDirectivesContent($content, $class = 'text-primary') {
                         <div class="flex items-center gap-3 mb-6">
                             <span class="text-red-500 text-[10px] font-black uppercase tracking-widest">Urgent Directive</span>
                         </div>
-                        
+
                         <?php
                             $heading = $directive->heading ?? 'Mandatory Registration Under Rules 2024';
                             $words = explode(' ', $heading);
@@ -69,7 +71,7 @@ function parseDirectivesContent($content, $class = 'text-primary') {
                             <?php if(!empty($firstPart)): ?> <br> <?php endif; ?>
                             <span class="text-[#123B2D]"><?php echo e(implode(' ', $lastTwo)); ?></span>
                         </h2>
-                        
+
                         <div class="space-y-6 text-slate-600 text-lg md:text-xl leading-relaxed max-w-4xl">
                             <?php echo parseDirectivesContent($directive->desc_2, 'text-slate-900 font-bold'); ?>
 
@@ -127,7 +129,7 @@ function parseDirectivesContent($content, $class = 'text-primary') {
                             </div>
 
                             <a href="<?php echo e(route('registration_form_part1')); ?>"
-                                class="group flex items-center justify-center gap-3 lg:px-12 lg:py-5 px-6 py-3 bg-primary font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-secondary transition-all shadow-xl shadow-primary/20 active:scale-95 w-full lg:w-auto">
+                                class="group flex items-center justify-center gap-3 lg:px-12 lg:py-5 px-6 py-3 bg-primary font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-secondary transition-all shadow-xl shadow-primary/20 active:scale-95 w-full lg:w-auto text-white">
                                 Click Here for Online Registration
                                 <i data-lucide="external-link" class="lg:w-4 lg:h-4 w-6 h-6 group-hover:rotate-45 transition-transform"></i>
                             </a>
@@ -141,17 +143,17 @@ function parseDirectivesContent($content, $class = 'text-primary') {
                                 </div>
                                 <div>
                                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Inquiry Helpline</p>
-                                    <p class="text-slate-900 font-bold">091-9217205 / 091-9217203</p>
+                                    <p class="text-slate-900 font-bold"><?php echo e($settings->contact_phone); ?></p>
                                 </div>
                             </div>
-                            
+
                             <div class="flex items-center gap-4">
                                 <div class="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-500">
                                     <i data-lucide="calendar-clock" class="w-4 h-4"></i>
                                 </div>
                                 <div>
                                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Working Hours</p>
-                                    <p class="text-slate-900 font-bold">09:00 AM – 05:00 PM</p>
+                                    <p class="text-slate-900 font-bold"><?php echo nl2br(e($settings->working_hours ?? '09:00 AM – 05:00 PM')); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -186,4 +188,5 @@ function parseDirectivesContent($content, $class = 'text-primary') {
 <?php if (isset($__componentOriginal23a33f287873b564aaf305a1526eada4)): ?>
 <?php $component = $__componentOriginal23a33f287873b564aaf305a1526eada4; ?>
 <?php unset($__componentOriginal23a33f287873b564aaf305a1526eada4); ?>
-<?php endif; ?><?php /**PATH /Applications/MAMP/htdocs/human-rights-kp/resources/views/pages/ngo_directives.blade.php ENDPATH**/ ?>
+<?php endif; ?>
+<?php /**PATH /Applications/MAMP/htdocs/human-rights-kp/resources/views/pages/ngo_directives.blade.php ENDPATH**/ ?>

@@ -20,7 +20,13 @@
                     </h1>
                     <p class="text-slate-500 mt-3 max-w-lg mx-auto text-sm">Enter your NGO registration number to verify the registration status with the Directorate General of Law & Human Rights.</p>
                 </div>
-                <form class="space-y-6" method="GET" action="<?php echo e(route('verify.certificate', ['registration_no' => '__placeholder__'])); ?>" onsubmit="event.preventDefault(); var val = document.getElementById('reg_no').value; if(val) { window.location.href = '<?php echo e(url('verify-certificate')); ?>/' + val; }">
+                                    <?php if(session('error')): ?>
+                        <div class="mb-6 px-4 py-3 bg-red-50 border border-red-200 text-red-700 text-sm font-medium rounded-xl">
+                            <?php echo e(session('error')); ?>
+
+                        </div>
+                    <?php endif; ?>
+                <form class="space-y-6" method="GET" action="<?php echo e(url('verify-certificate')); ?>">
                     <div>
                         <label for="reg_no" class="block text-sm font-medium text-slate-700 mb-2">NGO Registration Number</label>
                         <input type="text" name="registration_no" id="reg_no"

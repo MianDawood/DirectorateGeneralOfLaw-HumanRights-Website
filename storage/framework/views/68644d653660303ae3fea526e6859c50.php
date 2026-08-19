@@ -18,6 +18,21 @@
                         </div>
                     <?php endif; ?>
 
+                    <form method="GET" action="<?php echo e(route('admin.partners.index')); ?>"
+                          class="mb-4 flex items-center gap-2">
+                        <input type="text" name="search" value="<?php echo e($search ?? ''); ?>"
+                               placeholder="Search by name, description or URL..."
+                               class="flex-1 rounded border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all">
+                        <button type="submit"
+                                class="bg-gray-800 hover:bg-gray-900 dark:bg-brand-600 dark:hover:bg-brand-700 text-white font-bold py-2 px-4 rounded text-sm">
+                            Search
+                        </button>
+                        <?php if(!empty($search)): ?>
+                            <a href="<?php echo e(route('admin.partners.index')); ?>"
+                               class="text-gray-500 hover:text-gray-700 text-sm font-medium">Clear</a>
+                        <?php endif; ?>
+                    </form>
+
                     <div class="overflow-x-auto">
                         <table class="min-w-full table-auto">
                             <thead class="bg-gray-50">
@@ -72,7 +87,8 @@
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                     <tr>
                                         <td colspan="6" class="px-6 py-4 text-center text-gray-500">
-                                            No partners found.
+                                            <?php echo e(empty($search) ? 'No partners found.' : 'No partners match your search.'); ?>
+
                                         </td>
                                     </tr>
                                 <?php endif; ?>

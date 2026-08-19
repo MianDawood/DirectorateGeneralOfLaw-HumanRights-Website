@@ -33,7 +33,7 @@ $mission = $sections->get(1);
     @if($firstPart) <br class="hidden md:block" /> @endif
     <span class="text-[#123B2D]">{{ $lastWord }} DO</span>
 </h2>
-                <p class="text-white/20 text-base md:text-xl leading-relaxed max-w-xl font-medium mb-12">
+                <p class="text-gray-600 text-base md:text-xl leading-relaxed max-w-xl font-medium mb-12">
                     {{ $hero?->description ?? 'The Directorate of Human Rights, Khyber Pakhtunkhwa, is committed to safeguarding fundamental rights, promoting justice, and ensuring dignity for every citizen across the province.' }}
                 </p>
 
@@ -111,7 +111,7 @@ $mission = $sections->get(1);
                         </div>
                     </div>
                     <div class="absolute -top-4 -right-4 w-24 h-24 bg-primary/10 rounded-2xl -z-10"></div>
-                    {{-- <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-primary/5 rounded-2xl -z-10"></div> --}}
+                    <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-primary/5 rounded-2xl -z-10"></div>
                 </div>
             </div>
         </div>
@@ -119,9 +119,6 @@ $mission = $sections->get(1);
 
     <!-- KEY ACTIVITIES / SERVICES -->
     <section id="activities" class="bg-white py-16 md:py-24 relative overflow-hidden">
-        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-4 md:w-8 h-full bg-primary"></div>
-        <div class="absolute right-0 top-1/2 -translate-y-1/2 w-4 md:w-8 h-full bg-primary"></div>
-
         <div class="max-w-[1536px] mx-auto px-6 lg:px-20">
             <div class="text-center mb-16 md:mb-20 reveal-on-scroll">
                 <div class="inline-flex items-center gap-2 bg-secondary/10 text-secondary px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest mb-8">

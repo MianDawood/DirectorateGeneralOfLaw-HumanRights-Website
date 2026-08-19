@@ -105,10 +105,36 @@
                                class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-sm focus:border-slate-900 outline-none transition-all">
                     </div>
                 </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Toll Free Number</label>
+                        <input type="text" name="toll_free" value="{{ old('toll_free', $settings->toll_free) }}" placeholder="0800-11180"
+                               class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-sm focus:border-slate-900 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Working Hours</label>
+                        <textarea name="working_hours" rows="3" placeholder="Monday – Friday&#10;09:00 AM – 05:00 PM&#10;Closed on public holidays"
+                                  class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-sm focus:border-slate-900 outline-none transition-all">{{ old('working_hours', $settings->working_hours) }}</textarea>
+                    </div>
+                </div>
                 <div>
                     <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Office Address</label>
                     <textarea name="contact_address" rows="3" placeholder="Full office address..."
                               class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-sm focus:border-slate-900 outline-none transition-all">{{ old('contact_address', $settings->contact_address) }}</textarea>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Map Embed URL</label>
+                        <input type="text" name="map_embed_url" value="{{ old('map_embed_url', $settings->map_embed_url) }}" placeholder="https://www.google.com/maps/embed?pb=..."
+                               class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-sm focus:border-slate-900 outline-none transition-all">
+                        <p class="mt-2 text-xs text-gray-500">The Google Maps embed (iframe) src shown in the footer and contact page.</p>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Google Maps Location</label>
+                        <input type="text" name="map_link" value="{{ old('map_link', $settings->map_link) }}" placeholder="https://maps.app.goo.gl/..."
+                               class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-sm focus:border-slate-900 outline-none transition-all">
+                        <p class="mt-2 text-xs text-gray-500">Used by the "Open in Google Maps" buttons.</p>
+                    </div>
                 </div>
             </div>
         </div>

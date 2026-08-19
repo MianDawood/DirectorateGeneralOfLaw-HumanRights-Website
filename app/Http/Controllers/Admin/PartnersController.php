@@ -8,11 +8,23 @@ use Illuminate\Http\Request;
 
 class PartnersController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $partners = Partner::ordered()->paginate(15);
+        $search = trim($request->input('search'));
 
-        return view('pages.dashboard.partners.index', compact('partners'));
+        $partners = Partner::query()
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%")
+                        ->orWhere('url', 'like', "%{$search}%");
+                });
+            })
+            ->ordered()
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('pages.dashboard.partners.index', compact('partners', 'search'));
     }
 
     public function create()

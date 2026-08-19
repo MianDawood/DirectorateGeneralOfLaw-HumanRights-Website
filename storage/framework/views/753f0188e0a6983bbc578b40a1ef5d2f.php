@@ -35,7 +35,7 @@
                                 <?php endif; ?>
                             </p>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Navigation</h3>
                             <p class="mt-1">
@@ -46,12 +46,12 @@
                                 <?php endif; ?>
                             </p>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">URL Slug</h3>
                             <p class="mt-1 text-sm font-mono text-gray-900"><?php echo e($page->slug); ?></p>
                         </div>
-                        
+
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Order</h3>
                             <p class="mt-1 text-lg font-semibold text-gray-900"><?php echo e($page->order); ?></p>
@@ -94,6 +94,18 @@
                         </div>
                     </div>
 
+                    <!-- Attached File -->
+                    <?php if($page->file_path): ?>
+                        <div class="mb-8">
+                            <h2 class="text-lg font-semibold text-gray-900 mb-4">Attached File</h2>
+                            <div class="bg-gray-50 p-4 rounded-lg flex items-center gap-3">
+                                <i class="text-2xl">📎</i>
+                                <a href="<?php echo e(asset('storage/' . $page->file_path)); ?>" target="_blank"
+                                   class="text-sm font-medium text-blue-600 hover:text-blue-900"><?php echo e(basename($page->file_path)); ?></a>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
                     <!-- Additional Information -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-gray-50 p-4 rounded-lg">
@@ -116,7 +128,7 @@
 
                             </button>
                         </form>
-                        
+
                         <form method="POST" action="<?php echo e(route('admin.pages.toggle-navigation', $page)); ?>" class="inline">
                             <?php echo csrf_field(); ?>
                             <?php echo method_field('PATCH'); ?>
@@ -125,13 +137,8 @@
 
                             </button>
                         </form>
+
                         
-                        <form method="POST" action="<?php echo e(route('admin.pages.duplicate', $page)); ?>" class="inline">
-                            <?php echo csrf_field(); ?>
-                            <button type="submit" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
-                                Duplicate Page
-                            </button>
-                        </form>
                     </div>
                 </div>
             </div>

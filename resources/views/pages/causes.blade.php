@@ -32,6 +32,13 @@
                         <p class="mt-2 text-sm text-slate-500 leading-relaxed">
                             {{ $cause->description ?? 'Description will be updated soon.' }}
                         </p>
+                        @if($cause->file_path)
+                            <a href="{{ asset('storage/' . $cause->file_path) }}" target="_blank"
+                               class="mt-4 inline-flex items-center gap-2 px-5 py-2 border-2 border-[#02B1EB] text-[#02B1EB] text-[10px] font-bold uppercase tracking-widest hover:bg-[#02B1EB] hover:text-white transition-all rounded-lg">
+                                <i data-lucide="download" class="w-3 h-3"></i>
+                                Download {{ strtoupper(pathinfo($cause->file_path, PATHINFO_EXTENSION)) }}
+                            </a>
+                        @endif
                     </div>
                 @empty
                     <div class="col-span-full text-center py-16">

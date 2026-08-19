@@ -1,6 +1,6 @@
 <x-form-layout
-    title="Registration Form - PART-11"
-    subtitle="SCHEDULE-I | PART-11: SECURITY AGREEMENT & ARRANGEMENTS"
+    title="Registration Form - PART-J"
+    subtitle="SCHEDULE-I | PART-10: SECURITY AGREEMENT & ARRANGEMENTS"
     step="Step 11 of 11: Security Agreement & Arrangements"
     backRoute="registration_form_part10"
     backLabel="Back to Part 10"
@@ -81,7 +81,7 @@
 
     <div class="pt-10 border-t border-slate-100 flex flex-col items-center gap-5">
         <div class="flex flex-col sm:flex-row gap-4 w-full max-w-2xl justify-center">
-            <button type="button" onclick="saveAsDraft()" 
+            <button type="button" onclick="saveAsDraft()"
                 class="save-draft-btn flex-1 py-4 bg-white text-slate-900 border-2 border-slate-100 font-bold text-sm rounded-2xl shadow-sm hover:bg-slate-50 hover:border-[#02b1eb]/30 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3 uppercase tracking-widest">
                 <i data-lucide="save" class="w-4 h-4 text-[#02B1EB]"></i>
                 <span>Save as Draft</span>

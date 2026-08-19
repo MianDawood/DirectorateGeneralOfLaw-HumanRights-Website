@@ -8,14 +8,24 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
-<main class="bg-white md:py-24 py-12 relative overflow-hidden">
-        
+<main class="">
+  <section class="bg-gradient-to-br from-[#123B2D] to-[#1a5240] py-20 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
+            <div class="max-w-[1536px] mx-auto px-6 lg:px-20 relative z-10">
+                <div class="flex items-center gap-3 mb-6 reveal-on-scroll">
+                    <span class="w-12 h-[2px] bg-[#02B1EB]"></span>
+                    <span class="text-[#02B1EB] text-xs font-black uppercase tracking-[0.3em]">Directorate General of Law & Human Rights</span>
+                </div>
+                <h1 class="font-outfit text-5xl md:text-7xl font-black text-white uppercase tracking-tight mb-6 reveal-on-scroll">
+                    Our Perfect <br><span class="text-[#02B1EB]">Team</span>
+                </h1>
+                <p class="text-white/70 text-lg md:text-xl max-w-2xl leading-relaxed reveal-on-scroll">
+                    Committed to safeguarding fundamental rights and promoting justice, our dedicated team works tirelessly to ensure dignity and positive impact across Khyber Pakhtunkhwa.
+                </p>
+            </div>
+        </section>
 
-        <div class="max-w-6xl mx-auto px-6">
-            <h2
-                class="text-5xl md:text-7xl font-black text-center text-slate-900 uppercase tracking-tight md:mb-28 mb-10 font-outfit reveal-on-scroll">
-                Our <span class="text-[#123B2D]">Perfect</span> Team
-            </h2>
+        <div class="max-w-6xl mx-auto p-6">
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16 md:gap-y-32 reveal-stagger">
                 <?php

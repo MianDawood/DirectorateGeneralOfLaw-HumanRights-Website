@@ -6,9 +6,13 @@ use App\Models\News;
 use App\Models\Page;
 use App\Models\Event;
 use App\Models\Tender;
-use App\Models\Publication;
 use App\Models\Cause;
 use App\Models\NgoNotice;
+use App\Models\NgoDirective;
+use App\Models\NgoGuideline;
+use App\Models\NgoRequiredDocument;
+use App\Models\OfficialMessage;
+use App\Models\Publication;
 use App\Models\NgoApplication;
 use Illuminate\Http\Request;
 
@@ -16,8 +20,8 @@ class SearchController extends Controller
 {
     public function index(Request $request)
     {
-        $query = $request->input('query');
-        
+        $query = trim($request->input('query'));
+
         if (!$query) {
             return view('pages.search-results', [
                 'query' => $query,
@@ -25,92 +29,178 @@ class SearchController extends Controller
             ]);
         }
 
+        $like = "%{$query}%";
+
         // Search Pages
         $pages = Page::published()
-            ->where('title', 'like', "%{$query}%")
-            ->orWhere('content', 'like', "%{$query}%")
+            ->where(function ($q) use ($like) {
+                $q->where('title', 'like', $like)
+                    ->orWhere('content', 'like', $like);
+            })
             ->get()
-            ->map(function($item) {
-                $item->type = 'Page';
-                $item->url = route('page.show', $item->slug);
-                return $item;
-            });
+            ->map(fn($item) => (object) [
+                'type' => 'Page',
+                'title' => $item->title,
+                'content' => strip_tags($item->content),
+                'url' => route('page.show', $item->slug),
+            ]);
 
         // Search News
         $news = News::active()
-            ->where('title', 'like', "%{$query}%")
-            ->orWhere('content', 'like', "%{$query}%")
+            ->where(function ($q) use ($like) {
+                $q->where('title', 'like', $like)
+                    ->orWhere('content', 'like', $like);
+            })
             ->get()
-            ->map(function($item) {
-                $item->type = 'News';
-                $item->url = route('news_details', $item->id);
-                return $item;
-            });
+            ->map(fn($item) => (object) [
+                'type' => 'News',
+                'title' => $item->title,
+                'content' => strip_tags($item->content ?? ''),
+                'url' => route('news_details', $item->id),
+            ]);
 
         // Search Tenders
-        $tenders = Tender::where('title', 'like', "%{$query}%")
-            ->orWhere('description', 'like', "%{$query}%")
+        $tenders = Tender::where('status', 'active')
+            ->where(function ($q) use ($like) {
+                $q->where('title', 'like', $like)
+                    ->orWhere('description', 'like', $like)
+                    ->orWhere('reference_no', 'like', $like);
+            })
             ->get()
-            ->map(function($item) {
-                $item->type = 'Tender';
-                $item->url = route('tenders');
-                return $item;
-            });
+            ->map(fn($item) => (object) [
+                'type' => 'Tender',
+                'title' => $item->title,
+                'content' => $item->description,
+                'url' => route('tenders'),
+            ]);
 
         // Search Publications
         $publications = Publication::active()
-            ->where('title', 'like', "%{$query}%")
-            ->orWhere('description', 'like', "%{$query}%")
+            ->where(function ($q) use ($like) {
+                $q->where('title', 'like', $like)
+                    ->orWhere('description', 'like', $like);
+            })
             ->get()
-            ->map(function($item) {
-                $item->type = 'Publication';
-                $item->url = route('publications');
-                return $item;
-            });
+            ->map(fn($item) => (object) [
+                'type' => 'Publication',
+                'title' => $item->title,
+                'content' => $item->description,
+                'url' => route('publications'),
+            ]);
 
         // Search Causes
         $causes = Cause::where('status', 'active')
-            ->where('title', 'like', "%{$query}%")
-            ->orWhere('description', 'like', "%{$query}%")
+            ->where(function ($q) use ($like) {
+                $q->where('title', 'like', $like)
+                    ->orWhere('description', 'like', $like);
+            })
             ->get()
-            ->map(function($item) {
-                $item->type = 'Cause';
-                $item->url = route('causes');
-                return $item;
-            });
+            ->map(fn($item) => (object) [
+                'type' => 'Cause',
+                'title' => $item->title,
+                'content' => $item->description,
+                'url' => route('causes'),
+            ]);
 
         // Search Events
-        $events = Event::where('title', 'like', "%{$query}%")
-            ->orWhere('description', 'like', "%{$query}%")
+        $events = Event::active()
+            ->where(function ($q) use ($like) {
+                $q->where('title', 'like', $like)
+                    ->orWhere('description', 'like', $like);
+            })
             ->get()
-            ->map(function($item) {
-                $item->type = 'Event';
-                $item->url = route('mediacorner');
-                return $item;
-            });
+            ->map(fn($item) => (object) [
+                'type' => 'Event',
+                'title' => $item->title,
+                'content' => $item->description,
+                'url' => route('mediacorner'),
+            ]);
 
         // Search NGO Notices (Notifications)
-        $notices = NgoNotice::where('title', 'like', "%{$query}%")
-            ->orWhere('description', 'like', "%{$query}%")
+        $notices = NgoNotice::where(function ($q) use ($like) {
+            $q->where('title', 'like', $like)
+                ->orWhere('description', 'like', $like);
+        })
             ->get()
-            ->map(function($item) {
-                $item->type = 'Notification';
-                $item->url = route('ngo_notices');
-                $item->content = $item->description;
-                return $item;
-            });
+            ->map(fn($item) => (object) [
+                'type' => 'Notification',
+                'title' => $item->title,
+                'content' => $item->description,
+                'url' => route('ngo_notices'),
+            ]);
+
+        // Search NGO Directives (Documents)
+        $directives = NgoDirective::where('is_active', true)
+            ->where(function ($q) use ($like) {
+                $q->where('heading', 'like', $like)
+                    ->orWhere('card_1_title', 'like', $like)
+                    ->orWhere('card_1_desc', 'like', $like)
+                    ->orWhere('card_2_title', 'like', $like)
+                    ->orWhere('card_2_desc', 'like', $like);
+            })
+            ->get()
+            ->map(fn($item) => (object) [
+                'type' => 'Directive',
+                'title' => $item->heading,
+                'content' => trim(implode(' ', array_filter([
+                    $item->card_1_title, $item->card_1_desc,
+                    $item->card_2_title, $item->card_2_desc,
+                ]))),
+                'url' => route('ngo_directives'),
+            ]);
+
+        // Search NGO Guidelines (Documents)
+        $guidelines = NgoGuideline::where('is_active', true)
+            ->where(function ($q) use ($like) {
+                $q->where('title', 'like', $like)
+                    ->orWhere('description', 'like', $like);
+            })
+            ->get()
+            ->map(fn($item) => (object) [
+                'type' => 'Guideline',
+                'title' => $item->title,
+                'content' => $item->description,
+                'url' => route('ngo_guidelines'),
+            ]);
+
+        // Search NGO Required Documents
+        $documents = NgoRequiredDocument::where('is_active', true)
+            ->where('name', 'like', $like)
+            ->get()
+            ->map(fn($item) => (object) [
+                'type' => 'Document',
+                'title' => $item->name,
+                'content' => 'Required document for NGO registration',
+                'url' => route('ngo_required_documents'),
+            ]);
+
+        // Search Official Messages (DG messages)
+        $messages = OfficialMessage::active()
+            ->where(function ($q) use ($like) {
+                $q->where('name', 'like', $like)
+                    ->orWhere('position', 'like', $like)
+                    ->orWhere('statement', 'like', $like);
+            })
+            ->get()
+            ->map(fn($item) => (object) [
+                'type' => 'Official Message',
+                'title' => $item->name,
+                'content' => $item->statement,
+                'url' => route('home'),
+            ]);
 
         // Search NGO Applications (NGO Records)
-        $ngoRecords = NgoApplication::where('application_no', 'like', "%{$query}%")
-            ->orWhere('registration_no', 'like', "%{$query}%")
+        $ngoRecords = NgoApplication::where(function ($q) use ($like) {
+            $q->where('application_no', 'like', $like)
+                ->orWhere('registration_no', 'like', $like);
+        })
             ->get()
-            ->map(function($item) {
-                $item->type = 'NGO Record';
-                $item->title = $item->registration_no ?: $item->application_no;
-                $item->url = route('ngo_registered');
-                $item->content = "Application #{$item->application_no} - Status: {$item->status}";
-                return $item;
-            });
+            ->map(fn($item) => (object) [
+                'type' => 'NGO Record',
+                'title' => $item->registration_no ?: $item->application_no,
+                'content' => "Application #{$item->application_no} - Status: {$item->status}",
+                'url' => route('ngo_registered'),
+            ]);
 
         // Search Static Pages (hardcoded Blade views)
         $staticPages = [
@@ -181,12 +271,12 @@ class SearchController extends Controller
         foreach ($staticPages as $sp) {
             if (str_contains(strtolower($sp['title']), $lowerQuery) ||
                 str_contains(strtolower($sp['content']), $lowerQuery)) {
-                $item = new \stdClass();
-                $item->title = $sp['title'];
-                $item->type = 'Page';
-                $item->content = $sp['content'];
-                $item->url = $sp['url'];
-                $matchedStaticPages->push($item);
+                $matchedStaticPages->push((object) [
+                    'title' => $sp['title'],
+                    'type' => 'Page',
+                    'content' => $sp['content'],
+                    'url' => $sp['url'],
+                ]);
             }
         }
 
@@ -196,13 +286,12 @@ class SearchController extends Controller
                         ->concat($causes)
                         ->concat($events)
                         ->concat($notices)
+                        ->concat($directives)
+                        ->concat($guidelines)
+                        ->concat($documents)
+                        ->concat($messages)
                         ->concat($ngoRecords)
                         ->concat($matchedStaticPages);
-
-        $firstMatch = $results->first();
-        if ($firstMatch) {
-            return redirect($firstMatch->url);
-        }
 
         return view('pages.search-results', compact('results', 'query'));
     }

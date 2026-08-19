@@ -17,7 +17,7 @@
                         </div>
                     </div>
 
-                    <form method="POST" action="<?php echo e(route('admin.pages.update', $page)); ?>">
+                    <form method="POST" action="<?php echo e(route('admin.pages.update', $page)); ?>" enctype="multipart/form-data">
                         <?php echo csrf_field(); ?>
                         <?php echo method_field('PUT'); ?>
 
@@ -40,7 +40,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
                             </div>
 
-                            
+
                             <!-- Parent Page -->
                             <div>
                                 <label for="parent_id" class="block text-sm font-medium text-gray-700">Parent Page (Optional)</label>
@@ -112,7 +112,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
                             </div>
 
-                            
+
                             <!-- Show in Navigation -->
                             <div class="md:col-span-2 flex items-center">
                                 <label class="inline-flex items-center">
@@ -202,6 +202,37 @@ endif;
 unset($__errorArgs, $__bag); ?>
                         </div>
 
+                        <!-- Attach File -->
+                        <div class="mt-6">
+                            <label for="file_path" class="block text-sm font-medium text-gray-700">Attach File (PDF / DOC)</label>
+                            <?php if($page->file_path): ?>
+                                <div class="mt-2 flex items-center gap-3 bg-gray-50 p-3 rounded-md">
+                                    <i class="text-gray-400">📎</i>
+                                    <a href="<?php echo e(asset('storage/' . $page->file_path)); ?>" target="_blank"
+                                       class="text-sm font-medium text-blue-600 hover:text-blue-900"><?php echo e(basename($page->file_path)); ?></a>
+                                </div>
+                            <?php endif; ?>
+                            <input type="file" name="file_path" id="file_path" accept=".pdf,.doc,.docx"
+                                   class="mt-2 block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-500 file:text-white file:cursor-pointer hover:file:bg-blue-700">
+                            <p class="mt-1 text-sm text-gray-500">PDF, DOC or DOCX files only. Uploading a new file replaces the current one.</p>
+                            <?php if($page->file_path): ?>
+                                <label class="mt-2 inline-flex items-center">
+                                    <input type="checkbox" name="remove_file" value="1" class="rounded border-gray-300 text-red-600 shadow-sm focus:ring-red-500">
+                                    <span class="ml-2 text-sm text-red-600">Remove current file</span>
+                                </label>
+                            <?php endif; ?>
+                            <?php $__errorArgs = ['file_path'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                        </div>
+
                         <!-- CKEditor 5 Classic CDN (no API key required) -->
                         <?php $__env->startPush('scripts'); ?>
                             <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
@@ -269,12 +300,7 @@ unset($__errorArgs, $__bag); ?>
 
                         <div class="mt-6 flex justify-between">
                             <div class="space-x-2">
-                                <form method="POST" action="<?php echo e(route('admin.pages.duplicate', $page)); ?>" class="inline">
-                                    <?php echo csrf_field(); ?>
-                                    <button type="submit" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
-                                        Duplicate Page
-                                    </button>
-                                </form>
+
                             </div>
                             <div class="space-x-3">
                                 <a href="<?php echo e(route('admin.pages.index')); ?>"

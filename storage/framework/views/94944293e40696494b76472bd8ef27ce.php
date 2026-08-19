@@ -44,6 +44,14 @@
                             <?php echo e($cause->description ?? 'Description will be updated soon.'); ?>
 
                         </p>
+                        <?php if($cause->file_path): ?>
+                            <a href="<?php echo e(asset('storage/' . $cause->file_path)); ?>" target="_blank"
+                               class="mt-4 inline-flex items-center gap-2 px-5 py-2 border-2 border-[#02B1EB] text-[#02B1EB] text-[10px] font-bold uppercase tracking-widest hover:bg-[#02B1EB] hover:text-white transition-all rounded-lg">
+                                <i data-lucide="download" class="w-3 h-3"></i>
+                                Download <?php echo e(strtoupper(pathinfo($cause->file_path, PATHINFO_EXTENSION))); ?>
+
+                            </a>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <div class="col-span-full text-center py-16">

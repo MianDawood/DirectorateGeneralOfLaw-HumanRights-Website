@@ -24,6 +24,7 @@
                             <h2 class="text-xl font-bold text-gray-900 mb-2">{{ $complaint->full_name }}</h2>
                             <p class="text-sm text-gray-600 mb-4">{{ $complaint->details }}</p>
                             <div class="space-y-2 text-sm text-gray-700">
+                                <div><span class="font-semibold">Ref. No:</span> {{ $complaint->reference_no ?? '—' }}</div>
                                 <div><span class="font-semibold">CNIC:</span> {{ $complaint->cnic }}</div>
                                 <div><span class="font-semibold">Contact:</span> {{ $complaint->contact_number }}</div>
                                 <div><span class="font-semibold">District:</span> {{ $complaint->district ?? '—' }}</div>

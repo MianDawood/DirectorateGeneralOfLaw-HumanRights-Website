@@ -9,7 +9,7 @@
                     <a href="<?php echo e(route('admin.pages.index')); ?>" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Back to List</a>
                 </div>
 
-                <form method="POST" action="<?php echo e(route('admin.pages.store')); ?>">
+                <form method="POST" action="<?php echo e(route('admin.pages.store')); ?>" enctype="multipart/form-data">
                     <?php echo csrf_field(); ?>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -98,6 +98,22 @@ unset($__errorArgs, $__bag); ?>
                         <label class="block text-sm font-medium text-gray-700">Page Content</label>
                         <textarea id="content" name="content" rows="15" class="mt-1 block w-full"><?php echo e(old('content')); ?></textarea>
                         <?php $__errorArgs = ['content'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?><p class="text-red-600 text-sm mt-1"><?php echo e($message); ?></p><?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                    </div>
+
+                    <!-- Attach File -->
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium text-gray-700">Attach File (PDF / DOC)</label>
+                        <input type="file" name="file_path" accept=".pdf,.doc,.docx"
+                               class="mt-1 block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-500 file:text-white file:cursor-pointer hover:file:bg-blue-700">
+                        <p class="mt-1 text-sm text-gray-500">Optional. PDF, DOC or DOCX files only.</p>
+                        <?php $__errorArgs = ['file_path'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }

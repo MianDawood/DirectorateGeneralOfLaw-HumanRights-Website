@@ -18,12 +18,28 @@
                         </div>
                     <?php endif; ?>
 
+                    <form method="GET" action="<?php echo e(route('admin.pages.index')); ?>"
+                          class="mb-4 flex items-center gap-2">
+                        <input type="text" name="search" value="<?php echo e($search ?? ''); ?>"
+                               placeholder="Search by title, slug, content or meta title..."
+                               class="flex-1 rounded border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all">
+                        <button type="submit"
+                                class="bg-gray-800 hover:bg-gray-900 dark:bg-brand-600 dark:hover:bg-brand-700 text-white font-bold py-2 px-4 rounded text-sm">
+                            Search
+                        </button>
+                        <?php if(!empty($search)): ?>
+                            <a href="<?php echo e(route('admin.pages.index')); ?>"
+                               class="text-gray-500 hover:text-gray-700 text-sm font-medium">Clear</a>
+                        <?php endif; ?>
+                    </form>
+
                     <div class="overflow-x-auto">
                         <table class="min-w-full table-auto">
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Slug</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Attachment</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Navigation</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
@@ -43,6 +59,14 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             <code class="bg-gray-100 px-2 py-1 rounded text-xs"><?php echo e($page->slug); ?></code>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <?php if($page->file_path): ?>
+                                                <a href="<?php echo e(asset('storage/' . $page->file_path)); ?>" target="_blank"
+                                                   class="text-blue-600 hover:text-blue-900 text-sm font-medium">📎 View</a>
+                                            <?php else: ?>
+                                                <span class="text-gray-400 text-sm">—</span>
+                                            <?php endif; ?>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <?php if($page->status === 'published'): ?>
@@ -74,26 +98,10 @@
                                                    class="text-blue-600 hover:text-blue-900">View</a>
                                                 <a href="<?php echo e(route('admin.pages.edit', $page)); ?>"
                                                    class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                                
-                                                <form method="POST" action="<?php echo e(route('admin.pages.toggle-status', $page)); ?>" class="inline">
-                                                    <?php echo csrf_field(); ?>
-                                                    <?php echo method_field('PATCH'); ?>
-                                                    <button type="submit" class="text-yellow-600 hover:text-yellow-900" 
-                                                            title="Toggle Status">
-                                                        <?php echo e($page->status === 'published' ? 'Draft' : 'Publish'); ?>
 
-                                                    </button>
-                                                </form>
                                                 
-                                                <form method="POST" action="<?php echo e(route('admin.pages.toggle-navigation', $page)); ?>" class="inline">
-                                                    <?php echo csrf_field(); ?>
-                                                    <?php echo method_field('PATCH'); ?>
-                                                    <button type="submit" class="text-purple-600 hover:text-purple-900" 
-                                                            title="Toggle Navigation">
-                                                        <?php echo e($page->show_in_navigation ? 'Hide' : 'Show'); ?>
 
-                                                    </button>
-                                                </form>
+                                                
                                                 
                                                 <form method="POST" action="<?php echo e(route('admin.pages.destroy', $page)); ?>"
                                                       onsubmit="return confirm('Are you sure you want to delete this page?')"
@@ -107,9 +115,12 @@
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <tr>
-                                    <td colspan="7" class="px-6 py-4 text-center text-gray-500">
-                                        No pages found.
-                                        <a href="<?php echo e(route('admin.pages.create')); ?>" class="text-blue-600 hover:text-blue-900 ml-2">Create one now</a>
+                                    <td colspan="8" class="px-6 py-4 text-center text-gray-500">
+                                        <?php echo e(empty($search) ? 'No pages found.' : 'No pages match your search.'); ?>
+
+                                        <?php if(empty($search)): ?>
+                                            <a href="<?php echo e(route('admin.pages.create')); ?>" class="text-blue-600 hover:text-blue-900 ml-2">Create one now</a>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                                 <?php endif; ?>

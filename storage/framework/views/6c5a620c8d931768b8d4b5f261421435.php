@@ -27,6 +27,9 @@ foreach ($attributes->all() as $__key => $__value) {
 }
 
 unset($__defined_vars, $__key, $__value); ?>
+<?php
+    $settings = \App\Models\SiteSetting::getSettings();
+?>
 
 <?php if (isset($component)) { $__componentOriginal23a33f287873b564aaf305a1526eada4 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal23a33f287873b564aaf305a1526eada4 = $attributes; } ?>
@@ -330,8 +333,8 @@ unset($__defined_vars, $__key, $__value); ?>
         </div>
     </div>
 
-    <script src="/js/form-draft.js"></script>
-    <script src="/js/registration-form-sync.js"></script>
+    <script src="<?php echo e(url('js/form-draft.js')); ?>"></script>
+    <script src="<?php echo e(url('js/registration-form-sync.js')); ?>"></script>
     <script>
         lucide.createIcons();
         const observer = new IntersectionObserver((entries) => {

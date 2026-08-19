@@ -40,9 +40,27 @@ class ComplaintController extends Controller
             $data['attachment_path'] = 'complaints/' . $filename;
         }
 
-        Complaint::create($data);
+        $complaint = Complaint::create($data);
 
         return redirect()->route('complaint_cell')
-            ->with('success', 'Your complaint has been submitted successfully.');
+            ->with('success', 'Your complaint has been submitted successfully. Your reference number is: ' . $complaint->reference_no);
+    }
+
+    public function track(Request $request)
+    {
+        $referenceNo = trim($request->query('reference_no', ''));
+
+        $complaint = null;
+        $error = null;
+
+        if ($referenceNo !== '') {
+            $complaint = Complaint::where('reference_no', $referenceNo)->first();
+
+            if (!$complaint) {
+                $error = 'No complaint was found with reference number "' . $referenceNo . '". Please check the number and try again.';
+            }
+        }
+
+        return view('pages.track-complaint', compact('complaint', 'error', 'referenceNo'));
     }
 }

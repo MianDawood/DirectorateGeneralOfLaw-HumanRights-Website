@@ -70,16 +70,16 @@
                         </div>
                         <div class="md:col-span-4 flex gap-2 flex-wrap">
                             <button type="submit"
-                                    class="bg-gray-800 hover:bg-gray-900 dark:bg-brand-600 dark:hover:bg-brand-700 text-white font-bold py-2 px-4 rounded text-sm">Apply Filters</button>
+                                    class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded text-sm">Apply Filters</button>
                             <a href="<?php echo e(url()->current()); ?>"
                                class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded text-sm">Reset</a>
                             <span class="flex-1"></span>
                             <?php if(isset($exportRoute) && $exportRoute): ?>
                                 <?php $query = request()->only(['district', 'thematic_area', 'date_from', 'date_to']); ?>
                                 <a href="<?php echo e(route($exportRoute, array_merge(['format' => 'pdf'], $query))); ?>"
-                                   class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded text-sm">Export PDF</a>
+                                   class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-3 rounded text-sm">Export PDF</a>
                                 <a href="<?php echo e(route($exportRoute, array_merge(['format' => 'xlsx'], $query))); ?>"
-                                   class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-3 rounded text-sm">Export Excel</a>
+                                   class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-3 rounded text-sm">Export Excel</a>
                             <?php endif; ?>
                         </div>
                     </form>

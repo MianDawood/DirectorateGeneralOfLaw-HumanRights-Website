@@ -7,7 +7,7 @@
                         <h1 class="text-2xl font-bold text-gray-900"><?php echo e($event->title); ?></h1>
                         <div class="flex gap-2">
                             <a href="<?php echo e(route('events.show', $event)); ?>" target="_blank"
-                               class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded text-sm">Public View</a>
+                               class="bg-gray-100 hover:bg-gray-200 dark:text-gray-800 text-gray-800 font-bold py-2 px-4 rounded text-sm">Public View</a>
                             <a href="<?php echo e(route('admin.events.edit', $event)); ?>"
                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm">Edit</a>
                             <a href="<?php echo e(route('admin.news-events.index')); ?>"
@@ -16,12 +16,14 @@
                     </div>
 
                     <dl class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-8">
-                        <div><dt class="font-semibold text-gray-500">Date</dt><dd><?php echo e($event->event_date?->format('d M Y, h:i A')); ?></dd></div>
-                        <div><dt class="font-semibold text-gray-500">Venue</dt><dd><?php echo e($event->location); ?></dd></div>
+                        <div><dt class="font-semibold text-gray-500">Date</dt>
+                            <dd class="dark:text-gray-300"><?php echo e($event->event_date?->format('d M Y, h:i A')); ?></dd></div>
+                        <div><dt class="font-semibold text-gray-500">Venue</dt>
+                            <dd class="dark:text-gray-300"><?php echo e($event->location); ?></dd></div>
                         <?php if($event->subject): ?>
-                            <div class="md:col-span-2"><dt class="font-semibold text-gray-500">Subject</dt><dd><?php echo e($event->subject); ?></dd></div>
+                            <div class="md:col-span-2"><dt class="font-semibold text-gray-500">Subject</dt><dd class="dark:text-gray-300"><?php echo e($event->subject); ?></dd></div>
                         <?php endif; ?>
-                        <div class="md:col-span-2"><dt class="font-semibold text-gray-500">Description</dt><dd class="whitespace-pre-wrap"><?php echo e($event->description); ?></dd></div>
+                        <div class="md:col-span-2"><dt class="font-semibold text-gray-500">Description</dt><dd class="dark:text-gray-300 whitespace-pre-wrap"><?php echo e($event->description); ?></dd></div>
                     </dl>
 
                     <h3 class="font-bold text-gray-900 mb-3">Images (<?php echo e($event->images->count()); ?>)</h3>

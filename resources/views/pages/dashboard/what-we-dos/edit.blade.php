@@ -108,16 +108,12 @@
                         <p class="text-sm text-gray-500">Add or remove core activities and services.</p>
                     </div>
                 </div>
-                <button type="button" @click="addActivity" class="inline-flex items-center px-4 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-bold rounded-xl transition-all shadow-lg shadow-brand-500/20 hover:-translate-y-0.5 active:translate-y-0">
-                    <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                    Add Activity
-                </button>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <template x-for="(activity, index) in activities" :key="activity.local_id || activity.id">
                     <div class="group relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 transition-all hover:border-brand-300 dark:hover:border-brand-700 hover:shadow-xl hover:shadow-gray-200/50 dark:hover:shadow-none">
-                        
+
                         <!-- Header: Title and Controls -->
                         <div class="flex items-start justify-between gap-4 mb-5">
                             <div class="flex-1">
@@ -129,15 +125,15 @@
                                 </div>
                                 <input type="text" :name="'activities[' + (activity.id || 'new_' + index) + '][title]'" x-model="activity.title" placeholder="Enter activity title..." class="w-full text-lg font-bold bg-transparent border-none p-0 focus:ring-0 placeholder-gray-300 dark:text-white dark:placeholder-gray-600">
                             </div>
-                            
+
                             <div class="flex items-center gap-3 pt-1">
                                 <label class="flex items-center gap-2 cursor-pointer group/check">
                                     <input type="checkbox" :name="'activities[' + (activity.id || 'new_' + index) + '][is_active]'" :checked="activity.is_active" class="w-5 h-5 rounded border-gray-300 text-brand-600 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700 transition">
                                     <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 group-hover/check:text-brand-600 transition">Active</span>
                                 </label>
-                                
+
                                 <div class="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1"></div>
-                                
+
                                 <button type="button" @click="removeActivity(index, $event)" class="inline-flex items-center justify-center w-9 h-9 text-gray-400 hover:text-white bg-transparent hover:bg-red-500 dark:hover:bg-red-600 border border-gray-100 dark:border-gray-700 hover:border-red-500 dark:hover:border-red-600 rounded-xl transition-all duration-200" title="Delete Activity">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
@@ -147,7 +143,7 @@
                         <!-- Body: Description -->
                         <div class="space-y-4">
                             <input type="hidden" :name="'activities[' + (activity.id || 'new_' + index) + '][order]'" :value="index">
-                            
+
                             <div class="relative">
                                 <label class="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Description</label>
                                 <textarea :name="'activities[' + (activity.id || 'new_' + index) + '][description]'" x-model="activity.description" rows="3" placeholder="Describe this activity..." class="w-full rounded-xl border-gray-100 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/50 p-4 text-sm focus:bg-white dark:focus:bg-gray-900 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/5 transition-all dark:text-gray-300"></textarea>
@@ -179,14 +175,10 @@
         </div>
 
         <!-- Sticky Footer -->
-        <div class="sticky bottom-6 flex items-center justify-end">
-            <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md p-2 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 flex items-center gap-3">
-                <a href="{{ route('admin.what-we-dos.edit') }}" class="px-6 py-3 text-sm font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition">Reset Changes</a>
-                <button type="submit" class="inline-flex items-center px-8 py-3 bg-brand-500 hover:bg-brand-600 text-white text-sm font-bold rounded-xl shadow-xl shadow-brand-500/20 transition-all hover:-translate-y-0.5 active:translate-y-0">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+        <div class="flex items-center justify-end">
+                <button type="submit" class="inline-flex items-center px-8 py-3 bg-brand-500 hover:bg-brand-600 text-white text-sm font-bold rounded-xl shadow-xl">
                     Update What We Do Page
                 </button>
-            </div>
         </div>
     </form>
 </div>

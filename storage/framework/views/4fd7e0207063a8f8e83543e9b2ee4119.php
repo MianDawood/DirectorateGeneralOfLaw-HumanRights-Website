@@ -30,6 +30,15 @@
                             <?php echo $page->content; ?>
 
                         </div>
+                        <?php if($page->file_path): ?>
+                            <div class="mt-8 border-t border-gray-100 dark:border-gray-700 pt-6">
+                                <a href="<?php echo e(asset('storage/' . $page->file_path)); ?>" target="_blank"
+                                   class="inline-flex items-center gap-2 bg-[#123B2D] hover:bg-[#0e2c22] text-white font-bold py-3 px-6 rounded-xl transition-all">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    Download <?php echo e(strtoupper(pathinfo($page->file_path, PATHINFO_EXTENSION))); ?> Document
+                                </a>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 

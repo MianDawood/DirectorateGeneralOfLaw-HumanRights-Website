@@ -26,7 +26,7 @@ class MenuHelper
                 'title' => 'Content Management',
                 'items' => [
                     [
-                        'icon' => 'authentication',
+                        'icon' => 'ui-elements',
                         'name' => 'News & Events',
                         'path' => route('admin.news-events.index'),
                     ],
@@ -73,14 +73,6 @@ class MenuHelper
                                 'name' => 'Renewals',
                                 'path' => route('admin.ngos.renewals.index'),
                             ],
-                            [
-                                'name' => 'Required Docs',
-                                'path' => route('admin.ngo-required-documents.edit'),
-                            ],
-                            [
-                                'name' => 'NGO Notices',
-                                'path' => route('admin.ngo-notices.index'),
-                            ],
                         ]
                     ],
                     [
@@ -96,8 +88,12 @@ class MenuHelper
                                 'path' => route('admin.ngo-guidelines.edit'),
                             ],
                             [
-                                'name' => 'NGO Notices Page',
-                                'path' => route('admin.ngo-notices-pages.index'),
+                                'name' => 'Required Docs',
+                                'path' => route('admin.ngo-required-documents.edit'),
+                            ],
+                            [
+                                'name' => 'NGO Notices',
+                                'path' => route('admin.ngo-notices.index'),
                             ],
                         ]
                     ],
@@ -108,11 +104,19 @@ class MenuHelper
                 'items' => [
                     [
                         'icon' => 'pages',
-                        'name' => 'Main Sections',
+                        'name' => 'Website Sections',
                         'subItems' => [
                             [
                                 'name' => 'Introduction',
                                 'path' => route('admin.introductions.edit'),
+                            ],
+                            [
+                                'name' => 'Vision & Mission',
+                                'path' => route('admin.vision-missions.edit'),
+                            ],
+                            [
+                                'name' => 'Organizational Structure',
+                                'path' => route('admin.org-structure-positions.index'),
                             ],
                             [
                                 'name' => 'What We Do',
@@ -134,9 +138,14 @@ class MenuHelper
                         'path' => route('admin.official-messages.index'),
                     ],
                     [
-                        'icon' => 'authentication',
+                        'icon' => 'user',
                         'name' => 'Partners',
                         'path' => route('admin.partners.index'),
+                    ],
+                    [
+                        'icon' => 'forms',
+                        'name' => 'Provincial Departments',
+                        'path' => route('admin.provincial-departments.index'),
                     ],
                     [
                         'icon' => 'pages',
@@ -159,6 +168,10 @@ class MenuHelper
                             [
                                 'name' => 'Complaints',
                                 'path' => route('admin.complaints.index'),
+                            ],
+                            [
+                                'name' => 'Newsletter Subscribers',
+                                'path' => route('admin.newsletter-subscriptions.index'),
                             ],
                         ]
                     ],

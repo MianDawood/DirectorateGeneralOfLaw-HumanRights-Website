@@ -6,6 +6,27 @@ window.addEventListener('load', () => {
     lucide.createIcons(); // Fallback to ensure icons render
 });
 
+// Enable smooth scrolling only after the user's first real scroll input.
+// Without this, the browser's scroll-position restoration on refresh animates
+// a "jump" from the top back to the saved offset, which looks like a glitch
+// (the header and scrollbar visibly shift up/down on load).
+(() => {
+    const docEl = document.documentElement;
+    const scrollKeys = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '];
+    const enableSmooth = () => {
+        docEl.style.scrollBehavior = 'smooth';
+        window.removeEventListener('wheel', enableSmooth);
+        window.removeEventListener('touchstart', enableSmooth);
+        window.removeEventListener('keydown', onKeydown);
+    };
+    const onKeydown = (e) => {
+        if (scrollKeys.includes(e.key)) enableSmooth();
+    };
+    window.addEventListener('wheel', enableSmooth, { passive: true });
+    window.addEventListener('touchstart', enableSmooth, { passive: true });
+    window.addEventListener('keydown', onKeydown);
+})();
+
 // Mobile Menu Logic
 function toggleMobileMenu(isOpen) {
     const overlay = document.getElementById('mobileMenuOverlay');

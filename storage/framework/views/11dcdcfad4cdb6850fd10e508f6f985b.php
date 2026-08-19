@@ -22,6 +22,7 @@
                             <h2 class="text-xl font-bold text-gray-900 mb-2"><?php echo e($complaint->full_name); ?></h2>
                             <p class="text-sm text-gray-600 mb-4"><?php echo e($complaint->details); ?></p>
                             <div class="space-y-2 text-sm text-gray-700">
+                                <div><span class="font-semibold">Ref. No:</span> <?php echo e($complaint->reference_no ?? '—'); ?></div>
                                 <div><span class="font-semibold">CNIC:</span> <?php echo e($complaint->cnic); ?></div>
                                 <div><span class="font-semibold">Contact:</span> <?php echo e($complaint->contact_number); ?></div>
                                 <div><span class="font-semibold">District:</span> <?php echo e($complaint->district ?? '—'); ?></div>

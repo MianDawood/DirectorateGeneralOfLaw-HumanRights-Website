@@ -23,6 +23,7 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Attachment</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -34,6 +35,18 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                             <?php echo e($cause->title); ?>
 
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <?php if($cause->file_path): ?>
+                                                <a href="<?php echo e(asset('storage/' . $cause->file_path)); ?>" target="_blank"
+                                                   class="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-900">
+                                                    <i data-lucide="paperclip" class="w-3.5 h-3.5"></i>
+                                                    <?php echo e(strtoupper(pathinfo($cause->file_path, PATHINFO_EXTENSION))); ?>
+
+                                                </a>
+                                            <?php else: ?>
+                                                <span class="text-xs text-gray-400">—</span>
+                                            <?php endif; ?>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="px-2 py-1 text-xs font-semibold rounded-full <?php echo e(strtolower($cause->status) === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'); ?>">
@@ -61,7 +74,7 @@
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                     <tr>
-                                        <td colspan="4" class="px-6 py-4 text-center text-gray-500">
+                                        <td colspan="5" class="px-6 py-4 text-center text-gray-500">
                                             No causes found.
                                         </td>
                                     </tr>

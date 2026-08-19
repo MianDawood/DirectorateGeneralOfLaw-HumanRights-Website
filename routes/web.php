@@ -17,6 +17,7 @@ use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\Admin\ComplaintsController as AdminComplaintsController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\ContactMessagesController;
+use App\Http\Controllers\Admin\NewsletterSubscriptionsController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\Admin\TeamMembersController;
 use App\Http\Controllers\GalleryController;
@@ -32,12 +33,14 @@ use App\Http\Controllers\Admin\UserProfileController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\HeaderCampaignController;
 use App\Http\Controllers\Admin\PartnersController;
+use App\Http\Controllers\Admin\ProvincialDepartmentsController;
+use App\Http\Controllers\Admin\OrgStructurePositionsController;
 use App\Http\Controllers\Admin\PageContentsController;
 use App\Http\Controllers\Admin\IntroductionsController;
+use App\Http\Controllers\Admin\VisionMissionsController;
 use App\Http\Controllers\Admin\WhatWeDosController;
 use App\Http\Controllers\Admin\NgoDirectivesController;
 use App\Http\Controllers\Admin\NgoGuidelinesController;
-use App\Http\Controllers\Admin\NgoNoticesPagesController;
 use App\Http\Controllers\Admin\NgoRequiredDocumentsController;
 use App\Http\Controllers\Admin\WhatWeDoActivitiesController;
 use App\Http\Controllers\PageController as FrontPageController;
@@ -89,6 +92,32 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
         'update' => 'admin.partners.update',
         'destroy' => 'admin.partners.destroy',
     ]);
+
+    // Provincial Departments Management
+    Route::resource('provincial-departments', ProvincialDepartmentsController::class)
+        ->except(['show'])
+        ->parameters(['provincial-departments' => 'department'])
+        ->names([
+            'index' => 'admin.provincial-departments.index',
+            'create' => 'admin.provincial-departments.create',
+            'store' => 'admin.provincial-departments.store',
+            'edit' => 'admin.provincial-departments.edit',
+            'update' => 'admin.provincial-departments.update',
+            'destroy' => 'admin.provincial-departments.destroy',
+        ]);
+
+    // Organizational Structure Management
+    Route::resource('org-structure-positions', OrgStructurePositionsController::class)
+        ->except(['show'])
+        ->parameters(['org-structure-positions' => 'position'])
+        ->names([
+            'index' => 'admin.org-structure-positions.index',
+            'create' => 'admin.org-structure-positions.create',
+            'store' => 'admin.org-structure-positions.store',
+            'edit' => 'admin.org-structure-positions.edit',
+            'update' => 'admin.org-structure-positions.update',
+            'destroy' => 'admin.org-structure-positions.destroy',
+        ]);
 
     // News Management
     Route::resource('news', NewsController::class)->except(['index'])->names([
@@ -155,6 +184,15 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
         'update' => 'admin.contact-messages.update',
         'destroy' => 'admin.contact-messages.destroy',
     ]);
+
+    // Newsletter Subscriptions Management
+    Route::resource('newsletter-subscriptions', NewsletterSubscriptionsController::class)
+        ->only(['index', 'destroy'])
+        ->parameters(['newsletter-subscriptions' => 'subscription'])
+        ->names([
+            'index' => 'admin.newsletter-subscriptions.index',
+            'destroy' => 'admin.newsletter-subscriptions.destroy',
+        ]);
 
     // Team Members Management
     Route::resource('team-members', TeamMembersController::class)->names([
@@ -258,6 +296,10 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     Route::put('introductions', [IntroductionsController::class, 'update'])->name('admin.introductions.update');
     Route::delete('introductions/head/{head}', [IntroductionsController::class, 'destroyHead'])->name('admin.introductions.head.destroy');
 
+    // Vision & Mission Page Management
+    Route::get('vision-missions', [VisionMissionsController::class, 'edit'])->name('admin.vision-missions.edit');
+    Route::put('vision-missions', [VisionMissionsController::class, 'update'])->name('admin.vision-missions.update');
+
     // What We Do Page Management
     Route::get('what-we-dos', [WhatWeDosController::class, 'edit'])->name('admin.what-we-dos.edit');
     Route::put('what-we-dos', [WhatWeDosController::class, 'update'])->name('admin.what-we-dos.update');
@@ -273,17 +315,6 @@ Route::delete('/what-we-dos/activity/{activity}', [WhatWeDosController::class, '
     Route::get('ngo-guidelines', [NgoGuidelinesController::class, 'edit'])->name('admin.ngo-guidelines.edit');
     Route::put('ngo-guidelines', [NgoGuidelinesController::class, 'update'])->name('admin.ngo-guidelines.update');
     Route::delete('ngo-guidelines/{guideline}', [NgoGuidelinesController::class, 'destroy'])->name('admin.ngo-guidelines.destroy');
-
-    // NGO Notices Page Management
-    Route::resource('ngo-notices-pages', NgoNoticesPagesController::class)->names([
-        'index' => 'admin.ngo-notices-pages.index',
-        'create' => 'admin.ngo-notices-pages.create',
-        'store' => 'admin.ngo-notices-pages.store',
-        'show' => 'admin.ngo-notices-pages.show',
-        'edit' => 'admin.ngo-notices-pages.edit',
-        'update' => 'admin.ngo-notices-pages.update',
-        'destroy' => 'admin.ngo-notices-pages.destroy',
-    ]);
 
     // NGO Required Documents Page Management
     Route::get('ngo-required-documents', [NgoRequiredDocumentsController::class, 'edit'])->name('admin.ngo-required-documents.edit');
@@ -309,14 +340,21 @@ Route::delete('/what-we-dos/activity/{activity}', [WhatWeDosController::class, '
     // Old Page Contents (remove)
 });
 
-Route::get('/', function () {
-    $publications = \App\Models\Publication::active()->ordered()->take(3)->get();
-    return view('pages.index', compact('publications'));
-})->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/introduction', function () {
     return view('pages.introduction');
 })->name('introduction');
+
+Route::get('/vision-mission', function () {
+    return view('pages.vision_mission');
+})->name('vision_mission');
+
+Route::get('/organizational-structure', function () {
+    $positions = \App\Models\OrgStructurePosition::active()->ordered()->get();
+
+    return view('pages.org_structure', compact('positions'));
+})->name('org_structure');
 
 Route::get('/mediacorner', [MediaCornerController::class, 'index'])->name('mediacorner');
 
@@ -344,9 +382,7 @@ Route::get('/ngo_required_documents', function () {
     return view('pages.ngo_required_documents');
 })->name('ngo_required_documents');
 
-Route::get('/track-complaint', function () {
-    return view('pages.track-complaint');
-})->name('track.complaint');
+Route::get('/track-complaint', [ComplaintController::class, 'track'])->name('track.complaint');
 
 Route::get('/verify-ngo', function () {
     return view('pages.verify-ngo');
@@ -355,6 +391,10 @@ Route::get('/verify-ngo', function () {
 Route::get('/ngo_suspended', [RegistrationApplicationController::class, 'suspendedNgos'])->name('ngo_suspended');
 
 Route::get('/ourteam', [TeamController::class, 'index'])->name('ourteam');
+
+Route::get('/partners/{partner}', function (\App\Models\Partner $partner) {
+    return view('pages.partner_detail', compact('partner'));
+})->name('partners.show');
 
 Route::get('/photogallery', [GalleryController::class, 'photos'])->name('photogallery');
 
@@ -404,6 +444,7 @@ Route::get('/news-details/{id}', function ($id) {
 
 Route::get('/contact_us', [ContactController::class, 'index'])->name('contact_us');
 Route::post('/contact_us', [ContactController::class, 'store'])->name('contact.store');
+Route::post('/newsletter', [ContactController::class, 'newsletter'])->name('newsletter.subscribe');
 
 // Dynamic Pages Routes
 Route::get('/page/{slug}', [FrontPageController::class, 'show'])->name('page.show');
@@ -412,7 +453,7 @@ Route::get('/pages/search', [FrontPageController::class, 'search'])->name('pages
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 
 // Certificate Verification
-Route::get('/verify-certificate/{registration_no}', [\App\Http\Controllers\VerificationController::class, 'verifyNgo'])->name('verify.certificate');
+Route::get('/verify-certificate/{registration_no?}', [\App\Http\Controllers\VerificationController::class, 'verifyNgo'])->name('verify.certificate');
 
 Route::get('/certificate/design-preview', function () {
     $dummyData = [

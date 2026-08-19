@@ -13,7 +13,7 @@
                         </a>
                     </div>
 
-                    <form method="POST" action="{{ route('admin.causes.update', $cause) }}">
+                    <form method="POST" action="{{ route('admin.causes.update', $cause) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -33,6 +33,26 @@
                                 <textarea name="description" id="description" rows="3"
                                           class="mt-1 block w-full px-3 py-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">{{ old('description', $cause->description) }}</textarea>
                                 @error('description')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label for="file_path" class="block text-sm font-medium text-gray-700">Attach File (PDF / DOC)</label>
+                                @if($cause->file_path)
+                                    <div class="mt-1 flex items-center justify-between bg-gray-50 border border-gray-200 rounded-md px-3 py-2">
+                                        <a href="{{ asset('storage/' . $cause->file_path) }}" target="_blank"
+                                           class="text-sm font-medium text-blue-600 hover:text-blue-900">{{ basename($cause->file_path) }}</a>
+                                        <label class="inline-flex items-center text-sm text-gray-600">
+                                            <input type="checkbox" name="remove_file" value="1" class="rounded border-gray-300 text-red-600 shadow-sm focus:ring-red-500 mr-2">
+                                            Remove file
+                                        </label>
+                                    </div>
+                                @endif
+                                <input type="file" name="file_path" id="file_path" accept=".pdf,.doc,.docx"
+                                       class="mt-1 block w-full px-3 py-2 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                <p class="mt-1 text-xs text-gray-500">Optional. Upload a new file to replace the current attachment.</p>
+                                @error('file_path')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>

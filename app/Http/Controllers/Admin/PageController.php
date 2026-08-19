@@ -12,13 +12,25 @@ class PageController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pages = Page::orderBy('order')
-                     ->orderBy('title')
-                     ->paginate(15);
-        
-        return view('pages.dashboard.pages.index', compact('pages'));
+        $search = trim($request->input('search'));
+
+        $pages = Page::query()
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%")
+                        ->orWhere('slug', 'like', "%{$search}%")
+                        ->orWhere('content', 'like', "%{$search}%")
+                        ->orWhere('meta_title', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('order')
+            ->orderBy('title')
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('pages.dashboard.pages.index', compact('pages', 'search'));
     }
 
     /**
@@ -40,6 +52,7 @@ class PageController extends Controller
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:pages,slug',
             'content' => 'required|string',
+            'file_path' => 'nullable|file|mimes:pdf,doc,docx',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
             'meta_keywords' => 'nullable|string|max:255',
@@ -69,6 +82,13 @@ class PageController extends Controller
         $data['slug'] = $request->slug ?: Str::slug($request->title);
         $data['show_in_navigation'] = $request->has('show_in_navigation');
         $data['order'] = $request->order ?? 0;
+
+        if ($request->hasFile('file_path')) {
+            $file = $request->file('file_path');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/pages'), $filename);
+            $data['file_path'] = 'pages/' . $filename;
+        }
 
         Page::create($data);
 
@@ -106,6 +126,7 @@ class PageController extends Controller
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:pages,slug,' . $page->id,
             'content' => 'required|string',
+            'file_path' => 'nullable|file|mimes:pdf,doc,docx',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
             'meta_keywords' => 'nullable|string|max:255',
@@ -136,6 +157,21 @@ class PageController extends Controller
         $data['show_in_navigation'] = $request->has('show_in_navigation');
         $data['order'] = $request->order ?? 0;
 
+        if ($request->hasFile('file_path')) {
+            if ($page->file_path && storage_exists($page->file_path)) {
+                storage_delete($page->file_path);
+            }
+            $file = $request->file('file_path');
+            $filename = $file->hashName();
+            $file->move(public_path('storage/pages'), $filename);
+            $data['file_path'] = 'pages/' . $filename;
+        } elseif ($request->has('remove_file') && $page->file_path) {
+            if (storage_exists($page->file_path)) {
+                storage_delete($page->file_path);
+            }
+            $data['file_path'] = null;
+        }
+
         $page->update($data);
 
         return redirect()->route('admin.pages.index')
@@ -147,6 +183,10 @@ class PageController extends Controller
      */
     public function destroy(Page $page)
     {
+        if ($page->file_path && storage_exists($page->file_path)) {
+            storage_delete($page->file_path);
+        }
+
         $page->delete();
 
         return redirect()->route('admin.pages.index')
