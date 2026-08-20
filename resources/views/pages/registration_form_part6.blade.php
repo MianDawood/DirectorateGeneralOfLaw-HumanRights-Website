@@ -1,7 +1,7 @@
 <x-form-layout
     title="Registration Form - PART-F"
     subtitle="SCHEDULE-I | PART-6: PROJECTS/PROGRAMMES/ASSIGNMENTS UNDER IMPLEMENTATION"
-    step="Step 6 of 11: Ongoing Projects"
+    step="Step 6 of 10: Ongoing Projects"
     backRoute="registration_form_part5"
     backLabel="Back to Part 5"
 >
@@ -109,7 +109,7 @@
                 <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Funding Source <span class="text-red-500">*</span></label>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <label class="flex items-center gap-2 p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-blue-100 transition-all cursor-pointer group">
-                        <input type="checkbox" name="funding_sources[]" value="International Donors" class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0 shrink-0">
+                        <input type="checkbox" name="funding_sources[]" value="International Donors" required class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0 shrink-0">
                         <span class="text-[11px] font-bold text-slate-600 group-hover:text-slate-900 transition-colors shrink-0">International Donors (Specify)</span>
                         <input type="text" name="funding_sources_international_donors" placeholder="Specify" class="w-full p-2 rounded-md bg-transparent focus:outline-none text-[11px] font-bold text-slate-600 px-2 py-0.5">
                     </label>
@@ -311,75 +311,6 @@
     </div>
 
     @push('formScripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                function addDefaultRow() {
-                    const template = document.getElementById('ongoing-project-row-template');
-                    const container = document.getElementById('ongoing-projects-list');
-
-                    if (template && container) {
-                        const clone = template.content.cloneNode(true);
-                        const row = clone.querySelector('[data-repeat-item]');
-
-                        const existingRows = container.querySelectorAll('[data-repeat-item]');
-                        const sno = existingRows.length + 1;
-                        const snoBadge = row.querySelector('.sno-badge');
-                        if (snoBadge) {
-                            snoBadge.textContent = 'S.No. ' + sno;
-                        }
-
-                        container.appendChild(row);
-                    }
-                }
-
-                addDefaultRow();
-
-                document.addEventListener('click', function(e) {
-                    const addBtn = e.target.closest('[data-add-row]');
-                    if (addBtn) {
-                        const groupName = addBtn.dataset.addRow;
-                        const container = document.getElementById(groupName + '-list');
-                        const template = document.getElementById(groupName + '-row-template');
-
-                        if (container && template) {
-                            const clone = template.content.cloneNode(true);
-                            const row = clone.querySelector('[data-repeat-item]');
-
-                            const existingRows = container.querySelectorAll('[data-repeat-item]');
-                            const sno = existingRows.length + 1;
-                            const snoBadge = row.querySelector('.sno-badge');
-                            if (snoBadge) {
-                                snoBadge.textContent = 'S.No. ' + sno;
-                            }
-
-                            container.appendChild(row);
-                        }
-                    }
-                });
-
-                document.addEventListener('click', function(e) {
-                    const removeBtn = e.target.closest('[data-remove-row]');
-                    if (removeBtn) {
-                        const row = removeBtn.closest('[data-repeat-item]');
-                        const container = row ? row.parentElement : null;
-
-                        if (row && container) {
-                            const rows = container.querySelectorAll('[data-repeat-item]');
-                            if (rows.length > 1) {
-                                row.remove();
-                                rows.forEach((r, index) => {
-                                    const snoBadge = r.querySelector('.sno-badge');
-                                    if (snoBadge) {
-                                        snoBadge.textContent = 'S.No. ' + (index + 1);
-                                    }
-                                });
-                            } else {
-                                alert('At least one project row is required.');
-                            }
-                        }
-                    }
-                });
-            });
-        </script>
+        <script src="{{ url('js/registration-repeat-rows.js?v=2') }}"></script>
     @endpush
 </x-form-layout>

@@ -1,13 +1,13 @@
 <?php if (isset($component)) { $__componentOriginalf8d66f80f26570d03f587b9301010d1d = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalf8d66f80f26570d03f587b9301010d1d = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.form-layout','data' => ['title' => 'Registration Form - PART-H','subtitle' => 'SCHEDULE-I | PART-8: FINANCIAL INFORMATION','step' => 'Step 8 of 11: Financial Information','backRoute' => 'registration_form_part7','backLabel' => 'Back to Part 7']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.form-layout','data' => ['title' => 'Registration Form - PART-H','subtitle' => 'SCHEDULE-I | PART-8: FINANCIAL INFORMATION','step' => 'Step 8 of 10: Financial Information','backRoute' => 'registration_form_part7','backLabel' => 'Back to Part 7']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('form-layout'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['title' => 'Registration Form - PART-H','subtitle' => 'SCHEDULE-I | PART-8: FINANCIAL INFORMATION','step' => 'Step 8 of 11: Financial Information','backRoute' => 'registration_form_part7','backLabel' => 'Back to Part 7']); ?>
+<?php $component->withAttributes(['title' => 'Registration Form - PART-H','subtitle' => 'SCHEDULE-I | PART-8: FINANCIAL INFORMATION','step' => 'Step 8 of 10: Financial Information','backRoute' => 'registration_form_part7','backLabel' => 'Back to Part 7']); ?>
     <!-- Tax & Registration Information -->
     <section>
         <div class="flex items-center gap-3 mb-8">
@@ -103,43 +103,43 @@
                     <span class="text-[11px] font-bold text-slate-600 group-hover:text-slate-900 transition-colors">Bilateral Donors</span>
                 </label>
                 <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-blue-100 transition-all cursor-pointer group">
-                    <input type="checkbox" name="funding_sources_financial[]" value="INGOs" required class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
+                    <input type="checkbox" name="funding_sources_financial[]" value="INGOs" class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
                     <span class="text-[11px] font-bold text-slate-600 group-hover:text-slate-900 transition-colors">INGOs</span>
                 </label>
                 <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-blue-100 transition-all cursor-pointer group">
-                    <input type="checkbox" name="funding_sources_financial[]" value="Federal / Provincial Government" required class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
+                    <input type="checkbox" name="funding_sources_financial[]" value="Federal / Provincial Government" class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
                     <span class="text-[11px] font-bold text-slate-600 group-hover:text-slate-900 transition-colors">Federal / Provincial Government</span>
                 </label>
                 <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-blue-100 transition-all cursor-pointer group">
-                    <input type="checkbox" name="funding_sources_financial[]" value="National / International Organizations" required class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
+                    <input type="checkbox" name="funding_sources_financial[]" value="National / International Organizations" class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
                     <span class="text-[11px] font-bold text-slate-600 group-hover:text-slate-900 transition-colors">National / International Organizations</span>
                 </label>
                 <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-blue-100 transition-all cursor-pointer group">
-                    <input type="checkbox" name="funding_sources_financial[]" value="Voluntary Contributions" required class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
+                    <input type="checkbox" name="funding_sources_financial[]" value="Voluntary Contributions" class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
                     <span class="text-[11px] font-bold text-slate-600 group-hover:text-slate-900 transition-colors">Voluntary Contributions</span>
                 </label>
                 <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-blue-100 transition-all cursor-pointer group">
-                    <input type="checkbox" name="funding_sources_financial[]" value="Membership Fees" required class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
+                    <input type="checkbox" name="funding_sources_financial[]" value="Membership Fees" class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
                     <span class="text-[11px] font-bold text-slate-600 group-hover:text-slate-900 transition-colors">Membership Fees</span>
                 </label>
                 <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-blue-100 transition-all cursor-pointer group">
-                    <input type="checkbox" name="funding_sources_financial[]" value="Donations" required class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
+                    <input type="checkbox" name="funding_sources_financial[]" value="Donations" class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
                     <span class="text-[11px] font-bold text-slate-600 group-hover:text-slate-900 transition-colors">Donations</span>
                 </label>
                 <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-blue-100 transition-all cursor-pointer group">
-                    <input type="checkbox" name="funding_sources_financial[]" value="Fundraising" required class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
+                    <input type="checkbox" name="funding_sources_financial[]" value="Fundraising" class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
                     <span class="text-[11px] font-bold text-slate-600 group-hover:text-slate-900 transition-colors">Fundraising</span>
                 </label>
                 <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-blue-100 transition-all cursor-pointer group">
-                    <input type="checkbox" name="funding_sources_financial[]" value="Foundations" required class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
+                    <input type="checkbox" name="funding_sources_financial[]" value="Foundations" class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
                     <span class="text-[11px] font-bold text-slate-600 group-hover:text-slate-900 transition-colors">Foundations</span>
                 </label>
                 <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-blue-100 transition-all cursor-pointer group">
-                    <input type="checkbox" name="funding_sources_financial[]" value="Multilateral Agencies" required class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
+                    <input type="checkbox" name="funding_sources_financial[]" value="Multilateral Agencies" class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
                     <span class="text-[11px] font-bold text-slate-600 group-hover:text-slate-900 transition-colors">Multilateral Agencies</span>
                 </label>
                 <label class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-blue-100 transition-all cursor-pointer group md:col-span-2 lg:col-span-3">
-                    <input type="checkbox" name="funding_sources_financial[]" value="Other" required class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
+                    <input type="checkbox" name="funding_sources_financial[]" value="Other" class="w-4 h-4 rounded text-[#02B1EB] focus:ring-0">
                     <span class="text-[11px] w-32 font-bold text-slate-600 group-hover:text-slate-900 transition-colors">Other (Specify)</span>
                     <input type="text" name="funding_sources_financial_other"  class="w-full bg-transparent border border-slate-200 focus:border-[#02B1EB] focus:outline-none p-2 rounded-md text-[11px] font-bold text-slate-600">
                 </label>

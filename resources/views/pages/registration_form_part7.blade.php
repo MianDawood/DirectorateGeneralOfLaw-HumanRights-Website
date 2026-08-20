@@ -1,7 +1,7 @@
 <x-form-layout
     title="Registration Form - PART-G"
     subtitle="SCHEDULE-I | PART-7: PLANNED PROJECTS/PROGRAMMES/ASSIGNMENTS"
-    step="Step 7 of 11: Planned Projects"
+    step="Step 7 of 10: Planned Projects"
     backRoute="registration_form_part6"
     backLabel="Back to Part 6"
 >
@@ -98,6 +98,6 @@
     </div>
 
     @push('formScripts')
-        <script src="{{ url('js/registration-repeat-rows.js') }}"></script>
+        <script src="{{ url('js/registration-repeat-rows.js?v=2') }}"></script>
     @endpush
 </x-form-layout>

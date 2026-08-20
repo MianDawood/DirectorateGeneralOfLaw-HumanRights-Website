@@ -1,13 +1,13 @@
 <?php if (isset($component)) { $__componentOriginalf8d66f80f26570d03f587b9301010d1d = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalf8d66f80f26570d03f587b9301010d1d = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.form-layout','data' => ['title' => 'Registration Form - PART-B','subtitle' => 'SCHEDULE-I | PART-2: ADDRESS INFORMATION','step' => 'Step 2 of 11: Address Information','backRoute' => 'registration_form_part1','backLabel' => 'Back to Part 1']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.form-layout','data' => ['title' => 'Registration Form - PART-B','subtitle' => 'SCHEDULE-I | PART-2: ADDRESS INFORMATION','step' => 'Step 2 of 10: Address Information','backRoute' => 'registration_form_part1','backLabel' => 'Back to Part 1']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('form-layout'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['title' => 'Registration Form - PART-B','subtitle' => 'SCHEDULE-I | PART-2: ADDRESS INFORMATION','step' => 'Step 2 of 11: Address Information','backRoute' => 'registration_form_part1','backLabel' => 'Back to Part 1']); ?>
+<?php $component->withAttributes(['title' => 'Registration Form - PART-B','subtitle' => 'SCHEDULE-I | PART-2: ADDRESS INFORMATION','step' => 'Step 2 of 10: Address Information','backRoute' => 'registration_form_part1','backLabel' => 'Back to Part 1']); ?>
 
     <!-- Head Office -->
     <section>
@@ -248,7 +248,7 @@
             </a>
         </div>
         <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-            Step 2 of 11: Address Information
+            Step 2 of 10: Address Information
         </p>
     </div>
  <?php echo $__env->renderComponent(); ?>

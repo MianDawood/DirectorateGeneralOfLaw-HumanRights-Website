@@ -6,42 +6,47 @@
 const DRAFT_MODE_KEY = 'ngo_registration_draft_mode';
 
 function saveAsDraft() {
-    const formData = JSON.parse(localStorage.getItem('ngo_registration_draft') || '{}');
-    const form = document.querySelector('form');
-    if (!form) return;
+    if (window.NgoRegistrationSync) {
+        localStorage.setItem(DRAFT_MODE_KEY, '1');
+        window.NgoRegistrationSync.saveDraft();
+    } else {
+        const formData = JSON.parse(localStorage.getItem('ngo_registration_draft') || '{}');
+        const form = document.querySelector('form');
+        if (!form) return;
 
-    const inputs = form.querySelectorAll('input, textarea, select');
-    
-    inputs.forEach(input => {
-        if (input.name) {
-            if (input.type === 'checkbox') {
-                if (!formData[input.name]) formData[input.name] = [];
-                
-                // For groups of checkboxes with same name
-                const checkboxes = form.querySelectorAll(`input[name="${input.name}"][type="checkbox"]`);
-                if (checkboxes.length > 1) {
-                    formData[input.name] = Array.from(checkboxes)
-                        .filter(cb => cb.checked)
-                        .map(cb => cb.value);
+        const inputs = form.querySelectorAll('input, textarea, select');
+
+        inputs.forEach(input => {
+            if (input.name) {
+                if (input.type === 'checkbox') {
+                    if (!formData[input.name]) formData[input.name] = [];
+
+                    // For groups of checkboxes with same name
+                    const checkboxes = form.querySelectorAll(`input[name="${input.name}"][type="checkbox"]`);
+                    if (checkboxes.length > 1) {
+                        formData[input.name] = Array.from(checkboxes)
+                            .filter(cb => cb.checked)
+                            .map(cb => cb.value);
+                    } else {
+                        formData[input.name] = input.checked ? input.value : null;
+                    }
+                } else if (input.type === 'radio') {
+                    if (input.checked) {
+                        formData[input.name] = input.value;
+                    }
                 } else {
-                    formData[input.name] = input.checked ? input.value : null;
-                }
-            } else if (input.type === 'radio') {
-                if (input.checked) {
                     formData[input.name] = input.value;
                 }
-            } else {
-                formData[input.name] = input.value;
             }
-        }
-    });
+        });
 
-    localStorage.setItem('ngo_registration_draft', JSON.stringify(formData));
-    localStorage.setItem(DRAFT_MODE_KEY, '1');
-    
+        localStorage.setItem('ngo_registration_draft', JSON.stringify(formData));
+        localStorage.setItem(DRAFT_MODE_KEY, '1');
+    }
+
     // Show professional notification
     showNotification('Draft Saved Successfully');
-    
+
     // Pulse the button if it exists
     const saveBtn = document.querySelector('.save-draft-btn');
     if (saveBtn) {
@@ -52,6 +57,7 @@ function saveAsDraft() {
 
 function loadDraft() {
     if (localStorage.getItem(DRAFT_MODE_KEY) !== '1') return;
+    if (window.NgoRegistrationSync) return;
 
     const formData = JSON.parse(localStorage.getItem('ngo_registration_draft') || '{}');
     const form = document.querySelector('form');
@@ -114,6 +120,7 @@ function showNotification(message) {
 // Auto-save feature
 let autoSaveTimeout;
 function setupAutoSave() {
+    if (window.NgoRegistrationSync) return;
     if (localStorage.getItem(DRAFT_MODE_KEY) !== '1') return;
 
     const form = document.querySelector('form');

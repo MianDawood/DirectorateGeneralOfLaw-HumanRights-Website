@@ -1,7 +1,7 @@
 <x-form-layout
     title="Registration Form - PART-C"
     subtitle="SCHEDULE-I | PART-3: OBJECTIVES"
-    step="Step 3 of 11: Objectives"
+    step="Step 3 of 10: Objectives"
     backRoute="registration_form_part2"
     backLabel="Back to Part 2"
 >

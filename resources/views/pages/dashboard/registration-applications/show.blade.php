@@ -1,72 +1,42 @@
 @extends('layouts.app')
 
 @php
-    $formatLabel = function ($key) {
-        $key = (string) $key;
-        $key = preg_replace('/^part_\d+_/', '', $key);
-        $key = preg_replace('/_(\d+)$/', '', $key);
-        $key = preg_replace('/\[\d+\]/', '', $key);
-        $key = preg_replace('/\[\]$/', '', $key);
-        $key = preg_replace('/(?<=[a-z0-9])(?=[A-Z])/', ' ', $key);
-        return ucwords(str_replace(['_', '-'], ' ', $key));
-    };
+    use App\Support\RegistrationStepFields;
 
-    $isObjectList = function ($value) {
-        return is_array($value) && array_is_list($value) && count($value) > 0 && is_array($value[0]);
-    };
+    $stepDefinitions = RegistrationStepFields::steps();
 
-    $isScalarList = function ($value) {
-        return is_array($value) && array_is_list($value) && count($value) > 0 && !is_array($value[0]);
-    };
-
-    $formatValue = function ($value) use (&$formatValue, $formatLabel) {
+    $displayValue = function ($value) {
         if (is_bool($value)) {
             return $value ? 'Yes' : 'No';
         }
-
-        if ($value === null || $value === '') {
-            return '—';
-        }
-
         if (is_array($value)) {
-            if (array_is_list($value)) {
-                $items = array_map(function ($item) use (&$formatValue) {
-                    return is_scalar($item) ? (string) $item : $formatValue($item);
-                }, $value);
-
-                return implode(', ', $items);
-            }
-
-            $items = [];
-            foreach ($value as $nestedKey => $nestedValue) {
-                $items[] = $formatLabel($nestedKey) . ': ' . $formatValue($nestedValue);
-            }
-
-            return implode(' | ', $items);
+            return array_map(function ($item) {
+                return is_scalar($item) ? (string) $item : '';
+            }, array_values(array_filter($value, fn ($i) => $i !== null && $i !== '')));
         }
-
         return (string) $value;
     };
 
-    $stepTitles = [
-        1 => 'PART-1: GENERAL INFORMATION',
-        2 => 'PART-2: ADDRESS INFORMATION',
-        3 => 'PART-3: OBJECTIVES & STRATEGY',
-        4 => 'PART-4: MANAGEMENT & FOCAL PERSON',
-        5 => 'PART-5: PERSONNEL & FINANCIAL DETAILS',
-        6 => 'PART-6: PROJECT IMPLEMENTATION',
-        7 => 'PART-7: PLANNED PROJECTS / PROGRAMMES',
-        8 => 'PART-8: FINANCIAL & BANKING INFORMATION',
-        9 => 'PART-9: EXPANDED FINANCIAL & AUDIT INFORMATION',
-        10 => 'PART-10: ASSETS DISCLOSURE',
-        11 => 'PART-11: SECURITY AGREEMENT & ARRANGEMENTS',
-    ];
+    $hasValue = function ($value) {
+        if ($value === null || $value === '') return false;
+        if (is_array($value)) {
+            return collect($value)->filter(fn ($i) => $i !== null && $i !== '')->count() > 0;
+        }
+        return true;
+    };
+
+    $fileValues = function ($value) {
+        if (is_array($value)) {
+            return array_values(array_filter($value, fn ($i) => is_string($i) && $i !== ''));
+        }
+        return is_string($value) && $value !== '' ? [$value] : [];
+    };
 
     $ngoName = optional($application->profile)->organization_name;
     if (empty($ngoName)) {
         foreach ($stepPayloads as $stepPayload) {
-            if ($stepPayload->step_no === 1 && !empty($stepPayload->payload['ngoName'])) {
-                $ngoName = $stepPayload->payload['ngoName'];
+            if ($stepPayload->step_no === 1 && !empty($stepPayload->payload['ngo_name'])) {
+                $ngoName = $stepPayload->payload['ngo_name'];
                 break;
             }
         }
@@ -81,7 +51,7 @@
                     <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                         <div>
                             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Registration Application Details</h1>
-                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Compact review view for submitted registration steps.</p>
+                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Complete review of all submitted registration steps.</p>
                         </div>
                         <div class="flex flex-wrap gap-2">
                             @if($application->status === 'approved' && $application->certificate_path)
@@ -110,7 +80,7 @@
                         </div>
                         <div class="rounded-xl bg-white p-4 border border-slate-100 dark:bg-gray-800 dark:border-gray-700">
                             <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-gray-400">Application No</div>
-                            <div class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">{{ ($application->application_no) }}</div>
+                            <div class="mt-1 text-sm font-semibold text-gray-900 dark:text-white">{{ $application->application_no }}</div>
                         </div>
                         <div class="rounded-xl bg-white p-4 border border-slate-100 dark:bg-gray-800 dark:border-gray-700">
                             <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-gray-400">Status</div>
@@ -128,30 +98,16 @@
                 <div class="p-6 lg:p-8 space-y-4">
                     @forelse($stepPayloads as $stepPayload)
                         @php
+                            $definition = $stepDefinitions[$stepPayload->step_no] ?? null;
                             $payload = $stepPayload->payload ?: [];
-                            $payload = array_diff_key($payload, ['application_id' => true]);
-
-                            $commaListKeys = ['operationalArea'];
-
-                            foreach ($commaListKeys as $ck) {
-                                if (isset($payload[$ck]) && is_string($payload[$ck]) && str_contains($payload[$ck], ',')) {
-                                    $payload[$ck] = array_map('trim', explode(',', $payload[$ck]));
-                                }
-                            }
-
-                            $fileKeys = ['sealSignature', 'auditReport'];
-                            $fileFields = [];
-                            foreach ($fileKeys as $fileKey) {
-                                if (array_key_exists($fileKey, $payload)) {
-                                    $fileFields[$fileKey] = $payload[$fileKey];
-                                    unset($payload[$fileKey]);
-                                }
-                            }
-
-                            $objectListFields = array_filter($payload, $isObjectList);
-                            $scalarListFields = array_filter($payload, $isScalarList);
-                            $plainFields = array_diff_key($payload, $objectListFields, $scalarListFields);
                         @endphp
+
+                        @if(!$definition)
+                            <div class="rounded-2xl border border-dashed border-slate-200 bg-white p-6 text-sm text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
+                                No structured data available for Step {{ $stepPayload->step_no }}.
+                            </div>
+                            @continue
+                        @endif
 
                         <details open class="group rounded-2xl border border-slate-200 bg-white shadow-sm open:shadow-md dark:border-gray-700 dark:bg-gray-800">
                             <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4">
@@ -160,7 +116,7 @@
                                         {{ $stepPayload->step_no }}
                                     </span>
                                     <div>
-                                        <h3 class="text-base font-semibold text-gray-900 dark:text-white">{{ $stepTitles[$stepPayload->step_no] ?? ('Step ' . $stepPayload->step_no . ' Details') }}</h3>
+                                        <h3 class="text-base font-semibold text-gray-900 dark:text-white">{{ $definition['title'] }}</h3>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Click to collapse or expand the section</p>
                                     </div>
                                 </div>
@@ -170,127 +126,144 @@
                             </summary>
 
                             <div class="border-t border-slate-100 px-5 py-5 dark:border-gray-700">
-                                @if(!empty($payload))
-                                    <div class="space-y-5">
-                                        @foreach($objectListFields as $sectionKey => $entries)
-                                            <div>
-                                                <div class="mb-3 flex items-center justify-between">
-                                                    <h4 class="text-sm font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">
-                                                        {{ $formatLabel($sectionKey) }}
-                                                    </h4>
-                                                    <span class="text-xs text-gray-500 dark:text-gray-400">{{ count($entries) }} item(s)</span>
-                                                </div>
+                                @php
+                                    $shownAny = false;
+                                @endphp
 
-                                                <div class="grid grid-cols-1 gap-3 lg:grid-cols-2">
-                                                    @foreach($entries as $index => $entry)
-                                                        <div class="rounded-xl border border-slate-100 bg-slate-50 p-4 dark:border-gray-700 dark:bg-gray-700/30">
-                                                            <div class="mb-3 flex items-center justify-between">
-                                                                <span class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-gray-400">
-                                                                    Item {{ $index + 1 }}
-                                                                </span>
-                                                            </div>
-
-                                                            @if(is_array($entry))
-                                                                <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
-                                                                    @foreach($entry as $key => $value)
-                                                                        <div class="rounded-lg bg-white px-3 py-2 border border-slate-100 dark:bg-gray-800 dark:border-gray-700">
-                                                                            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-gray-400">
-                                                                                {{ $formatLabel($key) }}
-                                                                            </div>
-                                                                            <div class="mt-1 text-sm text-gray-900 break-words dark:text-gray-100">
-                                                                                {{ $formatValue($value) }}
-                                                                            </div>
-                                                                        </div>
+                                <div class="space-y-8">
+                                    @foreach($definition['sections'] as $section)
+                                        @php
+                                            $presentFields = array_filter(
+                                                $section['fields'],
+                                                fn ($key) => $hasValue($payload[$key] ?? null),
+                                                ARRAY_FILTER_USE_KEY
+                                            );
+                                        @endphp
+                                        @if(count($presentFields) === 0)
+                                            @continue
+                                        @endif
+                                        @php $shownAny = true; @endphp
+                                        <div>
+                                            <h4 class="mb-3 text-sm font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">{{ $section['title'] }}</h4>
+                                            <div class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+                                                @foreach($presentFields as $fieldKey => $fieldLabel)
+                                                    @php
+                                                        $value = $payload[$fieldKey];
+                                                    @endphp
+                                                    <div class="rounded-xl border border-slate-100 bg-slate-50 p-4 dark:border-gray-700 dark:bg-gray-700/30">
+                                                        <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-gray-400">{{ $fieldLabel }}</div>
+                                                        <div class="mt-1">
+                                                            @if(is_array($value))
+                                                                <div class="flex flex-wrap gap-1.5">
+                                                                    @foreach($displayValue($value) as $item)
+                                                                        <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-100 px-3 py-1 text-xs font-semibold text-blue-800 dark:bg-blue-500/20 dark:border-blue-500/30 dark:text-blue-300">
+                                                                            <span class="text-blue-500 dark:text-blue-400">✓</span>
+                                                                            {{ $item }}
+                                                                        </span>
                                                                     @endforeach
                                                                 </div>
                                                             @else
-                                                                <div class="text-sm text-gray-900 dark:text-gray-100">{{ $formatValue($entry) }}</div>
+                                                                <div class="text-sm text-gray-900 break-words dark:text-gray-100">{{ $displayValue($value) }}</div>
                                                             @endif
                                                         </div>
-                                                    @endforeach
-                                                </div>
+                                                    </div>
+                                                @endforeach
                                             </div>
-                                        @endforeach
+                                        </div>
+                                    @endforeach
 
-                                        @if(!empty($scalarListFields))
-                                            <div>
-                                                <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-                                                    @foreach($scalarListFields as $key => $values)
-                                                        <div class="rounded-xl border border-slate-100 bg-slate-50 p-4 dark:border-gray-700 dark:bg-gray-700/30">
-                                                            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2 dark:text-gray-400">
-                                                                {{ $formatLabel($key) }}
-                                                            </div>
-                                                            <div class="space-y-2">
-                                                                @foreach($values as $item)
-                                                                    <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-100 px-3 py-1 text-xs font-semibold text-blue-800 dark:bg-blue-500/20 dark:border-blue-500/30 dark:text-blue-300">
-                                                                        <span class="text-blue-500 dark:text-blue-400">✓</span>
-                                                                        {{ $formatValue($item) }}
-                                                                    </span>
-                                                                    <span class="block"></span>
+                                    @foreach($definition['files'] as $fileKey => $fileLabel)
+                                        @php
+                                            $paths = $fileValues($payload[$fileKey] ?? null);
+                                        @endphp
+                                        @if(count($paths) === 0)
+                                            @continue
+                                        @endif
+                                        @php $shownAny = true; @endphp
+                                        <div>
+                                            <h4 class="mb-3 text-sm font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">{{ $fileLabel }}</h4>
+                                            <div class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+                                                @foreach($paths as $path)
+                                                    @php
+                                                        $fileUrl = \Illuminate\Support\Facades\Storage::url($path);
+                                                        $fileName = basename($path);
+                                                        $isImage = in_array(strtolower(pathinfo($path, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+                                                    @endphp
+                                                    <div class="rounded-xl border border-slate-100 bg-slate-50 p-4 dark:border-gray-700 dark:bg-gray-700/30">
+                                                        @if($isImage)
+                                                            <a href="{{ $fileUrl }}" target="_blank" class="block mb-2">
+                                                                <img src="{{ $fileUrl }}" alt="{{ $fileName }}" class="max-h-40 w-full rounded-lg object-cover border border-slate-200 dark:border-gray-600">
+                                                            </a>
+                                                        @endif
+                                                        <a href="{{ $fileUrl }}" target="_blank" class="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700">
+                                                            <i data-lucide="download" class="w-3 h-3"></i> {{ $fileName }}
+                                                        </a>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endforeach
+
+                                    @foreach($definition['repeat'] as $groupKey => $groupDef)
+                                        @php
+                                            $rows = [];
+                                            if (isset($groupDef['prefix'])) {
+                                                for ($i = 1; $i <= $groupDef['count']; $i++) {
+                                                    $row = [];
+                                                    foreach (array_keys($groupDef['columns']) as $col) {
+                                                        $row[$col] = $payload[$groupDef['prefix'] . $i . '_' . $col] ?? null;
+                                                    }
+                                                    $rows[] = $row;
+                                                }
+                                                $rows = array_values(array_filter($rows, fn ($r) => collect($r)->filter(fn ($v) => $v !== null && $v !== '')->count() > 0));
+                                            } else {
+                                                $raw = $payload[$groupKey] ?? null;
+                                                if (is_array($raw)) {
+                                                    $rows = array_values(array_filter($raw, fn ($r) => is_array($r)));
+                                                }
+                                            }
+                                        @endphp
+                                        @if(count($rows) === 0)
+                                            @continue
+                                        @endif
+                                        @php $shownAny = true; @endphp
+                                        <div>
+                                            <div class="mb-3 flex items-center justify-between">
+                                                <h4 class="text-sm font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">{{ $groupDef['label'] }}</h4>
+                                                <span class="text-xs text-gray-500 dark:text-gray-400">{{ count($rows) }} item(s)</span>
+                                            </div>
+                                            <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-gray-700">
+                                                <table class="min-w-full divide-y divide-slate-200 text-sm dark:divide-gray-700">
+                                                    <thead class="bg-slate-50 dark:bg-gray-800">
+                                                        <tr>
+                                                            <th class="px-3 py-2.5 text-left text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-gray-400">S.No</th>
+                                                            @foreach($groupDef['columns'] as $colKey => $colLabel)
+                                                                <th class="px-3 py-2.5 text-left text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-gray-400">{{ $colLabel }}</th>
+                                                            @endforeach
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="divide-y divide-slate-100 bg-white dark:divide-gray-800 dark:bg-gray-800">
+                                                        @foreach($rows as $index => $row)
+                                                            <tr>
+                                                                <td class="px-3 py-2.5 text-xs font-bold text-slate-400 dark:text-gray-400">{{ $index + 1 }}</td>
+                                                                @foreach($groupDef['columns'] as $colKey => $colLabel)
+                                                                    @php
+                                                                        $cell = $row[$colKey] ?? null;
+                                                                    @endphp
+                                                                    <td class="px-3 py-2.5 text-sm text-gray-900 break-words dark:text-gray-100">
+                                                                        {{ $hasValue($cell) ? $displayValue($cell) : '—' }}
+                                                                    </td>
                                                                 @endforeach
-                                                            </div>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
                                             </div>
-                                        @endif
+                                        </div>
+                                    @endforeach
+                                </div>
 
-                                        @if(!empty($plainFields))
-                                            <div>
-                                                <div class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
-                                                    @foreach($plainFields as $key => $value)
-                                                        <div class="rounded-xl border border-slate-100 bg-slate-50 p-4 dark:border-gray-700 dark:bg-gray-700/30">
-                                                            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-gray-400">
-                                                                {{ $formatLabel($key) }}
-                                                            </div>
-                                                            <div class="mt-1 text-sm text-gray-900 break-words dark:text-gray-100">
-                                                                {{ $formatValue($value) }}
-                                                            </div>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        @endif
-
-                                        @if(!empty($fileFields))
-                                            <div>
-                                                <div class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
-                                                    @foreach($fileFields as $fileKey => $fileValue)
-                                                        @php $filePaths = is_array($fileValue) ? $fileValue : [$fileValue]; @endphp
-                                                        <div class="rounded-xl border border-slate-100 bg-slate-50 p-4 dark:border-gray-700 dark:bg-gray-700/30">
-                                                            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-gray-400">
-                                                                {{ $formatLabel($fileKey) }}
-                                                            </div>
-                                                            <div class="mt-2 space-y-2">
-                                                                @foreach($filePaths as $path)
-                                                                    @if(is_string($path) && $path)
-                                                                        @php
-                                                                            $fileUrl = \Illuminate\Support\Facades\Storage::url($path);
-                                                                            $fileName = basename($path);
-                                                                            $isImage = in_array(strtolower(pathinfo($path, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
-                                                                        @endphp
-                                                                        @if($isImage)
-                                                                            <a href="{{ $fileUrl }}" target="_blank" class="block">
-                                                                                <img src="{{ $fileUrl }}" alt="{{ $fileName }}" class="max-h-40 w-full rounded-lg object-cover border border-slate-200 dark:border-gray-600">
-                                                                            </a>
-                                                                        @endif
-                                                                        <a href="{{ $fileUrl }}" target="_blank" class="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700">
-                                                                            <i data-lucide="download" class="w-3 h-3"></i> {{ $fileName }}
-                                                                        </a>
-                                                                    @endif
-                                                                @endforeach
-                                                            </div>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        @endif
-
-                                        @if(empty($objectListFields) && empty($scalarListFields) && empty($plainFields) && empty($fileFields))
-                                            <div class="text-sm text-gray-500 dark:text-gray-400">No structured data available for this step.</div>
-                                        @endif
-                                    </div>
-                                @else
+                                @if(!$shownAny)
                                     <div class="text-sm text-gray-500 dark:text-gray-400">No data available for this step.</div>
                                 @endif
                             </div>

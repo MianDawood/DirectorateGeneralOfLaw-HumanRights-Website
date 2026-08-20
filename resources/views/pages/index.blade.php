@@ -484,11 +484,11 @@
                 </div>
 
                 <div
-                    class="bg-gradient-to-b from-[#02B1EB]/5  border-x border-b border-slate-100 rounded-2xl shadow-sm group-hover:shadow-xl transition-all duration-500 flex-1 overflow-hidden relative min-h-[420px] max-h-[420px]">
-                    <div class="h-full overflow-y-auto p-6 scrollbar-thin">
+                    class="bg-gradient-to-b from-[#02B1EB]/5  border-x border-b border-slate-100 rounded-2xl shadow-sm duration-500 flex-1 overflow-hidden relative min-h-[420px] max-h-[420px]">
+                    <div class="h-full overflow-y-auto p-6 scrollbar-none">
                         @forelse($latestCauses as $cause)
                             <div
-                                class="p-5 rounded-xl bg-slate-50/50 hover:bg-white border border-transparent hover:border-slate-100 hover:shadow-lg transition-all duration-300 mb-4 group/item">
+                                class="p-5 rounded-xl bg-slate-50/50 hover:bg-white border border-transparent hover:border-slate-100 mb-4 group/item">
                                 <div class="flex items-start justify-between gap-2">
                                     <h4
                                         class="text-sm font-bold text-slate-700 leading-snug group-hover/item:text-primary transition-colors">

@@ -398,7 +398,7 @@ Route::get('/partners/{partner}', function (\App\Models\Partner $partner) {
 
 Route::get('/photogallery', [GalleryController::class, 'photos'])->name('photogallery');
 
-for ($part = 1; $part <= 11; $part++) {
+for ($part = 1; $part <= 10; $part++) {
     Route::get("/registration_form_part{$part}", [RegistrationApplicationController::class, 'showPart'])
         ->defaults('part', $part)
         ->name("registration_form_part{$part}");

@@ -1,7 +1,7 @@
 <x-form-layout
     title="Registration Form - PART-B"
     subtitle="SCHEDULE-I | PART-2: ADDRESS INFORMATION"
-    step="Step 2 of 11: Address Information"
+    step="Step 2 of 10: Address Information"
     backRoute="registration_form_part1"
     backLabel="Back to Part 1"
 >
@@ -245,7 +245,7 @@
             </a>
         </div>
         <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-            Step 2 of 11: Address Information
+            Step 2 of 10: Address Information
         </p>
     </div>
 </x-form-layout>

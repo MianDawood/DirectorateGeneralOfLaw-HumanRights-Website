@@ -1,7 +1,7 @@
 <x-form-layout
     title="Registration Form - PART-D"
     subtitle="SCHEDULE-I | PART-4: MANAGEMENT & STAFF"
-    step="Step 4 of 11: Management & Staff"
+    step="Step 4 of 10: Management & Staff"
     backRoute="registration_form_part3"
     backLabel="Back to Part 3"
 >
@@ -275,6 +275,6 @@
     </div>
 
     @push('formScripts')
-        <script src="{{ url('js/registration-repeat-rows.js') }}"></script>
+        <script src="{{ url('js/registration-repeat-rows.js?v=2') }}"></script>
     @endpush
 </x-form-layout>

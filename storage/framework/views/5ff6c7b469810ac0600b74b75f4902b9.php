@@ -1,13 +1,13 @@
 <?php if (isset($component)) { $__componentOriginalf8d66f80f26570d03f587b9301010d1d = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalf8d66f80f26570d03f587b9301010d1d = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.form-layout','data' => ['title' => 'Registration Form - PART-D','subtitle' => 'SCHEDULE-I | PART-4: MANAGEMENT & STAFF','step' => 'Step 4 of 11: Management & Staff','backRoute' => 'registration_form_part3','backLabel' => 'Back to Part 3']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.form-layout','data' => ['title' => 'Registration Form - PART-D','subtitle' => 'SCHEDULE-I | PART-4: MANAGEMENT & STAFF','step' => 'Step 4 of 10: Management & Staff','backRoute' => 'registration_form_part3','backLabel' => 'Back to Part 3']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('form-layout'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['title' => 'Registration Form - PART-D','subtitle' => 'SCHEDULE-I | PART-4: MANAGEMENT & STAFF','step' => 'Step 4 of 11: Management & Staff','backRoute' => 'registration_form_part3','backLabel' => 'Back to Part 3']); ?>
+<?php $component->withAttributes(['title' => 'Registration Form - PART-D','subtitle' => 'SCHEDULE-I | PART-4: MANAGEMENT & STAFF','step' => 'Step 4 of 10: Management & Staff','backRoute' => 'registration_form_part3','backLabel' => 'Back to Part 3']); ?>
     <!-- Total Number of Employees -->
     <section>
         <div class="flex items-center gap-3 mb-8">
@@ -278,7 +278,7 @@
     </div>
 
     <?php $__env->startPush('formScripts'); ?>
-        <script src="<?php echo e(url('js/registration-repeat-rows.js')); ?>"></script>
+        <script src="<?php echo e(url('js/registration-repeat-rows.js?v=2')); ?>"></script>
     <?php $__env->stopPush(); ?>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>

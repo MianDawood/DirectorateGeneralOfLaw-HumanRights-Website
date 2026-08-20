@@ -162,9 +162,19 @@
      const initForPart = (part) => {
          if (part === 4) {
              init({
-                 groupName: 'board_members',
-                 containerSelector: '#board-members-list',
-                 templateSelector: '#board-member-row-template',
+                 groupName: 'staff_members',
+                 containerSelector: '#staff-members-list',
+                 templateSelector: '#staff-member-row-template',
+                 minRows: 1,
+                 maxRows: 50,
+             });
+         }
+ 
+         if (part === 5) {
+             init({
+                 groupName: 'completed_projects',
+                 containerSelector: '#completed-projects-list',
+                 templateSelector: '#completed-project-row-template',
                  minRows: 1,
                  maxRows: 20,
              });
@@ -193,6 +203,14 @@
 
     const hydratePayload = (payload) => {
         if (!payload || typeof payload !== 'object') return;
+
+        if (Array.isArray(payload.staff_members) && registry.has('staff_members')) {
+            hydrate('staff_members', payload.staff_members);
+        }
+
+        if (Array.isArray(payload.completed_projects) && registry.has('completed_projects')) {
+            hydrate('completed_projects', payload.completed_projects);
+        }
 
         if (Array.isArray(payload.ongoing_projects) && registry.has('ongoing_projects')) {
             hydrate('ongoing_projects', payload.ongoing_projects);

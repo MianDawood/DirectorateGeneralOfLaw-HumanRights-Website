@@ -295,8 +295,9 @@
         </div>
     </div>
 
-    <script src="{{ url('js/form-draft.js') }}"></script>
-    <script src="{{ url('js/registration-form-sync.js') }}"></script>
+    <script>window.REGISTRATION_BASE_URL = "{{ url('') }}";</script>
+    <script src="{{ url('js/form-draft.js?v=3') }}"></script>
+    <script src="{{ url('js/registration-form-sync.js?v=3') }}"></script>
     <script>
         lucide.createIcons();
         const observer = new IntersectionObserver((entries) => {

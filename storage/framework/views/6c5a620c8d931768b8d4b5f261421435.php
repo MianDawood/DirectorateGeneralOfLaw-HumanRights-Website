@@ -333,8 +333,9 @@ unset($__defined_vars, $__key, $__value); ?>
         </div>
     </div>
 
-    <script src="<?php echo e(url('js/form-draft.js')); ?>"></script>
-    <script src="<?php echo e(url('js/registration-form-sync.js')); ?>"></script>
+    <script>window.REGISTRATION_BASE_URL = "<?php echo e(url('')); ?>";</script>
+    <script src="<?php echo e(url('js/form-draft.js?v=3')); ?>"></script>
+    <script src="<?php echo e(url('js/registration-form-sync.js?v=3')); ?>"></script>
     <script>
         lucide.createIcons();
         const observer = new IntersectionObserver((entries) => {

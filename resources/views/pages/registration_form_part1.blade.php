@@ -1,5 +1,5 @@
 <x-form-layout title="Registration Form - PART-A" subtitle="SCHEDULE-I | PART-1: GENERAL INFORMATION"
-    step="Step 1 of 11: General Information">
+    step="Step 1 of 10: General Information">
     <!-- PART-1: General Information -->
     <section>
         <div class="flex items-center gap-3 mb-6">

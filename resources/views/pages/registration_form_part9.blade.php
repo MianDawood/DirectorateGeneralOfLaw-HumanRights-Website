@@ -1,7 +1,7 @@
 <x-form-layout
     title="Registration Form - PART-I"
     subtitle="SCHEDULE-I | PART-9: ASSETS"
-    step="Step 9 of 11: Assets"
+    step="Step 9 of 10: Assets"
     backRoute="registration_form_part8"
     backLabel="Back to Part 8"
 >

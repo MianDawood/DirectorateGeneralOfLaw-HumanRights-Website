@@ -1,13 +1,13 @@
 <?php if (isset($component)) { $__componentOriginalf8d66f80f26570d03f587b9301010d1d = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalf8d66f80f26570d03f587b9301010d1d = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.form-layout','data' => ['title' => 'Registration Form - PART-E','subtitle' => 'SCHEDULE-I | PART-5: PROJECTS/PROGRAMMES/ASSIGNMENTS COMPLETED','step' => 'Step 5 of 11: Completed Projects','backRoute' => 'registration_form_part4','backLabel' => 'Back to Part 4']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.form-layout','data' => ['title' => 'Registration Form - PART-E','subtitle' => 'SCHEDULE-I | PART-5: PROJECTS/PROGRAMMES/ASSIGNMENTS COMPLETED','step' => 'Step 5 of 10: Completed Projects','backRoute' => 'registration_form_part4','backLabel' => 'Back to Part 4']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('form-layout'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['title' => 'Registration Form - PART-E','subtitle' => 'SCHEDULE-I | PART-5: PROJECTS/PROGRAMMES/ASSIGNMENTS COMPLETED','step' => 'Step 5 of 11: Completed Projects','backRoute' => 'registration_form_part4','backLabel' => 'Back to Part 4']); ?>
+<?php $component->withAttributes(['title' => 'Registration Form - PART-E','subtitle' => 'SCHEDULE-I | PART-5: PROJECTS/PROGRAMMES/ASSIGNMENTS COMPLETED','step' => 'Step 5 of 10: Completed Projects','backRoute' => 'registration_form_part4','backLabel' => 'Back to Part 4']); ?>
     <!-- PART-E: Completed Projects -->
     <section>
         <div class="flex items-center gap-3 mb-8">
@@ -116,85 +116,7 @@
     </div>
 
     <?php $__env->startPush('formScripts'); ?>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Function to add a default row
-                function addDefaultRow() {
-                    const template = document.getElementById('completed-project-row-template');
-                    const container = document.getElementById('completed-projects-list');
-
-                    if (template && container) {
-                        const clone = template.content.cloneNode(true);
-                        const row = clone.querySelector('[data-repeat-item]');
-
-                        // Update S.No.
-                        const existingRows = container.querySelectorAll('[data-repeat-item]');
-                        const sno = existingRows.length + 1;
-                        const snoBadge = row.querySelector('.sno-badge');
-                        if (snoBadge) {
-                            snoBadge.textContent = 'S.No. ' + sno;
-                        }
-
-                        container.appendChild(row);
-                    }
-                }
-
-                // Add first row by default
-                addDefaultRow();
-
-                // Handle Add button
-                document.addEventListener('click', function(e) {
-                    const addBtn = e.target.closest('[data-add-row]');
-                    if (addBtn) {
-                        const groupName = addBtn.dataset.addRow;
-                        const container = document.getElementById(groupName + '-list');
-                        const template = document.getElementById(groupName + '-row-template');
-
-                        if (container && template) {
-                            const clone = template.content.cloneNode(true);
-                            const row = clone.querySelector('[data-repeat-item]');
-
-                            // Update S.No.
-                            const existingRows = container.querySelectorAll('[data-repeat-item]');
-                            const sno = existingRows.length + 1;
-                            const snoBadge = row.querySelector('.sno-badge');
-                            if (snoBadge) {
-                                snoBadge.textContent = 'S.No. ' + sno;
-                            }
-
-                            container.appendChild(row);
-                        }
-                    }
-                });
-
-                // Handle Remove button
-                document.addEventListener('click', function(e) {
-                    const removeBtn = e.target.closest('[data-remove-row]');
-                    if (removeBtn) {
-                        const row = removeBtn.closest('[data-repeat-item]');
-                        const container = row ? row.parentElement : null;
-
-                        if (row && container) {
-                            // Only remove if there's more than one row
-                            const rows = container.querySelectorAll('[data-repeat-item]');
-                            if (rows.length > 1) {
-                                row.remove();
-
-                                // Renumber remaining rows
-                                rows.forEach((r, index) => {
-                                    const snoBadge = r.querySelector('.sno-badge');
-                                    if (snoBadge) {
-                                        snoBadge.textContent = 'S.No. ' + (index + 1);
-                                    }
-                                });
-                            } else {
-                                alert('At least one project row is required.');
-                            }
-                        }
-                    }
-                });
-            });
-        </script>
+        <script src="<?php echo e(url('js/registration-repeat-rows.js?v=2')); ?>"></script>
     <?php $__env->stopPush(); ?>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>

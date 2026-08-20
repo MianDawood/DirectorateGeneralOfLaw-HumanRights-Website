@@ -1,13 +1,13 @@
 <?php if (isset($component)) { $__componentOriginalf8d66f80f26570d03f587b9301010d1d = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalf8d66f80f26570d03f587b9301010d1d = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.form-layout','data' => ['title' => 'Registration Form - PART-G','subtitle' => 'SCHEDULE-I | PART-7: PLANNED PROJECTS/PROGRAMMES/ASSIGNMENTS','step' => 'Step 7 of 11: Planned Projects','backRoute' => 'registration_form_part6','backLabel' => 'Back to Part 6']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.form-layout','data' => ['title' => 'Registration Form - PART-G','subtitle' => 'SCHEDULE-I | PART-7: PLANNED PROJECTS/PROGRAMMES/ASSIGNMENTS','step' => 'Step 7 of 10: Planned Projects','backRoute' => 'registration_form_part6','backLabel' => 'Back to Part 6']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('form-layout'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['title' => 'Registration Form - PART-G','subtitle' => 'SCHEDULE-I | PART-7: PLANNED PROJECTS/PROGRAMMES/ASSIGNMENTS','step' => 'Step 7 of 11: Planned Projects','backRoute' => 'registration_form_part6','backLabel' => 'Back to Part 6']); ?>
+<?php $component->withAttributes(['title' => 'Registration Form - PART-G','subtitle' => 'SCHEDULE-I | PART-7: PLANNED PROJECTS/PROGRAMMES/ASSIGNMENTS','step' => 'Step 7 of 10: Planned Projects','backRoute' => 'registration_form_part6','backLabel' => 'Back to Part 6']); ?>
     <!-- Projects/Programmes/Assignments Planned -->
     <section>
         <div class="flex items-center gap-3 mb-8">
@@ -101,7 +101,7 @@
     </div>
 
     <?php $__env->startPush('formScripts'); ?>
-        <script src="<?php echo e(url('js/registration-repeat-rows.js')); ?>"></script>
+        <script src="<?php echo e(url('js/registration-repeat-rows.js?v=2')); ?>"></script>
     <?php $__env->stopPush(); ?>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>

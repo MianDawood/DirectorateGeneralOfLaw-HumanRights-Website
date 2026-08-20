@@ -49,7 +49,6 @@
                     <th>District</th>
                     <th>Thematic Areas</th>
                     <th>Head Name</th>
-                    <th>Focal Person</th>
                     <th>Establishment Date</th>
                     <th>Submitted At</th>
                     <th>Issue Date</th>
@@ -72,7 +71,6 @@
                         <td>{{ $application->profile?->district ?? '' }}</td>
                         <td>{{ $application->profile?->thematic_areas ?? '' }}</td>
                         <td>{{ $application->profile?->head_name ?? '' }}</td>
-                        <td>{{ $application->profile?->focal_name ?? '' }}</td>
                         <td>{{ $application->profile?->establishment_date ? \Carbon\Carbon::parse($application->profile->establishment_date)->format('Y-m-d') : '' }}</td>
                         <td>{{ $application->submitted_at?->format('Y-m-d H:i') ?? '' }}</td>
                         <td>{{ $application->certificate_issue_date?->format('Y-m-d') ?? '' }}</td>

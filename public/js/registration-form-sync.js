@@ -6,7 +6,9 @@
     const partMatch = path.match(/registration_form_part(\d+)/);
     const part = partMatch ? Number(partMatch[1]) : 1;
 
-    const REPEAT_GROUP_KEYS = ['ongoing_projects', 'planned_projects', 'security_companies', 'board_members'];
+    const BASE = String(window.REGISTRATION_BASE_URL || '').replace(/\/?$/, '/');
+
+    const REPEAT_GROUP_KEYS = ['ongoing_projects', 'planned_projects', 'completed_projects', 'staff_members', 'security_companies', 'board_members'];
 
     const toSlug = (text) => (text || '')
         .toLowerCase()
@@ -142,7 +144,7 @@
     const isDraftMode = () => localStorage.getItem(DRAFT_MODE_KEY) === '1';
 
     const clearAllRegistrationState = () => {
-        for (let step = 1; step <= 11; step += 1) {
+        for (let step = 1; step <= 10; step += 1) {
             localStorage.removeItem(`ngo_registration_step_${step}_draft`);
         }
         localStorage.removeItem('ngo_registration_draft');
@@ -168,7 +170,7 @@
     const loadServerDraft = async () => {
         const appId = localStorage.getItem('ngo_application_id');
         if (!appId) return;
-        const response = await fetch(`/registration/part/${part}/data?application_id=${encodeURIComponent(appId)}`, {
+        const response = await fetch(`${BASE}registration/part/${part}/data?application_id=${encodeURIComponent(appId)}`, {
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
         });
         if (!response.ok) return;
@@ -251,14 +253,15 @@
         return true;
     };
 
-    const saveStep = async () => {
+    const saveStep = async (options = {}) => {
         persistLocalDraft();
         assignMissingNames();
         const fd = new FormData(form);
         const appId = localStorage.getItem('ngo_application_id');
         if (appId) fd.append('application_id', appId);
+        if (options.draft) fd.append('draft', '1');
 
-        const response = await fetch(`/registration/part/${part}/save`, {
+        const response = await fetch(`${BASE}registration/part/${part}/save`, {
             method: 'POST',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
@@ -315,7 +318,7 @@
                     return;
                 }
 
-                if (part === 11) {
+                if (part === 10) {
                     clearAllRegistrationState();
                     form.reset();
                 }
@@ -331,11 +334,18 @@
         });
     };
 
+    const hasRepeatRows = () => form.querySelectorAll(
+        '#staff-members-list, #completed-projects-list, #ongoing-projects-list, #planned-projects-list'
+    ).length > 0;
+
     const initRepeatRows = () => {
         if (window.NgoRepeatRows) {
             window.NgoRepeatRows.initForPart(part);
-        } else {
+            loadLocalDraft();
+        } else if (hasRepeatRows()) {
             setTimeout(initRepeatRows, 50);
+        } else {
+            loadLocalDraft();
         }
     };
     initRepeatRows();
@@ -359,7 +369,6 @@
             }
             return;
         }
-        loadLocalDraft();
     };
 
     loadPersistedData().catch(() => {});
@@ -367,4 +376,13 @@
     bindFinalSubmit();
     form.addEventListener('input', persistLocalDraft);
     document.addEventListener('ngo-repeat-rows-changed', persistLocalDraft);
+
+    window.NgoRegistrationSync = {
+        saveDraft: () => {
+            persistLocalDraft();
+            return saveStep({ draft: true }).catch(() => ({}));
+        },
+        persistLocalDraft,
+        loadLocalDraft,
+    };
 })();

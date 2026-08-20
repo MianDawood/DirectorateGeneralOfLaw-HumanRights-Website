@@ -56,7 +56,6 @@
                     <th>District</th>
                     <th>Thematic Areas</th>
                     <th>Head Name</th>
-                    <th>Focal Person</th>
                     <th>Establishment Date</th>
                     <th>Submitted At</th>
                     <th>Issue Date</th>
@@ -79,7 +78,6 @@
                         <td><?php echo e($application->profile?->district ?? ''); ?></td>
                         <td><?php echo e($application->profile?->thematic_areas ?? ''); ?></td>
                         <td><?php echo e($application->profile?->head_name ?? ''); ?></td>
-                        <td><?php echo e($application->profile?->focal_name ?? ''); ?></td>
                         <td><?php echo e($application->profile?->establishment_date ? \Carbon\Carbon::parse($application->profile->establishment_date)->format('Y-m-d') : ''); ?></td>
                         <td><?php echo e($application->submitted_at?->format('Y-m-d H:i') ?? ''); ?></td>
                         <td><?php echo e($application->certificate_issue_date?->format('Y-m-d') ?? ''); ?></td>
