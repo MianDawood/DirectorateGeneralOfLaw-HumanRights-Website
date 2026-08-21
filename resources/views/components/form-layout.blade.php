@@ -242,13 +242,6 @@
         document.documentElement.classList.add('js-hook');
     </script>
 
-    <div class="mobile-header">
-        <a href="{{ route($backRoute) }}" class="p-2 -ml-2 text-slate-600">
-            <i data-lucide="arrow-left" class="w-6 h-6"></i>
-        </a>
-        <img src="{{ $settings->logo ? asset('storage/' . $settings->logo) : asset('images/logo.jpg') }}" alt="Logo" class="h-8 w-auto">
-    </div>
-
     <div class="fixed-back-container lg:fixed top-6 left-6 z-50">
         <a href="{{ route($backRoute) }}"
             class="back-btn flex items-center gap-2 px-4 py-2 bg-white shadow-sm border border-slate-100 rounded-xl text-slate-600 font-bold text-xs uppercase tracking-wider">

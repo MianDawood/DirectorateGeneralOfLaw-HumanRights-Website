@@ -293,7 +293,7 @@
                 class="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 group hover:-translate-y-1">
                 <div class="relative overflow-hidden">
                     <img src="<?php echo e(asset('storage/' . $news->image_path)); ?>" alt="<?php echo e($news->title); ?>"
-                        class="w-full h-52 object-cover transition-transform duration-700 group-hover:scale-105" />
+                        class="w-full h-52 object-fill lg:object-cover transition-transform duration-700 group-hover:scale-105" />
                     <?php if($news->is_featured): ?>
                     <div class="absolute top-4 left-4">
                         <span
@@ -343,28 +343,28 @@
                 </h2>
                 <p class="text-white/70 mt-3 max-w-2xl mx-auto text-sm">Key performance indicators reflecting the impact and reach of the Directorate General of Law & Human Rights, Khyber Pakhtunkhwa.</p>
             </div>
-            <div class="flex flex-row items-start justify-center gap-6 md:gap-8 lg:gap-12">
-                <div class="flex-1 text-center stat-item min-w-0">
+            <div class="grid grid-cols-3 lg:grid-cols-6 items-start justify-center gap-2 sm:gap-4 md:gap-8 lg:gap-12">
+                <div class="text-center stat-item min-w-0">
                     <div class="stat-number text-3xl md:text-5xl lg:text-7xl font-black text-white font-outfit leading-none mb-3" data-target="<?php echo e($statsComplaintsTotal); ?>">0</div>
                     <div class="text-white/70 text-[10px] md:text-xs lg:text-sm uppercase tracking-widest font-semibold">Complaints Received</div>
                 </div>
-                <div class="flex-1 text-center stat-item min-w-0">
+                <div class="text-center stat-item min-w-0">
                     <div class="stat-number text-3xl md:text-5xl lg:text-7xl font-black text-white font-outfit leading-none mb-3" data-target="<?php echo e($statsComplaintsResolved); ?>">0</div>
                     <div class="text-white/70 text-[10px] md:text-xs lg:text-sm uppercase tracking-widest font-semibold">Complaints Resolved</div>
                 </div>
-                <div class="flex-1 text-center stat-item min-w-0">
+                <div class="text-center stat-item min-w-0">
                     <div class="stat-number text-3xl md:text-5xl lg:text-7xl font-black text-white font-outfit leading-none mb-3" data-target="<?php echo e($statsNgosRegistered); ?>">0</div>
                     <div class="text-white/70 text-[10px] md:text-xs lg:text-sm uppercase tracking-widest font-semibold">NGOs Registered</div>
                 </div>
-                <div class="flex-1 text-center stat-item min-w-0">
+                <div class="text-center stat-item min-w-0">
                     <div class="stat-number text-3xl md:text-5xl lg:text-7xl font-black text-white font-outfit leading-none mb-3" data-target="<?php echo e($statsTrainings); ?>">0</div>
                     <div class="text-white/70 text-[10px] md:text-xs lg:text-sm uppercase tracking-widest font-semibold">Trainings &amp; Workshops</div>
                 </div>
-                <div class="flex-1 text-center stat-item min-w-0">
+                <div class="text-center stat-item min-w-0">
                     <div class="stat-number text-3xl md:text-5xl lg:text-7xl font-black text-white font-outfit leading-none mb-3" data-target="<?php echo e($statsAwareness); ?>">0</div>
                     <div class="text-white/70 text-[10px] md:text-xs lg:text-sm uppercase tracking-widest font-semibold">HR Awareness Sessions</div>
                 </div>
-                <div class="flex-1 text-center stat-item min-w-0">
+                <div class="text-center stat-item min-w-0">
                     <div class="stat-number text-3xl md:text-5xl lg:text-7xl font-black text-white font-outfit leading-none mb-3" data-target="<?php echo e($statsResearch); ?>">0</div>
                     <div class="text-white/70 text-[10px] md:text-xs lg:text-sm uppercase tracking-widest font-semibold">Research &amp; Reporting</div>
                 </div>

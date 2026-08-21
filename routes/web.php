@@ -361,7 +361,17 @@ Route::get('/mediacorner', [MediaCornerController::class, 'index'])->name('media
 Route::get('/events/{event}', [\App\Http\Controllers\EventController::class, 'show'])->name('events.show');
 
 Route::get('/resources', function () {
-    return view('pages.resources');
+    $validTabs = ['publications', 'tenders', 'news', 'downloads', 'acts'];
+    $tab = in_array(request('tab'), $validTabs, true) ? request('tab') : 'publications';
+    $perPage = 6;
+
+    $publications = \App\Models\Publication::active()->ordered()->paginate($perPage)->withQueryString();
+    $tenders = \App\Models\Tender::where('status', 'active')->orderBy('publish_date', 'desc')->paginate($perPage)->withQueryString();
+    $news = \App\Models\News::active()->ordered()->paginate($perPage)->withQueryString();
+    $downloads = \App\Models\NgoRequiredDocument::where('is_active', true)->orderBy('order')->paginate($perPage)->withQueryString();
+    $actsRules = \App\Models\Publication::active()->ordered()->byCategory('Legal Act')->paginate($perPage)->withQueryString();
+
+    return view('pages.resources', compact('publications', 'tenders', 'news', 'downloads', 'actsRules', 'tab'));
 })->name('resources');
 
 Route::get('/ngo_directives', function () {

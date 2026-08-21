@@ -1,5 +1,9 @@
 @extends('layouts.fullscreen-layout')
 
+@php
+    $settings = \App\Models\SiteSetting::getSettings();
+@endphp
+
 @section('content')
     <div class="relative z-1 bg-white p-6 sm:p-0 dark:bg-gray-900">
         <div class="relative flex h-screen w-full flex-col justify-center sm:p-0 lg:flex-row dark:bg-gray-900">

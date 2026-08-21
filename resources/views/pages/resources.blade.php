@@ -49,20 +49,8 @@
                                 <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] py-4 px-5">
                                     Categories</h3>
                                 <nav id="resourceTabs" class="space-y-1">
-                                    <button onclick="switchTab('reports')" data-tab="reports"
-                                        class="tab-btn active relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98]">
-                                        <div class="flex items-center gap-3">
-                                            <div
-                                                class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center group-[.active]:bg-primary group-[.active]:text-white transition-colors">
-                                                <i data-lucide="file-bar-chart" class="w-4 h-4"></i>
-                                            </div>
-                                            <span>Reports</span>
-                                        </div>
-                                        <i data-lucide="arrow-right"
-                                            class="w-4 h-4 opacity-0 group-[.active]:opacity-100 group-[.active]:translate-x-0 -translate-x-2 transition-all"></i>
-                                    </button>
-                                    <button onclick="switchTab('publications')" data-tab="publications"
-                                        class="tab-btn relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98] text-slate-500 hover:text-primary hover:bg-slate-50">
+                                    <a href="{{ route('resources', ['tab' => 'publications']) }}" data-tab="publications"
+                                        class="tab-btn {{ $tab === 'publications' ? 'active bg-white text-primary shadow-sm border-l-4 border-secondary' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }} relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98]">
                                         <div class="flex items-center gap-3">
                                             <div
                                                 class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center group-[.active]:bg-primary group-[.active]:text-white transition-colors">
@@ -72,21 +60,45 @@
                                         </div>
                                         <i data-lucide="arrow-right"
                                             class="w-4 h-4 opacity-0 group-[.active]:opacity-100 group-[.active]:translate-x-0 -translate-x-2 transition-all"></i>
-                                    </button>
-                                    <button onclick="switchTab('obligations')" data-tab="obligations"
-                                        class="tab-btn relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98] text-slate-500 hover:text-primary hover:bg-slate-50">
+                                    </a>
+                                    <a href="{{ route('resources', ['tab' => 'tenders']) }}" data-tab="tenders"
+                                        class="tab-btn {{ $tab === 'tenders' ? 'active bg-white text-primary shadow-sm border-l-4 border-secondary' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }} relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98]">
                                         <div class="flex items-center gap-3">
                                             <div
                                                 class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center group-[.active]:bg-primary group-[.active]:text-white transition-colors">
-                                                <i data-lucide="globe" class="w-4 h-4"></i>
+                                                <i data-lucide="briefcase" class="w-4 h-4"></i>
                                             </div>
-                                            <span>Obligations</span>
+                                            <span>Tenders</span>
                                         </div>
                                         <i data-lucide="arrow-right"
                                             class="w-4 h-4 opacity-0 group-[.active]:opacity-100 group-[.active]:translate-x-0 -translate-x-2 transition-all"></i>
-                                    </button>
-                                    <button onclick="switchTab('acts')" data-tab="acts"
-                                        class="tab-btn relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98] text-slate-500 hover:text-primary hover:bg-slate-50">
+                                    </a>
+                                    <a href="{{ route('resources', ['tab' => 'news']) }}" data-tab="news"
+                                        class="tab-btn {{ $tab === 'news' ? 'active bg-white text-primary shadow-sm border-l-4 border-secondary' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }} relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98]">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center group-[.active]:bg-primary group-[.active]:text-white transition-colors">
+                                                <i data-lucide="newspaper" class="w-4 h-4"></i>
+                                            </div>
+                                            <span>News</span>
+                                        </div>
+                                        <i data-lucide="arrow-right"
+                                            class="w-4 h-4 opacity-0 group-[.active]:opacity-100 group-[.active]:translate-x-0 -translate-x-2 transition-all"></i>
+                                    </a>
+                                    <a href="{{ route('resources', ['tab' => 'downloads']) }}" data-tab="downloads"
+                                        class="tab-btn {{ $tab === 'downloads' ? 'active bg-white text-primary shadow-sm border-l-4 border-secondary' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }} relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98]">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center group-[.active]:bg-primary group-[.active]:text-white transition-colors">
+                                                <i data-lucide="download" class="w-4 h-4"></i>
+                                            </div>
+                                            <span>Downloads</span>
+                                        </div>
+                                        <i data-lucide="arrow-right"
+                                            class="w-4 h-4 opacity-0 group-[.active]:opacity-100 group-[.active]:translate-x-0 -translate-x-2 transition-all"></i>
+                                    </a>
+                                    <a href="{{ route('resources', ['tab' => 'acts']) }}" data-tab="acts"
+                                        class="tab-btn {{ $tab === 'acts' ? 'active bg-white text-primary shadow-sm border-l-4 border-secondary' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }} relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98]">
                                         <div class="flex items-center gap-3">
                                             <div
                                                 class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center group-[.active]:bg-primary group-[.active]:text-white transition-colors">
@@ -96,19 +108,7 @@
                                         </div>
                                         <i data-lucide="arrow-right"
                                             class="w-4 h-4 opacity-0 group-[.active]:opacity-100 group-[.active]:translate-x-0 -translate-x-2 transition-all"></i>
-                                    </button>
-                                    <button onclick="switchTab('articles')" data-tab="articles"
-                                        class="tab-btn relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98] text-slate-500 hover:text-primary hover:bg-slate-50">
-                                        <div class="flex items-center gap-3">
-                                            <div
-                                                class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center group-[.active]:bg-primary group-[.active]:text-white transition-colors">
-                                                <i data-lucide="pencil-line" class="w-4 h-4"></i>
-                                            </div>
-                                            <span>Articles</span>
-                                        </div>
-                                        <i data-lucide="arrow-right"
-                                            class="w-4 h-4 opacity-0 group-[.active]:opacity-100 group-[.active]:translate-x-0 -translate-x-2 transition-all"></i>
-                                    </button>
+                                    </a>
                                 </nav>
                             </div>
 
@@ -139,489 +139,150 @@
 
                     <!-- Main Content (Center) -->
                     <div class="flex-1">
-                        <div id="tabPanels" class="space-y-4">
-                            <div data-panel="reports" class="tab-panel active space-y-4">
+                                                <div id="tabPanels" class="space-y-4">
+                            <!-- Publications -->
+                            <div data-panel="publications" class="tab-panel active space-y-4">
+                                @forelse($publications as $publication)
                                 <div
                                     class="resource-item group bg-white border border-slate-200 rounded-3xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-secondary hover:shadow-xl hover:shadow-secondary/5 transition-all duration-300 transform hover:-translate-y-1">
                                     <div class="flex-1 space-y-3">
                                         <div
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-secondary/10 text-secondary uppercase tracking-wider">
-                                            Archive 2020</div>
+                                            {{ $publication->category ?? 'Publication' }}{{ $publication->published_date ? ' ' . $publication->published_date->format('Y') : '' }}</div>
                                         <h4
                                             class="text-base font-bold text-primary group-hover:text-secondary transition-colors">
-                                            Suo Moto record for the Years 2017 to 2020</h4>
-                                        <p class="text-slate-500 text-xs">Official record of cases taken up by the
-                                            Directorate for human rights protection.</p>
+                                            {{ $publication->title }}</h4>
+                                        <p class="text-slate-500 text-xs">{{ $publication->description }}</p>
                                     </div>
-                                    <a target="_blank"
-                                        href="https://www.humanrights.kp.gov.pk/sites/default/files/resources/Suo%20Moto%20record%20for%20the%20Years%202017%20to%202020.pdf"
+                                    <a target="_blank" href="{{ route('publications.download', $publication->id) }}"
                                         class="w-12 h-12 bg-slate-50 text-primary rounded-2xl flex items-center justify-center hover:bg-secondary hover:text-white transition-all shadow-sm shrink-0">
                                         <i data-lucide="eye" class="w-5 h-5"></i>
                                     </a>
                                 </div>
+                                @empty
+                                <div class="text-center py-24 bg-white rounded-3xl border border-slate-100">
+                                    <i data-lucide="file-x" class="w-10 h-10 text-slate-300 mx-auto mb-3"></i>
+                                    <p class="text-sm text-slate-400">No publications available yet.</p>
+                                </div>
+                                @endforelse
+                            </div>
+
+                            <!-- Tenders -->
+                            <div data-panel="tenders" class="tab-panel hidden space-y-4">
+                                @forelse($tenders as $tender)
                                 <div
                                     class="resource-item group bg-white border border-slate-200 rounded-3xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-secondary hover:shadow-xl hover:shadow-secondary/5 transition-all duration-300 transform hover:-translate-y-1">
                                     <div class="flex-1 space-y-3">
                                         <div
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-secondary/10 text-secondary uppercase tracking-wider">
-                                            Ref: KP-2020/02</div>
+                                            Ref: {{ $tender->reference_no }}</div>
                                         <h4
                                             class="text-base font-bold text-primary group-hover:text-secondary transition-colors">
-                                            Record of Complaints (Nature Wise Detail)</h4>
-                                        <p class="text-slate-500 text-xs">A comprehensive breakdown of complaints
-                                            received and processed by category.</p>
+                                            {{ $tender->title }}</h4>
+                                        <p class="text-slate-500 text-xs">{{ $tender->description }}</p>
+                                        @if ($tender->publish_date || $tender->closing_date)
+                                        <div class="flex flex-wrap items-center gap-4 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                                            @if ($tender->publish_date)
+                                                <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3"></i> Published: {{ $tender->publish_date->format('d M Y') }}</span>
+                                            @endif
+                                            @if ($tender->closing_date)
+                                                <span class="flex items-center gap-1"><i data-lucide="hourglass" class="w-3 h-3"></i> Closing: {{ $tender->closing_date->format('d M Y') }}</span>
+                                            @endif
+                                        </div>
+                                        @endif
                                     </div>
-                                    <a target="_blank"
-                                        href="https://www.humanrights.kp.gov.pk/sites/default/files/resources/Complaints%20records%20for%20the%20Years%202012%20to%202020%20%28Nature%20wise%20Detail%29.pdf"
+                                    <a target="_blank" href="{{ route('tenders.download', $tender->id) }}"
                                         class="w-12 h-12 bg-slate-50 text-primary rounded-2xl flex items-center justify-center hover:bg-secondary hover:text-white transition-all shadow-sm shrink-0">
-                                        <i data-lucide="eye" class="w-5 h-5"></i>
+                                        <i data-lucide="download" class="w-5 h-5"></i>
                                     </a>
                                 </div>
+                                @empty
+                                <div class="text-center py-24 bg-white rounded-3xl border border-slate-100">
+                                    <i data-lucide="file-x" class="w-10 h-10 text-slate-300 mx-auto mb-3"></i>
+                                    <p class="text-sm text-slate-400">No tenders available yet.</p>
+                                </div>
+                                @endforelse
                             </div>
 
-                            <!-- Publication -->
-                            <div data-panel="publications" class="tab-panel hidden space-y-4">
+                            <!-- News -->
+                            <div data-panel="news" class="tab-panel hidden space-y-4">
+                                @forelse($news as $item)
+                                <a href="{{ route('news_details', $item->id) }}"
+                                    class="resource-item group bg-white border border-slate-200 rounded-3xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-secondary hover:shadow-xl hover:shadow-secondary/5 transition-all duration-300 transform hover:-translate-y-1">
+                                    <div class="flex-1 space-y-3">
+                                        <div
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-secondary/10 text-secondary uppercase tracking-wider">
+                                            {{ $item->published_date ? $item->published_date->format('d M Y') : 'News' }}</div>
+                                        <h4
+                                            class="text-base font-bold text-primary group-hover:text-secondary transition-colors">
+                                            {{ $item->title }}</h4>
+                                        <p class="text-slate-500 text-xs">{{ $item->excerpt }}</p>
+                                    </div>
+                                    <span
+                                        class="w-12 h-12 bg-slate-50 text-primary rounded-2xl flex items-center justify-center hover:bg-secondary hover:text-white transition-all shadow-sm shrink-0">
+                                        <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
+                                    </span>
+                                </a>
+                                @empty
+                                <div class="text-center py-24 bg-white rounded-3xl border border-slate-100">
+                                    <i data-lucide="file-x" class="w-10 h-10 text-slate-300 mx-auto mb-3"></i>
+                                    <p class="text-sm text-slate-400">No news available yet.</p>
+                                </div>
+                                @endforelse
+                            </div>
+
+                            <!-- Downloads -->
+                            <div data-panel="downloads" class="tab-panel hidden space-y-4">
+                                @forelse($downloads as $document)
                                 <div
                                     class="resource-item group bg-white border border-slate-200 rounded-3xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-secondary hover:shadow-xl hover:shadow-secondary/5 transition-all duration-300 transform hover:-translate-y-1">
                                     <div class="flex-1 space-y-3">
                                         <div
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-secondary/10 text-secondary uppercase tracking-wider">
-                                            Publication 2018</div>
+                                            Document</div>
                                         <h4
                                             class="text-base font-bold text-primary group-hover:text-secondary transition-colors">
-                                            KP Human Rights Policy 2018</h4>
-                                        <p class="text-slate-500 text-xs">The foundational policy document outlining the
-                                            provincial vision for human rights.</p>
+                                            {{ $document->name }}</h4>
+                                        <p class="text-slate-500 text-xs">Official document provided by the Directorate.</p>
                                     </div>
-                                    <a target="_blank"
-                                        href="https://www.humanrights.kp.gov.pk/sites/default/files/resources/KP%20Human%20Rights%20Policy%202018.pdf"
-                                        class="w-14 h-14 bg-slate-50 text-primary rounded-2xl flex items-center justify-center hover:bg-secondary hover:text-white transition-all shadow-sm shrink-0">
-                                        <i data-lucide="download-cloud" class="w-6 h-6"></i>
+                                    <a target="_blank" href="{{ asset($document->file_path) }}"
+                                        class="w-12 h-12 bg-slate-50 text-primary rounded-2xl flex items-center justify-center hover:bg-secondary hover:text-white transition-all shadow-sm shrink-0">
+                                        <i data-lucide="download" class="w-5 h-5"></i>
                                     </a>
                                 </div>
-                            </div>
-
-                            <!-- Obligations -->
-                            <div data-panel="obligations" class="tab-panel hidden space-y-4">
-                                <div
-                                    class="resource-item group bg-white border border-slate-200 rounded-3xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-secondary hover:shadow-xl hover:shadow-secondary/5 transition-all duration-300 transform hover:-translate-y-1">
-                                    <div class="flex-1 space-y-3">
-                                        <div
-                                            class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-secondary/10 text-secondary uppercase tracking-wider">
-                                            International Charter</div>
-                                        <h4
-                                            class="text-base font-bold text-primary group-hover:text-secondary transition-colors">
-                                            Universal Declaration of Human Rights</h4>
-                                        <p class="text-slate-500 text-xs">Standard declaration as adopted by the UN
-                                            General Assembly.</p>
-                                    </div>
-                                    <a target="_blank"
-                                        href="https://www.humanrights.kp.gov.pk/sites/default/files/resources/Universal%20Declaration%20of%20Human%20Rights.pdf"
-                                        class="w-14 h-14 bg-slate-50 text-primary rounded-2xl flex items-center justify-center hover:bg-secondary hover:text-white transition-all shadow-sm shrink-0">
-                                        <i data-lucide="book-open" class="w-6 h-6"></i>
-                                    </a>
+                                @empty
+                                <div class="text-center py-24 bg-white rounded-3xl border border-slate-100">
+                                    <i data-lucide="file-x" class="w-10 h-10 text-slate-300 mx-auto mb-3"></i>
+                                    <p class="text-sm text-slate-400">No downloads available yet.</p>
                                 </div>
+                                @endforelse
                             </div>
 
                             <!-- Acts & Rules -->
                             <div data-panel="acts" class="tab-panel hidden space-y-4">
+                                @forelse($actsRules as $act)
                                 <div
                                     class="resource-item group bg-white border border-slate-200 rounded-3xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-secondary hover:shadow-xl hover:shadow-secondary/5 transition-all duration-300 transform hover:-translate-y-1">
                                     <div class="flex-1 space-y-3">
                                         <div
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-secondary/10 text-secondary uppercase tracking-wider">
-                                            Provincial Law 2014</div>
+                                            Legal Act{{ $act->published_date ? ' ' . $act->published_date->format('Y') : '' }}</div>
                                         <h4
                                             class="text-base font-bold text-primary group-hover:text-secondary transition-colors">
-                                            KP Human Rights Act - 2014</h4>
-                                        <p class="text-slate-500 text-xs">The primary legislative framework for human
-                                            rights in Khyber Pakhtunkhwa.</p>
+                                            {{ $act->title }}</h4>
+                                        <p class="text-slate-500 text-xs">{{ $act->description }}</p>
                                     </div>
-                                    <a target="_blank"
-                                        href="https://www.humanrights.kp.gov.pk/sites/default/files/resources/Act%20to%20provide%20for%20the%20promotion%2C%20protection%20and%20enforcement%20of%20human%20rights%20in%20the%20Province%20of%20KP-2014_0.pdf"
-                                        class="w-14 h-14 bg-slate-50 text-primary rounded-2xl flex items-center justify-center hover:bg-secondary hover:text-white transition-all shadow-sm shrink-0">
-                                        <i data-lucide="file-text" class="w-6 h-6"></i>
+                                    <a target="_blank" href="{{ route('publications.download', $act->id) }}"
+                                        class="w-12 h-12 bg-slate-50 text-primary rounded-2xl flex items-center justify-center hover:bg-secondary hover:text-white transition-all shadow-sm shrink-0">
+                                        <i data-lucide="eye" class="w-5 h-5"></i>
                                     </a>
                                 </div>
-                            </div>
-
-                            <!-- Special Articles -->
-                            <div data-panel="articles" class="tab-panel hidden space-y-6">
-                                <!-- Specialized Accordion System -->
-                                <div class="space-y-4">
-                                    <!-- VAW -->
-                                    <div class="resource-item accordion-item">
-                                        <button onclick="toggleAccordion('vaw-group', 'vaw-icon')"
-                                            class="w-full bg-white border border-slate-200 rounded-[2rem] p-5 flex items-center justify-between group hover:border-primary/30 hover:shadow-lg transition-all">
-                                            <div class="flex items-center gap-6 text-left">
-                                                <div
-                                                    class="w-14 h-14 bg-primary/5 rounded-[1.25rem] flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-                                                    <i data-lucide="shield-alert" class="w-6 h-6"></i>
-                                                </div>
-                                                <div>
-                                                    <h4
-                                                        class="text-base font-black font-outfit text-primary tracking-tight">
-                                                        Violence Against Women</h4>
-                                                    <p
-                                                        class="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">
-                                                        Policy Reviews & Articles</p>
-                                                </div>
-                                            </div>
-                                            <i data-lucide="chevron-down" id="vaw-icon"
-                                                class="w-6 h-6 text-slate-300 transition-transform duration-500"></i>
-                                        </button>
-                                        <div id="vaw-group" class="accordion-panel">
-                                            <div class="accordion-panel-content">
-                                                <div class="pt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                    <a href="https://www.humanrights.kp.gov.pk/resources/article/34"
-                                                        class="p-5 bg-white border border-slate-100 rounded-2xl flex items-center justify-between group/link hover:border-secondary hover:shadow-md transition-all">
-                                                        <span
-                                                            class="text-sm font-bold text-slate-600 group-hover/link:text-primary transition-colors">Review
-                                                            of Pakistan’s Policy on Domestic Violence</span>
-                                                        <i data-lucide="arrow-up-right"
-                                                            class="w-4 h-4 text-slate-300 group-hover/link:text-secondary group-hover/link:translate-x-1 group-hover/link:-translate-y-1 transition-all"></i>
-                                                    </a>
-                                                    <a href="https://www.humanrights.kp.gov.pk/resources/article/21"
-                                                        class="p-5 bg-white border border-slate-100 rounded-2xl flex items-center justify-between group/link hover:border-secondary hover:shadow-md transition-all">
-                                                        <span
-                                                            class="text-sm font-bold text-slate-600 group-hover/link:text-primary transition-colors">Domestic
-                                                            Violence in Pakistan</span>
-                                                        <i data-lucide="arrow-up-right"
-                                                            class="w-4 h-4 text-slate-300 group-hover/link:text-secondary group-hover/link:translate-x-1 group-hover/link:-translate-y-1 transition-all"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Disability -->
-                                    <div class="resource-item accordion-item">
-                                        <button onclick="toggleAccordion('disability-group', 'disability-icon')"
-                                            class="w-full bg-white border border-slate-200 rounded-[2rem] p-5 flex items-center justify-between group hover:border-secondary/30 hover:shadow-lg transition-all">
-                                            <div class="flex items-center gap-6 text-left">
-                                                <div
-                                                    class="w-14 h-14 bg-secondary/5 rounded-[1.25rem] flex items-center justify-center text-secondary group-hover:bg-secondary group-hover:text-white transition-all">
-                                                    <i data-lucide="accessibility" class="w-6 h-6"></i>
-                                                </div>
-                                                <div>
-                                                    <h4
-                                                        class="text-base font-black font-outfit text-primary tracking-tight">
-                                                        Rights of Persons with Disability</h4>
-                                                    <p
-                                                        class="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">
-                                                        Inclusion & Accessibility</p>
-                                                </div>
-                                            </div>
-                                            <i data-lucide="chevron-down" id="disability-icon"
-                                                class="w-6 h-6 text-slate-300 transition-transform duration-500"></i>
-                                        </button>
-                                        <div id="disability-group" class="accordion-panel">
-                                            <div class="accordion-panel-content">
-                                                <div class="pt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                    <a href="#"
-                                                        class="p-5 bg-white border border-slate-100 rounded-2xl flex items-center justify-between group/link hover:border-secondary hover:shadow-md transition-all">
-                                                        <span
-                                                            class="text-sm font-bold text-slate-600 group-hover/link:text-primary transition-colors">Disability
-                                                            in Developing Countries</span>
-                                                        <i data-lucide="arrow-up-right"
-                                                            class="w-4 h-4 text-slate-300 group-hover/link:text-secondary hover:translate-x-1 transition-all"></i>
-                                                    </a>
-                                                    <a href="#"
-                                                        class="p-5 bg-white border border-slate-100 rounded-2xl flex items-center justify-between group/link hover:border-secondary hover:shadow-md transition-all">
-                                                        <span
-                                                            class="text-sm font-bold text-slate-600 group-hover/link:text-primary transition-colors">CBR
-                                                            and UNCRPD Articles 6, 7, and 24</span>
-                                                        <i data-lucide="arrow-up-right"
-                                                            class="w-4 h-4 text-slate-300 group-hover/link:text-secondary hover:translate-x-1 transition-all"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Legal Basis -->
-                                    <div class="resource-item accordion-item">
-                                        <button onclick="toggleAccordion('legal-group', 'legal-icon')"
-                                            class="w-full bg-white border border-slate-200 rounded-[2rem] p-5 flex items-center justify-between group hover:border-primary/30 hover:shadow-lg transition-all">
-                                            <div class="flex items-center gap-6 text-left">
-                                                <div
-                                                    class="w-14 h-14 bg-primary/5 rounded-[1.25rem] flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-                                                    <i data-lucide="scale" class="w-6 h-6"></i>
-                                                </div>
-                                                <div>
-                                                    <h4
-                                                        class="text-base font-black font-outfit text-primary tracking-tight">
-                                                        Legal Basis of Human Rights</h4>
-                                                    <p
-                                                        class="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">
-                                                        Constitutional & International Law</p>
-                                                </div>
-                                            </div>
-                                            <i data-lucide="chevron-down" id="legal-icon"
-                                                class="w-6 h-6 text-slate-300 transition-transform duration-500"></i>
-                                        </button>
-                                        <div id="legal-group" class="accordion-panel">
-                                            <div class="accordion-panel-content">
-                                                <div class="pt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                    <a href="#"
-                                                        class="p-5 bg-white border border-slate-100 rounded-2xl flex items-center justify-between group/link hover:border-secondary hover:shadow-md transition-all">
-                                                        <span
-                                                            class="text-sm font-bold text-slate-600 group-hover/link:text-primary transition-colors">Legal
-                                                            Basis of Human Rights</span>
-                                                        <i data-lucide="arrow-up-right"
-                                                            class="w-4 h-4 text-slate-300 group-hover/link:text-secondary hover:translate-x-1 transition-all"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Inequality -->
-                                    <div class="resource-item accordion-item">
-                                        <button onclick="toggleAccordion('inequality-group', 'inequality-icon')"
-                                            class="w-full bg-white border border-slate-200 rounded-[2rem] p-5 flex items-center justify-between group hover:border-secondary/30 hover:shadow-lg transition-all">
-                                            <div class="flex items-center gap-6 text-left">
-                                                <div
-                                                    class="w-14 h-14 bg-secondary/5 rounded-[1.25rem] flex items-center justify-center text-secondary group-hover:bg-secondary group-hover:text-white transition-all">
-                                                    <i data-lucide="scale" class="w-6 h-6"></i>
-                                                </div>
-                                                <div>
-                                                    <h4
-                                                        class="text-base font-black font-outfit text-primary tracking-tight">
-                                                        Inequality</h4>
-                                                    <p
-                                                        class="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">
-                                                        Development & Access Gaps</p>
-                                                </div>
-                                            </div>
-                                            <i data-lucide="chevron-down" id="inequality-icon"
-                                                class="w-6 h-6 text-slate-300 transition-transform duration-500"></i>
-                                        </button>
-                                        <div id="inequality-group" class="accordion-panel">
-                                            <div class="accordion-panel-content">
-                                                <div class="pt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                    <a href="#"
-                                                        class="p-5 bg-white border border-slate-100 rounded-2xl flex items-center justify-between group/link hover:border-secondary hover:shadow-md transition-all">
-                                                        <span
-                                                            class="text-sm font-bold text-slate-600 group-hover/link:text-primary transition-colors">Putting
-                                                            Inequality at the Centre of Post-2015 Agenda</span>
-                                                        <i data-lucide="arrow-up-right"
-                                                            class="w-4 h-4 text-slate-300 group-hover/link:text-secondary hover:translate-x-1 transition-all"></i>
-                                                    </a>
-                                                    <a href="#"
-                                                        class="p-5 bg-white border border-slate-100 rounded-2xl flex items-center justify-between group/link hover:border-secondary hover:shadow-md transition-all">
-                                                        <span
-                                                            class="text-sm font-bold text-slate-600 group-hover/link:text-primary transition-colors">Gender
-                                                            Inequality in Health Access</span>
-                                                        <i data-lucide="arrow-up-right"
-                                                            class="w-4 h-4 text-slate-300 group-hover/link:text-secondary hover:translate-x-1 transition-all"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Girl Education -->
-                                    <div class="resource-item accordion-item">
-                                        <button onclick="toggleAccordion('girl-edu-group', 'girl-edu-icon')"
-                                            class="w-full bg-white border border-slate-200 rounded-[2rem] p-5 flex items-center justify-between group hover:border-primary/30 hover:shadow-lg transition-all">
-                                            <div class="flex items-center gap-6 text-left">
-                                                <div
-                                                    class="w-14 h-14 bg-primary/5 rounded-[1.25rem] flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-                                                    <i data-lucide="graduation-cap" class="w-6 h-6"></i>
-                                                </div>
-                                                <div>
-                                                    <h4
-                                                        class="text-base font-black font-outfit text-primary tracking-tight">
-                                                        Girl Education</h4>
-                                                    <p
-                                                        class="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">
-                                                        Empowerment & Reform</p>
-                                                </div>
-                                            </div>
-                                            <i data-lucide="chevron-down" id="girl-edu-icon"
-                                                class="w-6 h-6 text-slate-300 transition-transform duration-500"></i>
-                                        </button>
-                                        <div id="girl-edu-group" class="accordion-panel">
-                                            <div class="accordion-panel-content">
-                                                <div class="pt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                    <a href="#"
-                                                        class="p-5 bg-white border border-slate-100 rounded-2xl flex items-center justify-between group/link hover:border-secondary hover:shadow-md transition-all">
-                                                        <span
-                                                            class="text-sm font-bold text-slate-600 group-hover/link:text-primary transition-colors">Improving
-                                                            Girl Education in Pakistan</span>
-                                                        <i data-lucide="arrow-up-right"
-                                                            class="w-4 h-4 text-slate-300 group-hover/link:text-secondary hover:translate-x-1 transition-all"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- General Issues -->
-                                    <div class="resource-item accordion-item">
-                                        <button onclick="toggleAccordion('general-group', 'general-icon')"
-                                            class="w-full bg-white border border-slate-200 rounded-[2rem] p-5 flex items-center justify-between group hover:border-secondary/30 hover:shadow-lg transition-all">
-                                            <div class="flex items-center gap-6 text-left">
-                                                <div
-                                                    class="w-14 h-14 bg-secondary/5 rounded-[1.25rem] flex items-center justify-center text-secondary group-hover:bg-secondary group-hover:text-white transition-all">
-                                                    <i data-lucide="info" class="w-6 h-6"></i>
-                                                </div>
-                                                <div>
-                                                    <h4
-                                                        class="text-base font-black font-outfit text-primary tracking-tight">
-                                                        General Issues</h4>
-                                                    <p
-                                                        class="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">
-                                                        Social Policy & Media</p>
-                                                </div>
-                                            </div>
-                                            <i data-lucide="chevron-down" id="general-icon"
-                                                class="w-6 h-6 text-slate-300 transition-transform duration-500"></i>
-                                        </button>
-                                        <div id="general-group" class="accordion-panel">
-                                            <div class="accordion-panel-content">
-                                                <div class="pt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                    <a href="#"
-                                                        class="p-5 bg-white border border-slate-100 rounded-2xl flex items-center justify-between group/link hover:border-secondary hover:shadow-md transition-all">
-                                                        <span
-                                                            class="text-sm font-bold text-slate-600 group-hover/link:text-primary transition-colors">Social
-                                                            Policy and Development</span>
-                                                        <i data-lucide="arrow-up-right"
-                                                            class="w-4 h-4 text-slate-300 group-hover/link:text-secondary hover:translate-x-1 transition-all"></i>
-                                                    </a>
-                                                    <a href="#"
-                                                        class="p-5 bg-white border border-slate-100 rounded-2xl flex items-center justify-between group/link hover:border-secondary hover:shadow-md transition-all">
-                                                        <span
-                                                            class="text-sm font-bold text-slate-600 group-hover/link:text-primary transition-colors">Media
-                                                            Impact on Policy Debate</span>
-                                                        <i data-lucide="arrow-up-right"
-                                                            class="w-4 h-4 text-slate-300 group-hover/link:text-secondary hover:translate-x-1 transition-all"></i>
-                                                    </a>
-                                                    <a href="#"
-                                                        class="p-5 bg-white border border-slate-100 rounded-2xl flex items-center justify-between group/link hover:border-secondary hover:shadow-md transition-all">
-                                                        <span
-                                                            class="text-sm font-bold text-slate-600 group-hover/link:text-primary transition-colors">History
-                                                            of Human Rights</span>
-                                                        <i data-lucide="arrow-up-right"
-                                                            class="w-4 h-4 text-slate-300 group-hover/link:text-secondary hover:translate-x-1 transition-all"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Domestic Violence -->
-                                    <div class="resource-item accordion-item">
-                                        <button onclick="toggleAccordion('dv-group', 'dv-icon')"
-                                            class="w-full bg-white border border-slate-200 rounded-[2rem] p-5 flex items-center justify-between group hover:border-primary/30 hover:shadow-lg transition-all">
-                                            <div class="flex items-center gap-6 text-left">
-                                                <div
-                                                    class="w-14 h-14 bg-primary/5 rounded-[1.25rem] flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-                                                    <i data-lucide="home" class="w-6 h-6"></i>
-                                                </div>
-                                                <div>
-                                                    <h4
-                                                        class="text-base font-black font-outfit text-primary tracking-tight">
-                                                        Domestic Violence</h4>
-                                                    <p
-                                                        class="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">
-                                                        Protection & Policy</p>
-                                                </div>
-                                            </div>
-                                            <i data-lucide="chevron-down" id="dv-icon"
-                                                class="w-6 h-6 text-slate-300 transition-transform duration-500"></i>
-                                        </button>
-                                        <div id="dv-group" class="accordion-panel">
-                                            <div class="accordion-panel-content">
-                                                <div class="pt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                    <a href="#"
-                                                        class="p-5 bg-white border border-slate-100 rounded-2xl flex items-center justify-between group/link hover:border-secondary hover:shadow-md transition-all">
-                                                        <span
-                                                            class="text-sm font-bold text-slate-600 group-hover/link:text-primary transition-colors">Domestic
-                                                            Violence Prevention Strategy</span>
-                                                        <i data-lucide="arrow-up-right"
-                                                            class="w-4 h-4 text-slate-300 group-hover/link:text-secondary hover:translate-x-1 transition-all"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Child Rights -->
-                                    <div class="resource-item accordion-item">
-                                        <button onclick="toggleAccordion('child-rights-group', 'child-rights-icon')"
-                                            class="w-full bg-white border border-slate-200 rounded-[2rem] p-5 flex items-center justify-between group hover:border-secondary/30 hover:shadow-lg transition-all">
-                                            <div class="flex items-center gap-6 text-left">
-                                                <div
-                                                    class="w-14 h-14 bg-secondary/5 rounded-[1.25rem] flex items-center justify-center text-secondary group-hover:bg-secondary group-hover:text-white transition-all">
-                                                    <i data-lucide="shield-check" class="w-6 h-6"></i>
-                                                </div>
-                                                <div>
-                                                    <h4
-                                                        class="text-base font-black font-outfit text-primary tracking-tight">
-                                                        Child Rights</h4>
-                                                    <p
-                                                        class="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">
-                                                        Protection & UNCRC Compliance</p>
-                                                </div>
-                                            </div>
-                                            <i data-lucide="chevron-down" id="child-rights-icon"
-                                                class="w-6 h-6 text-slate-300 transition-transform duration-500"></i>
-                                        </button>
-                                        <div id="child-rights-group" class="accordion-panel">
-                                            <div class="accordion-panel-content">
-                                                <div class="pt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                    <a href="#"
-                                                        class="p-5 bg-white border border-slate-100 rounded-2xl flex items-center justify-between group/link hover:border-secondary hover:shadow-md transition-all">
-                                                        <span
-                                                            class="text-sm font-bold text-slate-600 group-hover/link:text-primary transition-colors">Child
-                                                            Rights Framework in Pakistan</span>
-                                                        <i data-lucide="arrow-up-right"
-                                                            class="w-4 h-4 text-slate-300 group-hover/link:text-secondary hover:translate-x-1 transition-all"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Child Labor -->
-                                    <div class="resource-item accordion-item">
-                                        <button onclick="toggleAccordion('child-labor-group', 'child-labor-icon')"
-                                            class="w-full bg-white border border-slate-200 rounded-[2rem] p-5 flex items-center justify-between group hover:border-primary/30 hover:shadow-lg transition-all">
-                                            <div class="flex items-center gap-6 text-left">
-                                                <div
-                                                    class="w-14 h-14 bg-primary/5 rounded-[1.25rem] flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
-                                                    <i data-lucide="briefcase" class="w-6 h-6"></i>
-                                                </div>
-                                                <div>
-                                                    <h4
-                                                        class="text-base font-black font-outfit text-primary tracking-tight">
-                                                        Child Labor</h4>
-                                                    <p
-                                                        class="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">
-                                                        Eradication & Monitoring</p>
-                                                </div>
-                                            </div>
-                                            <i data-lucide="chevron-down" id="child-labor-icon"
-                                                class="w-6 h-6 text-slate-300 transition-transform duration-500"></i>
-                                        </button>
-                                        <div id="child-labor-group" class="accordion-panel">
-                                            <div class="accordion-panel-content">
-                                                <div class="pt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                    <a href="#"
-                                                        class="p-5 bg-white border border-slate-100 rounded-2xl flex items-center justify-between group/link hover:border-secondary hover:shadow-md transition-all">
-                                                        <span
-                                                            class="text-sm font-bold text-slate-600 group-hover/link:text-primary transition-colors">Elimination
-                                                            of Child Labor Initiatives</span>
-                                                        <i data-lucide="arrow-up-right"
-                                                            class="w-4 h-4 text-slate-300 group-hover/link:text-secondary hover:translate-x-1 transition-all"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                @empty
+                                <div class="text-center py-24 bg-white rounded-3xl border border-slate-100">
+                                    <i data-lucide="file-x" class="w-10 h-10 text-slate-300 mx-auto mb-3"></i>
+                                    <p class="text-sm text-slate-400">No acts or rules available yet.</p>
                                 </div>
+                                @endforelse
                             </div>
                         </div> <!-- End of tabPanels content -->
 
@@ -650,9 +311,9 @@
                     </div>
 
                     <!-- 4. Empty Search Helper -->
-                    <div id="noResults"
+                    <div class="w-full" id="noResults"
                         class="hidden py-32 text-center bg-white rounded-[3rem] border border-slate-100 shadow-inner">
-                        <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <div class="w-full h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
                             <i data-lucide="search-x" class="w-10 h-10 text-slate-300"></i>
                         </div>
                         <h3 class="text-primary font-black uppercase tracking-[0.2em] text-sm">No documents found

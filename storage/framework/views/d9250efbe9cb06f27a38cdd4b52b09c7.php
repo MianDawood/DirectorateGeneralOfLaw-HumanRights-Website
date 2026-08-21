@@ -403,21 +403,9 @@ unset($__defined_vars, $__key, $__value); ?>
                     <li><a href="<?php echo e(route('whatwedo')); ?>"
                             class="flex items-center gap-2 px-5 py-4 text-white <?php echo e(request()->routeIs('whatwedo') ? 'bg-[#02B1EB]' : 'hover:bg-white/10'); ?> transition-all-custom font-medium text-sm"><span>What
                                 We Do</span></a></li>
-                    <li class="group relative">
-                        <a href="<?php echo e(route('mediacorner')); ?>"
+                    <li><a href="<?php echo e(route('mediacorner')); ?>"
                             class="flex items-center gap-2 px-5 py-4 text-white <?php echo e(request()->routeIs('mediacorner', 'events.show', 'photogallery', 'videogallery') ? 'bg-[#02B1EB]' : 'hover:bg-white/10'); ?> transition-all-custom font-medium text-sm"><span>Media
-                                Corner</span><i data-lucide="chevron-down"
-                                class="w-3.5 h-3.5 opacity-60 group-hover:rotate-180 transition-transform duration-300"></i></a>
-                        <div
-                            class="absolute left-0 top-full w-64 bg-white shadow-2xl rounded-b-xl border border-slate-100 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-[110] p-2">
-                            <div class="flex flex-col">
-                                <a href="<?php echo e(route('mediacorner')); ?>#events"
-                                    class="px-4 py-3 text-slate-700 hover:bg-[#123B2D]/5 hover:text-[#123B2D] rounded-lg transition-colors flex items-center gap-3 text-sm"><i
-                                        data-lucide="calendar" class="w-4 h-4 text-[#123B2D]"></i>Events &amp;
-                                    Media</a>
-                            </div>
-                        </div>
-                    </li>
+                                Corner</span></a></li>
                     <!-- NGO Registration with Sub-Menu -->
                     <li class="group relative">
                         <a href="<?php echo e(route('ngo_required_documents')); ?>"
@@ -523,6 +511,47 @@ unset($__defined_vars, $__key, $__value); ?>
             </div>
         </nav>
 
+
+
+        <!-- HERO SECTION -->
+
+
+
+        <!--  4: Latest News Ticker -->
+        <div class="bg-[#123B2D] flex items-center overflow-hidden h-10 border-t border-white">
+            <div class="bg-[#02B1EB] px-6 h-full flex items-center shrink-0 z-10">
+                <span
+                    class="flex items-center text-[10px] font-black uppercase tracking-widest text-white whitespace-nowrap">
+                    <span class="pulse-dot"></span>
+                    Latest News
+                </span>
+            </div>
+            <div class="flex-1 overflow-hidden h-full ticker-mask">
+                <div class="animate-ticker whitespace-nowrap h-full flex items-center gap-10">
+                    <?php
+                        $tickerNews = App\Models\News::active()->latest()->take(3)->get();
+                    ?>
+                    <?php $__currentLoopData = $tickerNews; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <a href="<?php echo e(route('news_details', $item->id)); ?>"
+                            class="text-xs font-bold text-white/90 hover:text-[#02B1EB] uppercase tracking-wider"><?php echo e(Str::limit($item->title, 60)); ?></a>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php if($tickerNews->count() < 3): ?>
+                        <a href="<?php echo e(route('mediacorner')); ?>"
+                            class="text-xs font-bold text-white/90 hover:text-[#02B1EB] uppercase tracking-wider">VIEW
+                            ALL NEWS</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 px-4 border-l border-white/20 text-white/60">
+                <button class="hover:text-[#02B1EB] transition-colors"><i data-lucide="chevron-left"
+                        class="w-4 h-4"></i></button>
+                <button class="hover:text-[#02B1EB] transition-colors"><i data-lucide="pause"
+                        class="w-3 h-3"></i></button>
+                <button class="hover:text-[#02B1EB] transition-colors"><i data-lucide="chevron-right"
+                        class="w-4 h-4"></i></button>
+            </div>
+        </div>
+    </header>
         <!-- Mobile Side Menu Overlay -->
         <div id="mobileMenuOverlay"
             class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[150] opacity-0 invisible transition-all duration-500">
@@ -600,24 +629,14 @@ unset($__defined_vars, $__key, $__value); ?>
                             <i data-lucide="briefcase" class="w-5 h-5"></i> What We Do
                         </a>
 
-                        <div class="mobile-dropdown group">
-                            <div
-                                class="flex items-center justify-between w-full p-3 rounded-xl text-slate-700 font-bold <?php echo e(request()->routeIs('mediacorner', 'events.show', 'photogallery', 'videogallery') ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary'); ?> transition-all">
-                                <a href="<?php echo e(route('mediacorner')); ?>" class="flex items-center gap-3 flex-1">
-                                    <i data-lucide="layers" class="w-5 h-5"></i> Media Corner
-                                </a>
-                                <button class="p-2 dropdown-trigger">
-                                    <i data-lucide="chevron-down"
-                                        class="w-4 h-4 transition-transform duration-300 dropdown-icon"></i>
-                                </button>
+                        <a href="<?php echo e(route('mediacorner')); ?>"
+                            class="flex items-center gap-3 p-3 rounded-xl text-slate-700 font-bold <?php echo e(request()->routeIs('mediacorner') ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary'); ?> transition-all">
+                            <i data-lucide="layers" class="w-5 h-5"></i> Media Corner
+                        </a>
+
+                        
                             </div>
-                            <div class="hidden space-y-1 mt-1 ml-11 dropdown-content">
-                                <a href="<?php echo e(route('mediacorner')); ?>"
-                                    class="block p-2 text-sm text-slate-500 italic">Media Corner</a>
-                                <a href="<?php echo e(route('mediacorner')); ?>#events"
-                                    class="block p-2 text-sm text-slate-500 italic">Events &amp; Media</a>
-                            </div>
-                        </div>
+                         
 
                         <div class="mobile-dropdown group">
                             <div
@@ -786,47 +805,6 @@ unset($__defined_vars, $__key, $__value); ?>
                     Government</p>
             </div>
         </div>
-
-
-        <!-- HERO SECTION -->
-
-
-
-        <!--  4: Latest News Ticker -->
-        <div class="bg-[#123B2D] flex items-center overflow-hidden h-10 border-t border-white">
-            <div class="bg-[#02B1EB] px-6 h-full flex items-center shrink-0 z-10">
-                <span
-                    class="flex items-center text-[10px] font-black uppercase tracking-widest text-white whitespace-nowrap">
-                    <span class="pulse-dot"></span>
-                    Latest News
-                </span>
-            </div>
-            <div class="flex-1 overflow-hidden h-full ticker-mask">
-                <div class="animate-ticker whitespace-nowrap h-full flex items-center gap-10">
-                    <?php
-                        $tickerNews = App\Models\News::active()->latest()->take(3)->get();
-                    ?>
-                    <?php $__currentLoopData = $tickerNews; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <a href="<?php echo e(route('news_details', $item->id)); ?>"
-                            class="text-xs font-bold text-white/90 hover:text-[#02B1EB] uppercase tracking-wider"><?php echo e(Str::limit($item->title, 60)); ?></a>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    <?php if($tickerNews->count() < 3): ?>
-                        <a href="<?php echo e(route('mediacorner')); ?>"
-                            class="text-xs font-bold text-white/90 hover:text-[#02B1EB] uppercase tracking-wider">VIEW
-                            ALL NEWS</a>
-                    <?php endif; ?>
-                </div>
-            </div>
-            <div class="flex items-center gap-2 px-4 border-l border-white/20 text-white/60">
-                <button class="hover:text-[#02B1EB] transition-colors"><i data-lucide="chevron-left"
-                        class="w-4 h-4"></i></button>
-                <button class="hover:text-[#02B1EB] transition-colors"><i data-lucide="pause"
-                        class="w-3 h-3"></i></button>
-                <button class="hover:text-[#02B1EB] transition-colors"><i data-lucide="chevron-right"
-                        class="w-4 h-4"></i></button>
-            </div>
-        </div>
-    </header>
     <main>
         <?php echo e($slot); ?>
 
