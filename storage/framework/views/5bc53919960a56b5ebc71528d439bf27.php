@@ -1,4 +1,13 @@
-<x-layout>
+<?php if (isset($component)) { $__componentOriginal23a33f287873b564aaf305a1526eada4 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal23a33f287873b564aaf305a1526eada4 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layout','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
 <main class="bg-slate-50/50 min-h-screen lg:pt-12 pt-6">
         <!-- Registry Header -->
         <section class="mb-12">
@@ -49,8 +58,8 @@
                                 <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] py-4 px-5">
                                     Categories</h3>
                                 <nav id="resourceTabs" class="space-y-1">
-                                    <a href="{{ route('resources', ['tab' => 'publications']) }}" data-tab="publications"
-                                        class="tab-btn {{ $tab === 'publications' ? 'active bg-white text-primary shadow-sm border-l-4 border-secondary' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }} relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98]">
+                                    <a href="<?php echo e(route('resources', ['tab' => 'publications'])); ?>" data-tab="publications"
+                                        class="tab-btn <?php echo e($tab === 'publications' ? 'active bg-white text-primary shadow-sm border-l-4 border-secondary' : 'text-slate-500 hover:text-primary hover:bg-slate-50'); ?> relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98]">
                                         <div class="flex items-center gap-3">
                                             <div
                                                 class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center group-[.active]:bg-primary group-[.active]:text-white transition-colors">
@@ -61,8 +70,8 @@
                                         <i data-lucide="arrow-right"
                                             class="w-4 h-4 opacity-0 group-[.active]:opacity-100 group-[.active]:translate-x-0 -translate-x-2 transition-all"></i>
                                     </a>
-                                    <a href="{{ route('resources', ['tab' => 'tenders']) }}" data-tab="tenders"
-                                        class="tab-btn {{ $tab === 'tenders' ? 'active bg-white text-primary shadow-sm border-l-4 border-secondary' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }} relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98]">
+                                    <a href="<?php echo e(route('resources', ['tab' => 'tenders'])); ?>" data-tab="tenders"
+                                        class="tab-btn <?php echo e($tab === 'tenders' ? 'active bg-white text-primary shadow-sm border-l-4 border-secondary' : 'text-slate-500 hover:text-primary hover:bg-slate-50'); ?> relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98]">
                                         <div class="flex items-center gap-3">
                                             <div
                                                 class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center group-[.active]:bg-primary group-[.active]:text-white transition-colors">
@@ -73,8 +82,8 @@
                                         <i data-lucide="arrow-right"
                                             class="w-4 h-4 opacity-0 group-[.active]:opacity-100 group-[.active]:translate-x-0 -translate-x-2 transition-all"></i>
                                     </a>
-                                    <a href="{{ route('resources', ['tab' => 'news']) }}" data-tab="news"
-                                        class="tab-btn {{ $tab === 'news' ? 'active bg-white text-primary shadow-sm border-l-4 border-secondary' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }} relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98]">
+                                    <a href="<?php echo e(route('resources', ['tab' => 'news'])); ?>" data-tab="news"
+                                        class="tab-btn <?php echo e($tab === 'news' ? 'active bg-white text-primary shadow-sm border-l-4 border-secondary' : 'text-slate-500 hover:text-primary hover:bg-slate-50'); ?> relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98]">
                                         <div class="flex items-center gap-3">
                                             <div
                                                 class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center group-[.active]:bg-primary group-[.active]:text-white transition-colors">
@@ -85,8 +94,8 @@
                                         <i data-lucide="arrow-right"
                                             class="w-4 h-4 opacity-0 group-[.active]:opacity-100 group-[.active]:translate-x-0 -translate-x-2 transition-all"></i>
                                     </a>
-                                    <a href="{{ route('resources', ['tab' => 'downloads']) }}" data-tab="downloads"
-                                        class="tab-btn {{ $tab === 'downloads' ? 'active bg-white text-primary shadow-sm border-l-4 border-secondary' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }} relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98]">
+                                    <a href="<?php echo e(route('resources', ['tab' => 'downloads'])); ?>" data-tab="downloads"
+                                        class="tab-btn <?php echo e($tab === 'downloads' ? 'active bg-white text-primary shadow-sm border-l-4 border-secondary' : 'text-slate-500 hover:text-primary hover:bg-slate-50'); ?> relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98]">
                                         <div class="flex items-center gap-3">
                                             <div
                                                 class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center group-[.active]:bg-primary group-[.active]:text-white transition-colors">
@@ -97,8 +106,8 @@
                                         <i data-lucide="arrow-right"
                                             class="w-4 h-4 opacity-0 group-[.active]:opacity-100 group-[.active]:translate-x-0 -translate-x-2 transition-all"></i>
                                     </a>
-                                    <a href="{{ route('resources', ['tab' => 'acts']) }}" data-tab="acts"
-                                        class="tab-btn {{ $tab === 'acts' ? 'active bg-white text-primary shadow-sm border-l-4 border-secondary' : 'text-slate-500 hover:text-primary hover:bg-slate-50' }} relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98]">
+                                    <a href="<?php echo e(route('resources', ['tab' => 'acts'])); ?>" data-tab="acts"
+                                        class="tab-btn <?php echo e($tab === 'acts' ? 'active bg-white text-primary shadow-sm border-l-4 border-secondary' : 'text-slate-500 hover:text-primary hover:bg-slate-50'); ?> relative w-full flex items-center justify-between px-5 py-4 rounded-2xl text-[13px] font-bold transition-all duration-300 transform group active:scale-[0.98]">
                                         <div class="flex items-center gap-3">
                                             <div
                                                 class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center group-[.active]:bg-primary group-[.active]:text-white transition-colors">
@@ -124,7 +133,7 @@
                                         <h4 class="text-xl font-bold mb-3 font-outfit">Support Desk</h4>
                                         <p class="text-sm mb-8 leading-relaxed">Having trouble finding a
                                             specific document or needing verification?</p>
-                                        <a href="{{ route('contact_us') }}"
+                                        <a href="<?php echo e(route('contact_us')); ?>"
                                             class="flex items-center justify-center gap-3 py-4 bg-white rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-secondary hover:text-white transition-all transform hover:-translate-y-1 text-black">
                                             Get Help Now <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
                                         </a>
@@ -141,99 +150,99 @@
                     <div class="flex-1">
                                                 <div id="tabPanels" class="space-y-4">
                             <!-- Publications -->
-                            <div data-panel="publications" class="tab-panel {{ $tab === 'publications' ? 'active' : 'hidden' }} space-y-4">
-                                @forelse($publications as $publication)
+                            <div data-panel="publications" class="tab-panel <?php echo e($tab === 'publications' ? 'active' : 'hidden'); ?> space-y-4">
+                                <?php $__empty_1 = true; $__currentLoopData = $publications; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $publication): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                 <div
                                     class="resource-item group bg-white border border-slate-200 rounded-3xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-secondary hover:shadow-xl hover:shadow-secondary/5 transition-all duration-300 transform hover:-translate-y-1">
                                     <div class="flex-1 space-y-3">
                                         <div
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-secondary/10 text-secondary uppercase tracking-wider">
-                                            {{ $publication->category ?? 'Publication' }}{{ $publication->published_date ? ' ' . $publication->published_date->format('Y') : '' }}</div>
+                                            <?php echo e($publication->category ?? 'Publication'); ?><?php echo e($publication->published_date ? ' ' . $publication->published_date->format('Y') : ''); ?></div>
                                         <h4
                                             class="text-base font-bold text-primary group-hover:text-secondary transition-colors">
-                                            {{ $publication->title }}</h4>
-                                        <p class="text-slate-500 text-xs">{{ $publication->description }}</p>
+                                            <?php echo e($publication->title); ?></h4>
+                                        <p class="text-slate-500 text-xs"><?php echo e($publication->description); ?></p>
                                     </div>
-                                    <a target="_blank" href="{{ route('publications.download', $publication->id) }}"
+                                    <a target="_blank" href="<?php echo e(route('publications.download', $publication->id)); ?>"
                                         class="w-12 h-12 bg-slate-50 text-primary rounded-2xl flex items-center justify-center hover:bg-secondary hover:text-white transition-all shadow-sm shrink-0">
                                         <i data-lucide="eye" class="w-5 h-5"></i>
                                     </a>
                                 </div>
-                                @empty
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <div class="text-center py-24 bg-white rounded-3xl border border-slate-100">
                                     <i data-lucide="file-x" class="w-10 h-10 text-slate-300 mx-auto mb-3"></i>
                                     <p class="text-sm text-slate-400">No publications available yet.</p>
                                 </div>
-                                @endforelse
+                                <?php endif; ?>
                             </div>
 
                             <!-- Tenders -->
-                            <div data-panel="tenders" class="tab-panel {{ $tab === 'tenders' ? 'active' : 'hidden' }} space-y-4">
-                                @forelse($tenders as $tender)
+                            <div data-panel="tenders" class="tab-panel <?php echo e($tab === 'tenders' ? 'active' : 'hidden'); ?> space-y-4">
+                                <?php $__empty_1 = true; $__currentLoopData = $tenders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tender): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                 <div
                                     class="resource-item group bg-white border border-slate-200 rounded-3xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-secondary hover:shadow-xl hover:shadow-secondary/5 transition-all duration-300 transform hover:-translate-y-1">
                                     <div class="flex-1 space-y-3">
                                         <div
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-secondary/10 text-secondary uppercase tracking-wider">
-                                            Ref: {{ $tender->reference_no }}</div>
+                                            Ref: <?php echo e($tender->reference_no); ?></div>
                                         <h4
                                             class="text-base font-bold text-primary group-hover:text-secondary transition-colors">
-                                            {{ $tender->title }}</h4>
-                                        <p class="text-slate-500 text-xs">{{ $tender->description }}</p>
-                                        @if ($tender->publish_date || $tender->closing_date)
+                                            <?php echo e($tender->title); ?></h4>
+                                        <p class="text-slate-500 text-xs"><?php echo e($tender->description); ?></p>
+                                        <?php if($tender->publish_date || $tender->closing_date): ?>
                                         <div class="flex flex-wrap items-center gap-4 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
-                                            @if ($tender->publish_date)
-                                                <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3"></i> Published: {{ $tender->publish_date->format('d M Y') }}</span>
-                                            @endif
-                                            @if ($tender->closing_date)
-                                                <span class="flex items-center gap-1"><i data-lucide="hourglass" class="w-3 h-3"></i> Closing: {{ $tender->closing_date->format('d M Y') }}</span>
-                                            @endif
+                                            <?php if($tender->publish_date): ?>
+                                                <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3"></i> Published: <?php echo e($tender->publish_date->format('d M Y')); ?></span>
+                                            <?php endif; ?>
+                                            <?php if($tender->closing_date): ?>
+                                                <span class="flex items-center gap-1"><i data-lucide="hourglass" class="w-3 h-3"></i> Closing: <?php echo e($tender->closing_date->format('d M Y')); ?></span>
+                                            <?php endif; ?>
                                         </div>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
-                                    <a target="_blank" href="{{ route('tenders.download', $tender->id) }}"
+                                    <a target="_blank" href="<?php echo e(route('tenders.download', $tender->id)); ?>"
                                         class="w-12 h-12 bg-slate-50 text-primary rounded-2xl flex items-center justify-center hover:bg-secondary hover:text-white transition-all shadow-sm shrink-0">
                                         <i data-lucide="download" class="w-5 h-5"></i>
                                     </a>
                                 </div>
-                                @empty
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <div class="text-center py-24 bg-white rounded-3xl border border-slate-100">
                                     <i data-lucide="file-x" class="w-10 h-10 text-slate-300 mx-auto mb-3"></i>
                                     <p class="text-sm text-slate-400">No tenders available yet.</p>
                                 </div>
-                                @endforelse
+                                <?php endif; ?>
                             </div>
 
                             <!-- News -->
-                            <div data-panel="news" class="tab-panel {{ $tab === 'news' ? 'active' : 'hidden' }} space-y-4">
-                                @forelse($news as $item)
-                                <a href="{{ route('news_details', $item->id) }}"
+                            <div data-panel="news" class="tab-panel <?php echo e($tab === 'news' ? 'active' : 'hidden'); ?> space-y-4">
+                                <?php $__empty_1 = true; $__currentLoopData = $news; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <a href="<?php echo e(route('news_details', $item->id)); ?>"
                                     class="resource-item group bg-white border border-slate-200 rounded-3xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-secondary hover:shadow-xl hover:shadow-secondary/5 transition-all duration-300 transform hover:-translate-y-1">
                                     <div class="flex-1 space-y-3">
                                         <div
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-secondary/10 text-secondary uppercase tracking-wider">
-                                            {{ $item->published_date ? $item->published_date->format('d M Y') : 'News' }}</div>
+                                            <?php echo e($item->published_date ? $item->published_date->format('d M Y') : 'News'); ?></div>
                                         <h4
                                             class="text-base font-bold text-primary group-hover:text-secondary transition-colors">
-                                            {{ $item->title }}</h4>
-                                        <p class="text-slate-500 text-xs">{{ $item->excerpt }}</p>
+                                            <?php echo e($item->title); ?></h4>
+                                        <p class="text-slate-500 text-xs"><?php echo e($item->excerpt); ?></p>
                                     </div>
                                     <span
                                         class="w-12 h-12 bg-slate-50 text-primary rounded-2xl flex items-center justify-center hover:bg-secondary hover:text-white transition-all shadow-sm shrink-0">
                                         <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
                                     </span>
                                 </a>
-                                @empty
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <div class="text-center py-24 bg-white rounded-3xl border border-slate-100">
                                     <i data-lucide="file-x" class="w-10 h-10 text-slate-300 mx-auto mb-3"></i>
                                     <p class="text-sm text-slate-400">No news available yet.</p>
                                 </div>
-                                @endforelse
+                                <?php endif; ?>
                             </div>
 
                             <!-- Downloads -->
-                            <div data-panel="downloads" class="tab-panel {{ $tab === 'downloads' ? 'active' : 'hidden' }} space-y-4">
-                                @forelse($downloads as $document)
+                            <div data-panel="downloads" class="tab-panel <?php echo e($tab === 'downloads' ? 'active' : 'hidden'); ?> space-y-4">
+                                <?php $__empty_1 = true; $__currentLoopData = $downloads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $document): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                 <div
                                     class="resource-item group bg-white border border-slate-200 rounded-3xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-secondary hover:shadow-xl hover:shadow-secondary/5 transition-all duration-300 transform hover:-translate-y-1">
                                     <div class="flex-1 space-y-3">
@@ -242,47 +251,47 @@
                                             Document</div>
                                         <h4
                                             class="text-base font-bold text-primary group-hover:text-secondary transition-colors">
-                                            {{ $document->name }}</h4>
+                                            <?php echo e($document->name); ?></h4>
                                         <p class="text-slate-500 text-xs">Official document provided by the Directorate.</p>
                                     </div>
-                                    <a target="_blank" href="{{ asset($document->file_path) }}"
+                                    <a target="_blank" href="<?php echo e(asset($document->file_path)); ?>"
                                         class="w-12 h-12 bg-slate-50 text-primary rounded-2xl flex items-center justify-center hover:bg-secondary hover:text-white transition-all shadow-sm shrink-0">
                                         <i data-lucide="download" class="w-5 h-5"></i>
                                     </a>
                                 </div>
-                                @empty
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <div class="text-center py-24 bg-white rounded-3xl border border-slate-100">
                                     <i data-lucide="file-x" class="w-10 h-10 text-slate-300 mx-auto mb-3"></i>
                                     <p class="text-sm text-slate-400">No downloads available yet.</p>
                                 </div>
-                                @endforelse
+                                <?php endif; ?>
                             </div>
 
                             <!-- Acts & Rules -->
-                            <div data-panel="acts" class="tab-panel {{ $tab === 'acts' ? 'active' : 'hidden' }} space-y-4">
-                                @forelse($actsRules as $act)
+                            <div data-panel="acts" class="tab-panel <?php echo e($tab === 'acts' ? 'active' : 'hidden'); ?> space-y-4">
+                                <?php $__empty_1 = true; $__currentLoopData = $actsRules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $act): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                 <div
                                     class="resource-item group bg-white border border-slate-200 rounded-3xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-secondary hover:shadow-xl hover:shadow-secondary/5 transition-all duration-300 transform hover:-translate-y-1">
                                     <div class="flex-1 space-y-3">
                                         <div
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-secondary/10 text-secondary uppercase tracking-wider">
-                                            Legal Act{{ $act->published_date ? ' ' . $act->published_date->format('Y') : '' }}</div>
+                                            Legal Act<?php echo e($act->published_date ? ' ' . $act->published_date->format('Y') : ''); ?></div>
                                         <h4
                                             class="text-base font-bold text-primary group-hover:text-secondary transition-colors">
-                                            {{ $act->title }}</h4>
-                                        <p class="text-slate-500 text-xs">{{ $act->description }}</p>
+                                            <?php echo e($act->title); ?></h4>
+                                        <p class="text-slate-500 text-xs"><?php echo e($act->description); ?></p>
                                     </div>
-                                    <a target="_blank" href="{{ route('publications.download', $act->id) }}"
+                                    <a target="_blank" href="<?php echo e(route('publications.download', $act->id)); ?>"
                                         class="w-12 h-12 bg-slate-50 text-primary rounded-2xl flex items-center justify-center hover:bg-secondary hover:text-white transition-all shadow-sm shrink-0">
                                         <i data-lucide="eye" class="w-5 h-5"></i>
                                     </a>
                                 </div>
-                                @empty
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <div class="text-center py-24 bg-white rounded-3xl border border-slate-100">
                                     <i data-lucide="file-x" class="w-10 h-10 text-slate-300 mx-auto mb-3"></i>
                                     <p class="text-sm text-slate-400">No acts or rules available yet.</p>
                                 </div>
-                                @endforelse
+                                <?php endif; ?>
                             </div>
                         </div> <!-- End of tabPanels content -->
 
@@ -298,7 +307,7 @@
                                     <h4 class="text-xl font-bold mb-3 font-outfit">Support Desk</h4>
                                     <p class="text-sm text-white/60 mb-8 leading-relaxed">Having trouble finding a
                                         specific document or needing verification?</p>
-                                    <a href="{{ route('contact_us') }}"
+                                    <a href="<?php echo e(route('contact_us')); ?>"
                                         class="flex items-center justify-center gap-3 py-4 bg-white text-primary rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-secondary hover:text-white transition-all transform hover:-translate-y-1">
                                         Get Help Now <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
                                     </a>
@@ -409,4 +418,14 @@
         document.getElementById('resourceSearch')?.addEventListener('input', (e) => filterResources(e.target.value));
     </script>
     <!-- Footer Section -->
-</x-layout>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal23a33f287873b564aaf305a1526eada4)): ?>
+<?php $attributes = $__attributesOriginal23a33f287873b564aaf305a1526eada4; ?>
+<?php unset($__attributesOriginal23a33f287873b564aaf305a1526eada4); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal23a33f287873b564aaf305a1526eada4)): ?>
+<?php $component = $__componentOriginal23a33f287873b564aaf305a1526eada4; ?>
+<?php unset($__componentOriginal23a33f287873b564aaf305a1526eada4); ?>
+<?php endif; ?>
+<?php /**PATH /Applications/MAMP/htdocs/human-rights-kp/resources/views/pages/resources.blade.php ENDPATH**/ ?>

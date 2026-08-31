@@ -466,6 +466,7 @@ Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/verify-certificate/{registration_no?}', [\App\Http\Controllers\VerificationController::class, 'verifyNgo'])->name('verify.certificate');
 
 Route::get('/certificate/design-preview', function () {
+    $settings = \App\Models\SiteSetting::getSettings();
     $dummyData = [
         'application' => (object) [
             'registration_no' => 'KP-DGLHR-999',
@@ -474,7 +475,9 @@ Route::get('/certificate/design-preview', function () {
         'ngoName' => 'PARTICIPATORY RURAL DEVELOPMENT SOCIETY (PRDS)',
         'qrCodeImage' => 'data:image/png;base64,...', // placeholder
         'signatureImage' => null,
-        // 'logoSrc' => 'data:image/jpeg;base64,...',
+        'contactEmail' => $settings->contact_email ?? '',
+        'contactPhone' => $settings->contact_phone ?? '',
+        'contactAddress' => $settings->contact_address ?? '',
     ];
     return view('pdf.ngo_certificate', $dummyData);
 });

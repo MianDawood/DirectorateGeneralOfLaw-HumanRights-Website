@@ -240,6 +240,7 @@
             font-size: 16.5px;
             font-weight: bold;
             letter-spacing: 0.4px;
+            background: #f7f7f7;
             padding: 3px 11px;
             border-radius: 3px;
             display: inline-block;
@@ -382,7 +383,7 @@
 </head>
 
 <body>
-    @php
+    <?php
         // Dynamic variables from controller
         $issueDate =
             isset($application) && $application->certificate_issue_date
@@ -404,7 +405,7 @@
         $contactEmail = $contactEmail ?? $siteSettings->contact_email ?? '';
         $contactPhone = $contactPhone ?? $siteSettings->contact_phone ?? '';
         $contactAddress = $contactAddress ?? $siteSettings->contact_address ?? '';
-    @endphp
+    ?>
 
     <div class="certificate-page">
         <!-- Borders -->
@@ -417,7 +418,7 @@
 
         <!-- Watermark -->
         <div class="watermark">
-            <img src="{{ $logoSrc }}" alt="Watermark">
+            <img src="<?php echo e($logoSrc); ?>" alt="Watermark">
         </div>
 
         <!-- Content Area with Flexbox -->
@@ -428,7 +429,7 @@
                 <table class="header-table">
                     <tr>
                         <td class="logo-cell">
-                            <img src="{{ $logoSrc }}" alt="Logo">
+                            <img src="<?php echo e($logoSrc); ?>" alt="Logo">
                         </td>
                         <td class="header-text">
                             <div class="header-line-1">DIRECTORATE GENERAL</div>
@@ -436,7 +437,7 @@
                             <div class="header-line-3">GOVERNMENT OF KHYBER PAKHTUNKHWA</div>
                         </td>
                         <td class="logo-cell">
-                            <img src="{{ $logoSrc }}" alt="Logo">
+                            <img src="<?php echo e($logoSrc); ?>" alt="Logo">
                         </td>
                     </tr>
                 </table>
@@ -451,8 +452,8 @@
             <div class="meta-section">
                 <table class="meta-table">
                     <tr>
-                        <td>Registration No. {{ $registrationNo }}</td>
-                        <td class="meta-right">Issue Date: {{ $issueDate->format('d/m/Y') }}</td>
+                        <td>Registration No. <?php echo e($registrationNo); ?></td>
+                        <td class="meta-right">Issue Date: <?php echo e($issueDate->format('d/m/Y')); ?></td>
                     </tr>
                 </table>
             </div>
@@ -463,7 +464,7 @@
                     <p class="intro-line">This is to certify that</p>
 
                     <div class="ngo-name-block">
-                        <span class="ngo-name">{{ strtoupper($ngoName) }}</span>
+                        <span class="ngo-name"><?php echo e(strtoupper($ngoName)); ?></span>
                     </div>
 
                     <p>
@@ -475,10 +476,10 @@
 
                     <p>
                         In view of the foregoing the registration certification is hereby granted in
-                        favour of <strong> {{ strtoupper($ngoName) }}</strong>
+                        favour of <strong> <?php echo e(strtoupper($ngoName)); ?></strong>
                         for a period of three years commencing from
-                        <span class="date-highlight">{{ $issueDate->format('d/m/Y') }}</span> and expiring on
-                        <span class="date-highlight">{{ $expiryDate->format('d/m/Y') }}</span>.
+                        <span class="date-highlight"><?php echo e($issueDate->format('d/m/Y')); ?></span> and expiring on
+                        <span class="date-highlight"><?php echo e($expiryDate->format('d/m/Y')); ?></span>.
                     </p>
                 </div>
             </div>
@@ -490,26 +491,26 @@
                     <tr>
                         <td class="qr-column">
                             <div class="qr-container">
-                                @if ($qrCodeImage)
-                                    <img src="{{ $qrCodeImage }}" alt="QR Code">
-                                @else
+                                <?php if($qrCodeImage): ?>
+                                    <img src="<?php echo e($qrCodeImage); ?>" alt="QR Code">
+                                <?php else: ?>
                                     <div class="qr-placeholder">QR Code</div>
-                                @endif
-                                <div class="qr-reg-no">{{ $registrationNo }}</div>
+                                <?php endif; ?>
+                                <div class="qr-reg-no"><?php echo e($registrationNo); ?></div>
                             </div>
                         </td>
                         <td class="signature-column">
                             <div class="signature-block">
                                 <div class="signature-image">
-                                    @if (!empty($signatureImage) && file_exists(public_path('storage/' . $signatureImage)))
-                                        <img src="{{ asset('storage/' . $signatureImage) }}" alt="Signature">
-                                    @endif
+                                    <?php if(!empty($signatureImage) && file_exists(public_path('storage/' . $signatureImage))): ?>
+                                        <img src="<?php echo e(asset('storage/' . $signatureImage)); ?>" alt="Signature">
+                                    <?php endif; ?>
                                 </div>
                                 <div class="dg-title">
                                     Director General<br>Law &amp; Human Rights
                                 </div>
                                 <div class="official-seal">
-                                    <img src="{{ $logoSrc }}" alt="Seal">
+                                    <img src="<?php echo e($logoSrc); ?>" alt="Seal">
                                 </div>
                             </div>
                         </td>
@@ -518,11 +519,14 @@
 
                 <!-- Contact Info -->
                 <div class="contact-footer">
-                    <strong>Address:</strong> {{ $contactAddress }}
+                    <strong>Address:</strong> <?php echo e($contactAddress); ?>
+
                     &nbsp;&nbsp;|&nbsp;&nbsp;
-                    <strong>Email:</strong> {{ $contactEmail }}
+                    <strong>Email:</strong> <?php echo e($contactEmail); ?>
+
                     &nbsp;&nbsp;|&nbsp;&nbsp;
-                    <strong>Phone:</strong> {{ $contactPhone }}
+                    <strong>Phone:</strong> <?php echo e($contactPhone); ?>
+
                 </div>
             </div>
         </div><!-- end content-area -->
@@ -531,3 +535,4 @@
 </body>
 
 </html>
+<?php /**PATH /Applications/MAMP/htdocs/human-rights-kp/resources/views/pdf/ngo_certificate.blade.php ENDPATH**/ ?>

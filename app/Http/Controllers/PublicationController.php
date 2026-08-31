@@ -36,7 +36,7 @@ class PublicationController extends Controller
     public function download($id)
     {
         $publication = Publication::findOrFail($id);
-        $filePath = storage_path('app/public/' . $publication->file_path);
+        $filePath = public_path('storage/' . $publication->file_path);
 
         if (!file_exists($filePath)) {
             abort(404, 'File not found');

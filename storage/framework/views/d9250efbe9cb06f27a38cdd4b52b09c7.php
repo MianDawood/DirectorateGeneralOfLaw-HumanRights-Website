@@ -634,10 +634,6 @@ unset($__defined_vars, $__key, $__value); ?>
                             <i data-lucide="layers" class="w-5 h-5"></i> Media Corner
                         </a>
 
-                        
-                            </div>
-                         
-
                         <div class="mobile-dropdown group">
                             <div
                                 class="flex items-center justify-between w-full p-3 rounded-xl text-slate-700 font-bold <?php echo e(request()->routeIs('ngo_*', 'registration_form_*') || $ngoRegistrationPages->contains('slug', request()->route('slug')) ? 'bg-slate-50 text-primary' : 'hover:bg-slate-50 hover:text-primary'); ?> transition-all">

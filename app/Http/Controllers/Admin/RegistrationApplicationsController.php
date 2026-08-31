@@ -167,25 +167,25 @@ class RegistrationApplicationsController extends Controller
             $data['certificate_issue_date'] = now();
 
             // Get NGO Name from Step 1 payload
-            $ngoName = 'Unknown Organization';
+            $ngoName = '';
             $step1 = DB::table('ngo_application_step_payloads')
                 ->where('application_id', $registration_application->id)
                 ->where('step_no', 1)
                 ->first();
             if ($step1) {
                 $payload = json_decode($step1->payload, true);
-                $ngoName = $payload['ngoName'] ?? 'Unknown Organization';
+                $ngoName = $payload['ngo_name'] ?? $payload['ngoName'] ?? '';
             }
 
             $verifyUrl = URL::route('verify.certificate', ['registration_no' => $registration_no], true);
 
             $settings = \App\Models\SiteSetting::getSettings();
             $signatureImage = $settings->dg_signature_image ?? null;
-            $contactEmail = $settings->contact_email ?? 'dhr.kpk@gmail.com';
-            $contactPhone = $settings->contact_phone ?? '0092 91 9217205';
-            $contactAddress = $settings->contact_address ?? 'Plot NO. 21, Sector B-2, Phase - V, Hayatabad, Peshawar, Pakistan';
+            $contactEmail = $settings->contact_email ?? '';
+            $contactPhone = $settings->contact_phone ?? '';
+            $contactAddress = $settings->contact_address ?? '';
 
-            // Same file as asset('images/logo.jpg') — embedded for reliable DomPDF rendering
+
             $logoPath = public_path('images/logo.jpg');
             $logoSrc = file_exists($logoPath)
                 ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($logoPath))
@@ -256,14 +256,14 @@ class RegistrationApplicationsController extends Controller
 public function previewCertificate(NgoApplication $registration_application)
 {
     // Prepare data exactly like in update(), but without PDF generation
-    $ngoName = 'Unknown Organization';
+    $ngoName = '';
     $step1 = DB::table('ngo_application_step_payloads')
         ->where('application_id', $registration_application->id)
         ->where('step_no', 1)
         ->first();
     if ($step1) {
         $payload = json_decode($step1->payload, true);
-        $ngoName = $payload['ngoName'] ?? 'Unknown Organization';
+        $ngoName = $payload['ngo_name'] ?? $payload['ngoName'] ?? '';
     }
 
     // Use existing registration_no or generate a temporary one
@@ -275,6 +275,9 @@ public function previewCertificate(NgoApplication $registration_application)
 
     $settings = \App\Models\SiteSetting::getSettings();
     $signatureImage = $settings->dg_signature_image ?? null;
+    $contactEmail = $settings->contact_email ?? '';
+    $contactPhone = $settings->contact_phone ?? '';
+    $contactAddress = $settings->contact_address ?? '';
 
     $logoPath = public_path('images/logo.jpg');
     $logoSrc = file_exists($logoPath)
@@ -286,12 +289,14 @@ public function previewCertificate(NgoApplication $registration_application)
             'registration_no' => $regNo,
             'certificate_issue_date' => $issueDate,
             'id' => $registration_application->id,
-            // Add any other needed fields
         ],
         'ngoName' => $ngoName,
         'qrCodeImage' => CertificateQrGenerator::verificationDataUri($verifyUrl),
         'signatureImage' => $signatureImage,
         'logoSrc' => $logoSrc,
+        'contactEmail' => $contactEmail,
+        'contactPhone' => $contactPhone,
+        'contactAddress' => $contactAddress,
     ];
 
     // Return the same Blade view as HTML (not PDF)

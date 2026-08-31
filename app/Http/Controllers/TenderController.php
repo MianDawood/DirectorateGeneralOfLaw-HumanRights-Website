@@ -31,7 +31,7 @@ class TenderController extends Controller
     public function download($id)
     {
         $tender = Tender::findOrFail($id);
-        $filePath = storage_path('app/public/' . $tender->file_path);
+        $filePath = public_path('storage/' . $tender->file_path);
 
         if (!file_exists($filePath)) {
             abort(404, 'File not found');
