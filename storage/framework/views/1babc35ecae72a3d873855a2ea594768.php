@@ -4,24 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <title>NGO Registration Certificate</title>
+
     <style>
-        /* RESET */
+        /* Reset */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* CRITICAL: A4 page settings */
+        /* A4 page settings */
         @page {
             margin: 0;
-            /* size: A4 portrait; */
             size: 190mm 297mm;
         }
 
         html,
         body {
-            /* width: 210mm; */
             width: 190mm;
             height: 297mm;
             margin: 0;
@@ -37,9 +36,8 @@
             color: #000;
         }
 
-        /* MAIN PAGE CONTAINER - Fixed A4 size with padding */
+        /* Certificate page */
         .certificate-page {
-            /* width: 210mm; */
             width: 190mm;
             height: 297mm;
             position: relative;
@@ -47,7 +45,7 @@
             overflow: hidden;
         }
 
-        /* OUTER GREEN BORDER - with equal spacing from edges */
+        /* Outer green border */
         .outer-border {
             position: absolute;
             top: 10mm;
@@ -58,7 +56,7 @@
             z-index: 10;
         }
 
-        /* INNER BLACK BORDER */
+        /* Inner black border */
         .inner-border {
             position: absolute;
             top: calc(10mm + 35px);
@@ -69,36 +67,38 @@
             z-index: 11;
         }
 
-        /* DECORATIVE RIBBONS */
+        /* Decorative ribbon */
         .corner-ribbon {
             position: absolute;
-            top: calc(10mm + 15px);
-            left: calc(10mm + 55px);
-            width: 42px;
-            height: 95px;
-            background: #0a3d24;
+            top: 10mm;
+            left: calc(10mm + 35px);
+            width: 15mm;
+            height: 30mm;
+            background: #075a2c;
             z-index: 12;
         }
 
-        .corner-ribbon-tail {
+        /* Ribbon pointed bottom */
+        .corner-ribbon:after {
+            content: "";
             position: absolute;
-            top: calc(10mm + 15px);
-            left: calc(10mm + 55px);
+            left: 0;
+            bottom: 0;
             width: 0;
             height: 0;
-            border-top: 48px solid #0a3d24;
-            border-right: 17px solid transparent;
-            z-index: 12;
+            border-left: 7.5mm solid transparent;
+            border-right: 7.5mm solid transparent;
+            border-bottom: 5mm solid #ffffff;
         }
 
-        /* WATERMARK */
+        /* Watermark */
         .watermark {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 300px;
-            opacity: 0.02;
+            opacity: 0.10;
             z-index: 1;
             pointer-events: none;
         }
@@ -108,7 +108,7 @@
             height: auto;
         }
 
-        /* CONTENT AREA - Fixed height with flexbox for footer positioning */
+        /* Content area */
         .content-area {
             position: absolute;
             top: calc(10mm + 17px);
@@ -116,12 +116,14 @@
             right: calc(10mm + 17px);
             bottom: calc(10mm + 17px);
             z-index: 5;
+
             display: flex;
             flex-direction: column;
+
             padding: 25px 35px 20px 35px;
         }
 
-        /* ========== HEADER ========== */
+        /* Header */
         .header-section {
             flex-shrink: 0;
             margin-bottom: 12px;
@@ -170,7 +172,7 @@
             text-transform: uppercase;
         }
 
-        /* ========== TITLE ========== */
+        /* Certificate title */
         .title-section {
             flex-shrink: 0;
             text-align: center;
@@ -185,7 +187,7 @@
             color: #000;
         }
 
-        /* ========== META INFO ========== */
+        /* Meta information */
         .meta-section {
             flex-shrink: 0;
             margin-bottom: 16px;
@@ -207,7 +209,7 @@
             text-align: right;
         }
 
-        /* ========== BODY CONTENT ========== */
+        /* Body content */
         .body-section {
             flex: 1;
             flex-shrink: 0;
@@ -219,6 +221,7 @@
             font-size: 18px;
             line-height: 1.55;
             text-align: justify;
+            overflow: hidden;
         }
 
         .body-text p {
@@ -250,7 +253,7 @@
             color: #000;
         }
 
-        /* ========== FOOTER - ALWAYS AT BOTTOM ========== */
+        /* Footer */
         .footer-section {
             flex-shrink: 0;
             margin-top: auto;
@@ -267,7 +270,7 @@
             vertical-align: bottom;
         }
 
-        /* QR Code Column */
+        /* QR code */
         .qr-column {
             width: 32%;
             vertical-align: bottom;
@@ -303,7 +306,7 @@
             text-align: center;
         }
 
-        /* Signature Column */
+        /* Signature */
         .signature-column {
             width: 68%;
             text-align: right;
@@ -341,7 +344,7 @@
             height: auto;
         }
 
-        /* ========== CONTACT FOOTER ========== */
+        /* Contact footer */
         .contact-footer {
             margin-top: 13px;
             padding-top: 9px;
@@ -359,7 +362,7 @@
 
             html,
             body {
-                width: 210mm;
+                width: 190mm;
                 height: 297mm;
             }
 
@@ -373,163 +376,313 @@
                 print-color-adjust: exact;
             }
         }
-
-        /* Force height containment */
-        .body-text {
-            overflow: hidden;
-        }
     </style>
 </head>
 
 <body>
+
     <?php
-        // Dynamic variables from controller
+        // Certificate dates
         $issueDate =
             isset($application) && $application->certificate_issue_date
                 ? \Carbon\Carbon::parse($application->certificate_issue_date)
                 : \Carbon\Carbon::now();
+
         $expiryDate = $issueDate->copy()->addYears(3);
+
+        // Main logo
+        $logoPath = public_path('images/logo.jpg');
+
         $logoSrc =
             $logoSrc ??
-            (file_exists(public_path('images/logo.jpg'))
-                ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents(public_path('images/logo.jpg')))
+            (file_exists($logoPath)
+                ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($logoPath))
                 : asset('images/logo.jpg'));
+
+        // Certificate information
         $ngoName = $ngoName ?? '';
+
         $registrationNo =
-            isset($application) && $application->registration_no ? $application->registration_no : 'KP-DGLHR-001';
+            isset($application) && $application->registration_no
+                ? $application->registration_no
+                : 'KP-DGLHR-001';
+
+        // Signature and QR code
         $signatureImage = $signatureImage ?? null;
         $qrCodeImage = $qrCodeImage ?? '';
 
+        // Contact information
         $siteSettings = \App\Models\SiteSetting::getSettings();
-        $contactEmail = $contactEmail ?? $siteSettings->contact_email ?? '';
-        $contactPhone = $contactPhone ?? $siteSettings->contact_phone ?? '';
-        $contactAddress = $contactAddress ?? $siteSettings->contact_address ?? '';
+
+        $contactEmail = $contactEmail ?? ($siteSettings->contact_email ?? '');
+        $contactPhone = $contactPhone ?? ($siteSettings->contact_phone ?? '');
+        $contactAddress = $contactAddress ?? ($siteSettings->contact_address ?? '');
     ?>
 
+
     <div class="certificate-page">
-        <!-- Borders -->
+
+        <!-- Outer border -->
         <div class="outer-border"></div>
+
+        <!-- Inner border -->
         <div class="inner-border"></div>
 
-        <!-- Decorative corner elements -->
+        <!-- Decorative ribbon -->
         <div class="corner-ribbon"></div>
-        <div class="corner-ribbon-tail"></div>
+
 
         <!-- Watermark -->
         <div class="watermark">
             <img src="<?php echo e($logoSrc); ?>" alt="Watermark">
         </div>
 
-        <!-- Content Area with Flexbox -->
+
+        <!-- Certificate content -->
         <div class="content-area">
-            <div style='min-height:80% !important;'>
-            <!-- HEADER -->
-            <div class="header-section">
-                <table class="header-table">
-                    <tr>
-                        <td class="logo-cell">
-                            <img src="<?php echo e($logoSrc); ?>" alt="Logo">
-                        </td>
-                        <td class="header-text">
-                            <div class="header-line-1">DIRECTORATE GENERAL</div>
-                            <div class="header-line-2">LAW &amp; HUMAN RIGHTS</div>
-                            <div class="header-line-3">GOVERNMENT OF KHYBER PAKHTUNKHWA</div>
-                        </td>
-                        <td class="logo-cell">
-                            <img src="<?php echo e($logoSrc); ?>" alt="Logo">
-                        </td>
-                    </tr>
-                </table>
-            </div>
 
-            <!-- TITLE -->
-            <div class="title-section">
-                <h1 class="cert-title">REGISTRATION CERTIFICATE</h1>
-            </div>
+            <div style="min-height: 80% !important;">
 
-            <!-- META INFO -->
-            <div class="meta-section">
-                <table class="meta-table">
-                    <tr>
-                        <td>Registration No. <?php echo e($registrationNo); ?></td>
-                        <td class="meta-right">Issue Date: <?php echo e($issueDate->format('d/m/Y')); ?></td>
-                    </tr>
-                </table>
-            </div>
+                <!-- Header -->
+                <div class="header-section">
 
-            <!-- BODY TEXT -->
-            <div class="body-section">
-                <div class="body-text">
-                    <p class="intro-line">This is to certify that</p>
+                    <table class="header-table">
 
-                    <div class="ngo-name-block">
-                        <span class="ngo-name"><?php echo e(strtoupper($ngoName)); ?></span>
+                        <tr>
+
+                            <!-- Left logo -->
+                            <td class="logo-cell">
+                                <img src="<?php echo e($logoSrc); ?>" alt="Logo">
+                            </td>
+
+
+                            <!-- Header text -->
+                            <td class="header-text">
+
+                                <div class="header-line-1">
+                                    DIRECTORATE GENERAL
+                                </div>
+
+                                <div class="header-line-2">
+                                    LAW &amp; HUMAN RIGHTS
+                                </div>
+
+                                <div class="header-line-3">
+                                    GOVERNMENT OF KHYBER PAKHTUNKHWA
+                                </div>
+
+                            </td>
+
+
+                            <!-- Right logo -->
+                            <td class="logo-cell">
+                                <img src="<?php echo e($logoSrc); ?>" alt="Logo">
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+
+                <!-- Certificate title -->
+                <div class="title-section">
+
+                    <h1 class="cert-title">
+                        REGISTRATION CERTIFICATE
+                    </h1>
+
+                </div>
+
+
+                <!-- Registration information -->
+                <div class="meta-section">
+
+                    <table class="meta-table">
+
+                        <tr>
+
+                            <td>
+                                Registration No. <?php echo e($registrationNo); ?>
+
+                            </td>
+
+                            <td class="meta-right">
+                                Issue Date: <?php echo e($issueDate->format('d/m/Y')); ?>
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+
+                <!-- Certificate body -->
+                <div class="body-section">
+
+                    <div class="body-text">
+
+                        <p class="intro-line">
+                            This is to certify that
+                        </p>
+
+
+                        <div class="ngo-name-block">
+
+                            <span class="ngo-name">
+                                <?php echo e(strtoupper($ngoName)); ?>
+
+                            </span>
+
+                        </div>
+
+
+                        <p>
+                            has satisfied/fulfilled the requirements of the
+                            Khyber Pakhtunkhwa Promotion, Protection and
+                            Enforcement of Human Rights Act, 2014 and the
+                            Khyber Pakhtunkhwa Non-Governmental Organizations
+                            Registration Rules, 2024.
+                        </p>
+
+
+                        <p>
+                            In view of the foregoing the registration certification
+                            is hereby granted in favour of
+                            <strong><?php echo e(strtoupper($ngoName)); ?></strong>
+                            for a period of three years commencing from
+                            <span class="date-highlight">
+                                <?php echo e($issueDate->format('d/m/Y')); ?>
+
+                            </span>
+                            and expiring on
+                            <span class="date-highlight">
+                                <?php echo e($expiryDate->format('d/m/Y')); ?>
+
+                            </span>.
+                        </p>
+
                     </div>
 
-                    <p>
-                        has satisfied/fulfilled the requirements of the Khyber Pakhtunkhwa
-                        Promotion, Protection and Enforcement of Human Rights Act, 2014 and
-                        the Khyber Pakhtunkhwa Non-Governmental Organizations Registration
-                        Rules, 2024.
-                    </p>
-
-                    <p>
-                        In view of the foregoing the registration certification is hereby granted in
-                        favour of <strong> <?php echo e(strtoupper($ngoName)); ?></strong>
-                        for a period of three years commencing from
-                        <span class="date-highlight"><?php echo e($issueDate->format('d/m/Y')); ?></span> and expiring on
-                        <span class="date-highlight"><?php echo e($expiryDate->format('d/m/Y')); ?></span>.
-                    </p>
                 </div>
+
+            </div>
+
+
+            <!-- Footer -->
+            <div class="footer-section">
+
+                <table class="footer-table">
+
+                    <tr>
+
+                        <!-- QR code -->
+                        <td class="qr-column">
+
+                            <div class="qr-container">
+
+                                <?php if($qrCodeImage): ?>
+
+                                    <img
+                                        src="<?php echo e($qrCodeImage); ?>"
+                                        alt="QR Code"
+                                    >
+
+                                <?php else: ?>
+
+                                    <div class="qr-placeholder">
+                                        QR Code
+                                    </div>
+
+                                <?php endif; ?>
+
+
+                                <div class="qr-reg-no">
+                                    <?php echo e($registrationNo); ?>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- Signature -->
+                        <td class="signature-column">
+
+                            <div class="signature-block">
+
+                                <div class="signature-image">
+
+                                    <?php if(
+                                        !empty($signatureImage) &&
+                                        file_exists(public_path('storage/' . $signatureImage))
+                                    ): ?>
+
+                                        <img
+                                            src="<?php echo e(asset('storage/' . $signatureImage)); ?>"
+                                            alt="Signature"
+                                        >
+
+                                    <?php endif; ?>
+
+                                </div>
+
+
+                                <div class="dg-title">
+                                    Director General
+                                    <br>
+                                    Law &amp; Human Rights
+                                </div>
+
+
+                                <div class="official-seal">
+
+                                    <img
+                                        src="<?php echo e($logoSrc); ?>"
+                                        alt="Seal"
+                                    >
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </table>
+
+
+                <!-- Contact information -->
+                <div class="contact-footer">
+
+                    <strong>Address:</strong>
+                    <?php echo e($contactAddress); ?>
+
+
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+
+                    <strong>Email:</strong>
+                    <?php echo e($contactEmail); ?>
+
+
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+
+                    <strong>Phone:</strong>
+                    <?php echo e($contactPhone); ?>
+
+
+                </div>
+
             </div>
 
         </div>
-            <!-- FOOTER - Will stick to bottom due to margin-top: auto -->
-            <div class="footer-section">
-                <table class="footer-table">
-                    <tr>
-                        <td class="qr-column">
-                            <div class="qr-container">
-                                <?php if($qrCodeImage): ?>
-                                    <img src="<?php echo e($qrCodeImage); ?>" alt="QR Code">
-                                <?php else: ?>
-                                    <div class="qr-placeholder">QR Code</div>
-                                <?php endif; ?>
-                                <div class="qr-reg-no"><?php echo e($registrationNo); ?></div>
-                            </div>
-                        </td>
-                        <td class="signature-column">
-                            <div class="signature-block">
-                                <div class="signature-image">
-                                    <?php if(!empty($signatureImage) && file_exists(public_path('storage/' . $signatureImage))): ?>
-                                        <img src="<?php echo e(asset('storage/' . $signatureImage)); ?>" alt="Signature">
-                                    <?php endif; ?>
-                                </div>
-                                <div class="dg-title">
-                                    Director General<br>Law &amp; Human Rights
-                                </div>
-                                <div class="official-seal">
-                                    <img src="<?php echo e($logoSrc); ?>" alt="Seal">
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
 
-                <!-- Contact Info -->
-                <div class="contact-footer">
-                    <strong>Address:</strong> <?php echo e($contactAddress); ?>
-
-                    &nbsp;&nbsp;|&nbsp;&nbsp;
-                    <strong>Email:</strong> <?php echo e($contactEmail); ?>
-
-                    &nbsp;&nbsp;|&nbsp;&nbsp;
-                    <strong>Phone:</strong> <?php echo e($contactPhone); ?>
-
-                </div>
-            </div>
-        </div><!-- end content-area -->
-    </div><!-- end certificate-page -->
+    </div>
 
 </body>
 

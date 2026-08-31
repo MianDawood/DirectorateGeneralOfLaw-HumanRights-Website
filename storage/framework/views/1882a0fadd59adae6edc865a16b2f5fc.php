@@ -5,10 +5,16 @@
                 <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
                     <div class="flex justify-between items-center mb-6">
                         <h1 class="text-2xl font-bold text-gray-900">Review Registration Application</h1>
-                        <a href="<?php echo e($returnTo ?? route('admin.registration-applications.index')); ?>"
-                           class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                            Back to List
-                        </a>
+                        <div class="flex gap-2">
+                            <a href="<?php echo e(route('admin.registration-applications.certificate-preview', $application)); ?>" target="_blank"
+                               class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
+                                Preview Certificate
+                            </a>
+                            <a href="<?php echo e($returnTo ?? route('admin.registration-applications.index')); ?>"
+                               class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                                Back to List
+                            </a>
+                        </div>
                     </div>
 
                     <form method="POST" action="<?php echo e(route('admin.registration-applications.update', $application)); ?>">

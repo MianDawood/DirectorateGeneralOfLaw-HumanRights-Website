@@ -299,8 +299,18 @@ public function previewCertificate(NgoApplication $registration_application)
         'contactAddress' => $contactAddress,
     ];
 
-    // Return the same Blade view as HTML (not PDF)
-    return view('pdf.ngo_certificate', $pdfData);
+    // Stream the real PDF inline so the preview is identical to the approved certificate
+    $pdf = Pdf::loadView('pdf.ngo_certificate', $pdfData)
+        ->setPaper('a4', 'portrait')
+        ->setOptions([
+            'isHtml5ParserEnabled' => true,
+            'isRemoteEnabled' => true,
+            'dpi' => 150,
+            'defaultFont' => 'sans-serif',
+            'isPhpEnabled' => false,
+        ]);
+
+    return $pdf->stream('ngo_certificate_' . $registration_application->id . '.pdf');
 }
 
 private function thematicAreas(): array
