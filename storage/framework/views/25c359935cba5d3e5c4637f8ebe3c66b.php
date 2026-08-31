@@ -58,6 +58,10 @@
                                     <i data-lucide="download" class="w-4 h-4 mr-2"></i> Certificate
                                 </a>
                             <?php endif; ?>
+                            <a href="<?php echo e(route('admin.registration-applications.certificate-preview', $application)); ?>" target="_blank"
+                               class="inline-flex items-center rounded-lg bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">
+                                <i data-lucide="eye" class="w-4 h-4 mr-2"></i> Preview Certificate
+                            </a>
                             <a href="<?php echo e(route('admin.registration-applications.edit', $application) . ($returnTo ? '?return_to=' . urlencode($returnTo) : '')); ?>"
                                class="inline-flex items-center rounded-lg bg-yellow-500 px-4 py-2 text-sm font-semibold text-white hover:bg-yellow-600">
                                 Review

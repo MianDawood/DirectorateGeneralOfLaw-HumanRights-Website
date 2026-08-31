@@ -240,7 +240,6 @@
             font-size: 16.5px;
             font-weight: bold;
             letter-spacing: 0.4px;
-            background: #f7f7f7;
             padding: 3px 11px;
             border-radius: 3px;
             display: inline-block;

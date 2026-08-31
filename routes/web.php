@@ -251,6 +251,9 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
     Route::get('registration-applications/export', [RegistrationApplicationsController::class, 'export'])
         ->name('admin.registration-applications.export');
 
+    Route::get('registration-applications/{registration_application}/certificate-preview', [RegistrationApplicationsController::class, 'previewCertificate'])
+        ->name('admin.registration-applications.certificate-preview');
+
     // Strategic NGO registers
     Route::get('ngos/registered', [\App\Http\Controllers\Admin\RegisteredNgosController::class, 'index'])->name('admin.ngos.registered.index');
     Route::get('ngos/registered/export', [\App\Http\Controllers\Admin\RegisteredNgosController::class, 'export'])->name('admin.ngos.registered.export');
