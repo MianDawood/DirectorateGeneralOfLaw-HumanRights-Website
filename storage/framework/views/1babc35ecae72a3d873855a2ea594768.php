@@ -45,6 +45,7 @@
             overflow: hidden;
         }
 
+
         /* Outer green border */
         .outer-border {
             position: absolute;
@@ -59,10 +60,10 @@
         /* Inner black border */
         .inner-border {
             position: absolute;
-            top: calc(10mm + 35px);
-            left: calc(10mm + 35px);
-            right: calc(10mm + 35px);
-            bottom: calc(10mm + 35px);
+            top: calc(10mm + 25px);
+            left: calc(10mm + 25px);
+            right: calc(10mm + 25px);
+            bottom: calc(10mm + 25px);
             border: 2px solid #000;
             z-index: 11;
         }
@@ -71,9 +72,9 @@
         .corner-ribbon {
             position: absolute;
             top: 10mm;
-            left: calc(10mm + 35px);
-            width: 15mm;
-            height: 30mm;
+            left: calc(10mm + 65px);
+            width: 10mm;
+            height: 20mm;
             background: #075a2c;
             z-index: 12;
         }
@@ -86,9 +87,9 @@
             bottom: 0;
             width: 0;
             height: 0;
-            border-left: 7.5mm solid transparent;
-            border-right: 7.5mm solid transparent;
-            border-bottom: 5mm solid #ffffff;
+            border-left: 5mm solid transparent;
+            border-right: 5mm solid transparent;
+            border-bottom: 3mm solid #ffffff;
         }
 
         /* Watermark */
@@ -139,24 +140,34 @@
         }
 
         .logo-cell {
-            width: 22%;
+            width: 25%;
             text-align: center;
         }
 
         .logo-cell img {
-            width: 78px;
+            width: 100px;
             height: auto;
             max-height: 78px;
+        }
+
+        .logo-cell-left {
+            text-align: left;
+            padding-left: 75px;
+        }
+
+        .logo-cell-right {
+            text-align: right;
+            padding-right: 10px;
         }
 
         .header-text {
             width: 64%;
             text-align: center;
             padding: 0 8px;
+            color: #075a2c
         }
 
-        .header-line-1,
-        .header-line-2 {
+        .header-line-1 {
             font-size: 24px;
             font-weight: 900;
             letter-spacing: 0.4px;
@@ -164,12 +175,21 @@
             text-transform: uppercase;
         }
 
-        .header-line-3 {
-            font-size: 20px;
-            font-weight: 700;
-            margin-top: 3px;
-            letter-spacing: 0.2px;
+        .header-line-2 {
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 0.4px;
+            line-height: 1.1;
             text-transform: uppercase;
+        }
+
+        .header-line-3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 0px;
+            letter-spacing: -1px !important;
+            text-transform: uppercase;
+            white-space: nowrap;
         }
 
         /* Certificate title */
@@ -451,7 +471,7 @@
                         <tr>
 
                             <!-- Left logo -->
-                            <td class="logo-cell">
+                            <td class="logo-cell logo-cell-left">
                                 <img src="<?php echo e($logoSrc); ?>" alt="Logo">
                             </td>
 
@@ -475,7 +495,7 @@
 
 
                             <!-- Right logo -->
-                            <td class="logo-cell">
+                            <td class="logo-cell logo-cell-right">
                                 <img src="<?php echo e($logoSrc); ?>" alt="Logo">
                             </td>
 

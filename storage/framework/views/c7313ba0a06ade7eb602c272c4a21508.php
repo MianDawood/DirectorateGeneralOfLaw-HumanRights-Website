@@ -41,10 +41,10 @@
                         <?php endif; ?>
                         <?php
                             $statusColors = [
-                                'approved' => 'bg-emerald-500/20 text-white border-emerald-300/40',
-                                'submitted' => 'bg-blue-500/20 text-blue-100 border-blue-300/40',
-                                'under_review' => 'bg-amber-500/20 text-amber-200 border-amber-300/40',
-                                'rejected' => 'bg-red-500/20 text-red-200 border-red-300/40',
+                                'approved' => 'bg-emerald-500/20 text-black border-emerald-300/40',
+                                'submitted' => 'bg-blue-500/20 text-black border-blue-300/40',
+                                'under_review' => 'bg-amber-500/20 text-black border-amber-300/40',
+                                'rejected' => 'bg-red-500/20 text-black border-red-300/40',
                             ];
                             $statusLabels = [
                                 'approved' => 'Approved',
@@ -55,7 +55,7 @@
                             $color = $statusColors[$application->status] ?? 'bg-slate-500/20 text-slate-200 border-slate-300/40';
                             $label = $statusLabels[$application->status] ?? $application->status;
                         ?>
-                        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full border text-[11px] font-black uppercase tracking-wider <?php echo e($color); ?>">
+                        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full border text-[11px] font-black uppercase tracking-wider text-white">
                             <i data-lucide="activity" class="w-4 h-4"></i>
                             <?php echo e($label); ?>
 
