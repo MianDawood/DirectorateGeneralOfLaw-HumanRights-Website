@@ -16,13 +16,13 @@
         /* A4 page settings */
         @page {
             margin: 0;
-            size: 190mm 297mm;
+            size: 162mm 162mm;
         }
 
         html,
         body {
-            width: 190mm;
-            height: 297mm;
+            width: 162mm;
+            height: 162mm;
             margin: 0;
             padding: 0;
             background: #fff;
@@ -38,8 +38,8 @@
 
         /* Certificate page */
         .certificate-page {
-            width: 190mm;
-            height: 297mm;
+            width: 162mm;
+            height: 162mm;
             position: relative;
             background: #fff;
             overflow: hidden;
@@ -118,16 +118,17 @@
             bottom: calc(10mm + 17px);
             z-index: 5;
 
-            display: flex;
-            flex-direction: column;
-
             padding: 25px 35px 20px 35px;
+        }
+
+        .content-top {
+            display: block;
         }
 
         /* Header */
         .header-section {
             flex-shrink: 0;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
 
         .header-table {
@@ -168,7 +169,7 @@
         }
 
         .header-line-1 {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 900;
             letter-spacing: 0.4px;
             line-height: 1.1;
@@ -176,7 +177,7 @@
         }
 
         .header-line-2 {
-            font-size: 22px;
+            font-size: 19px;
             font-weight: 900;
             letter-spacing: 0.4px;
             line-height: 1.1;
@@ -184,7 +185,7 @@
         }
 
         .header-line-3 {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 600;
             margin-top: 0px;
             letter-spacing: -1px !important;
@@ -196,12 +197,12 @@
         .title-section {
             flex-shrink: 0;
             text-align: center;
-            margin: 10px 0 12px;
+            margin: 6px 0 8px;
         }
 
         .cert-title {
             font-family: 'DejaVu Serif', 'Times New Roman', serif;
-            font-size: 34px;
+            font-size: 28px;
             font-weight: 700;
             letter-spacing: 1.6px;
             color: #000;
@@ -210,8 +211,8 @@
         /* Meta information */
         .meta-section {
             flex-shrink: 0;
-            margin-bottom: 16px;
-            margin-top: 4px;
+            margin-bottom: 10px;
+            margin-top: 2px;
         }
 
         .meta-table {
@@ -231,32 +232,32 @@
 
         /* Body content */
         .body-section {
-            flex: 1;
+            flex: 0 1 auto;
             flex-shrink: 0;
-            margin-bottom: 16px;
+            margin-bottom: 8px;
             min-height: 0;
         }
 
         .body-text {
-            font-size: 18px;
-            line-height: 1.55;
+            font-size: 16px;
+            line-height: 1.5;
             text-align: justify;
             overflow: hidden;
         }
 
         .body-text p {
-            margin: 9px 0;
+            margin: 6px 0;
         }
 
         .intro-line {
             text-align: center;
-            margin-bottom: 7px;
-            font-size: 15px;
+            margin-bottom: 5px;
+            font-size: 14px;
         }
 
         .ngo-name-block {
             text-align: center;
-            margin: 9px 0 12px;
+            margin: 6px 0 8px;
         }
 
         .ngo-name {
@@ -275,9 +276,12 @@
 
         /* Footer */
         .footer-section {
-            flex-shrink: 0;
-            margin-top: auto;
-            padding-top: 14px;
+            position: absolute;
+            left: 8mm;
+            right: 8mm;
+            bottom: 30mm;
+            z-index: 6;
+            padding-top: 8px;
         }
 
         .footer-table {
@@ -335,7 +339,7 @@
 
         .signature-block {
             display: inline-block;
-            text-align: center;
+            text-align: right;
             width: 210px;
         }
 
@@ -353,21 +357,24 @@
         }
 
         .dg-title {
-            font-weight: bold;
-            font-size: 11.5px;
+            font-weight: 600;
+            font-size: 10px;
             line-height: 1.25;
-            margin: 5px 0 7px;
+            margin: 0px 0px 20px 50px;
+            text-align: center;
+            margin-left: 100px !important;
         }
 
         .official-seal img {
-            width: 65px;
+            width: 85px;
             height: auto;
+            margin-bottom: 10px;
         }
 
         /* Contact footer */
         .contact-footer {
-            margin-top: 13px;
-            padding-top: 9px;
+            margin-top: 8px;
+            padding-top: 6px;
             text-align: center;
             font-size: 8.5px;
             line-height: 1.4;
@@ -382,8 +389,8 @@
 
             html,
             body {
-                width: 190mm;
-                height: 297mm;
+                width: 162mm;
+                height: 162mm;
             }
 
             .certificate-page {
@@ -461,7 +468,7 @@
         <!-- Certificate content -->
         <div class="content-area">
 
-            <div style="min-height: 80% !important;">
+            <div class="content-top">
 
                 <!-- Header -->
                 <div class="header-section">
